@@ -1,13 +1,38 @@
 import Vue from 'vue';
+import 'vuetify/dist/vuetify.min.css';
+import './plugins/vuetify';
+import Vuetify from 'vuetify/lib';
+import VueAxios from 'vue-axios';
+import axios from 'axios';
+import Vuex from 'vuex';
+import Auth from './utils/auth';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+import store from './store/index';
 import './registerServiceWorker';
+
+
+Vue.use(VueAxios, axios);
+Vue.use(router);
+Vue.use(Vuex);
+Vue.use(Vuetify);
+
+Vue.use(Auth, {
+  loginUrl: 'auth/admin/login',
+  refresh: true,
+});
+
+Vue.filter('percent', (value, decimals) => (
+  `${Math.round(value * (10 ** decimals)) / (10 ** decimals)}%`
+));
+
 
 Vue.config.productionTip = false;
 
-new Vue({
+new Vue({ // eslint-disable-line no-new
+  el: '#app',
   router,
   store,
-  render: h => h(App),
-}).$mount('#app');
+  template: '<App/>',
+  components: { App },
+});
