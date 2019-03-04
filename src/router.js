@@ -110,10 +110,50 @@ const router = new Router({
       },
     },
     {
-      path: 'product-analysis',
-      name: 'ProductAnalysis',
+      path: 'create-investment-approach',
+      name: 'CreateInvestmentApproach',
       component: () => import(/* webpackChunkName: "product" */
-        './views/App/product-analysis.vue'
+        './views/App/create-investment-approach.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'get-investment-approaches',
+      name: 'GetInvestmentApproaches',
+      component: () => import(/* webpackChunkName: "product" */
+        './views/App/get-investment-approaches.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'create-product-category',
+      name: 'CreatProductCategory',
+      component: () => import(/* webpackChunkName: "product" */
+        './views/App/create-product-category.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'get-product-categories',
+      name: 'GetProductCategories',
+      component: () => import(/* webpackChunkName: "product" */
+        './views/App/get-product-categories.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'get-selfmanaged-products',
+      name: 'GetSelfManagedProducts',
+      component: () => import(/* webpackChunkName: "product" */
+        './views/App/get-self-managed-products.vue'
       ),
       meta: {
         requiresAuth: true,

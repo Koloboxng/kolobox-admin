@@ -1,0 +1,186 @@
+<template>
+  <v-app>
+    <v-dialog v-model="relatedProductsDialog" width="500">
+      <v-card v-if="relatedProductsItem">
+        <v-card-title>Get Related Products</v-card-title>
+        <v-card-text></v-card-text>
+        <v-card-actions>
+          <v-btn
+            flat
+            @click="getRelatedProducts(relatedProductsItem.id);relatedProductsItem = null"
+            class="green --text"
+          >GET RELATED PRODUCTS</v-btn>
+          <v-btn
+            color="error"
+            class="red --text"
+            flat
+            @click="relatedProductsDialog = false;relatedProductsItem = null;"
+          >CANCEL</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="deleteDialog" width="500">
+      <v-card v-if="deleteItem">
+        <v-card-title>Delete Product Category</v-card-title>
+        <v-card-text>Are you sure you want to delete the {{deleteItem.email}} category ?</v-card-text>
+        <v-card-actions>
+          <v-btn
+            class="green --text"
+            flat
+            @click="deleteCategory(deleteItem.id);deleteItem = null;"
+          >YES</v-btn>
+          <v-btn class="red --text" flat @click="deleteDialog = false;deleteItem = null;">NO</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="updateDialog" width="500">
+      <v-card v-if="updateItem">
+        <v-card-title>Update Product Category</v-card-title>
+        <v-card-text>
+          <v-form></v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn
+            class="green --text"
+            flat
+            @click="updateCategory(updateItem.id);updateItem = null;"
+          >YES</v-btn>
+          <v-btn class="red --text" flat @click="deleteDialog = false;deleteItem = null;">NO</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-flex xs11 ml-4 mt-4>
+      <h1>All Admins</h1>
+      <v-data-table :headers="headers" :items="allAdmins" class="elevation-1" v-if="allAdmins">
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.email }}</td>
+          <td>{{ props.item.phone }}</td>
+          <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+          <td>
+            <v-btn
+              color="error"
+              class="red --text"
+              flat
+              slot="activator"
+              @click="deleteDialog = true;deleteItem = props.item"
+            >Delete</v-btn>
+          </td>
+          <td>
+            <v-btn
+              :class="props.item.active ? 'blue --text' : 'green --text'"
+              flat
+              slot="activator"
+              @click="fillForm(props.item);updateDialog = true;updateItem = props.item"
+            >Update</v-btn>
+          </td>
+        </template>
+      </v-data-table>
+    </v-flex>
+    <v-snackbar v-model="toast.show" top right color="black">
+      {{ toast.msg }}
+      <v-btn flat dark small @click.native="toast.show = false">Close</v-btn>
+    </v-snackbar>
+  </v-app>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex';
+
+export default {
+  data() {
+    return {
+      headers: [
+        {
+          text: 'Email',
+          value: 'email',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Phone Number',
+          value: 'phone',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Name',
+          value: 'firstname',
+          align: 'left',
+          sortable: true,
+        },
+        {},
+        {},
+      ],
+      deleteDialog: false,
+      relatedProductsDialog: false,
+      deleteItem: null,
+      relatedProductsItem: null,
+      updateDialog: false,
+      updateItem: null,
+      toast: {
+        show: false,
+        msg: '',
+      },
+      form: {
+        name: '',
+        performance: [
+          {
+            data: 'year 1',
+            value: 0,
+          },
+          {
+            data: 'year 2',
+            value: 0,
+          },
+          {
+            data: 'year 3',
+            value: 0,
+          },
+        ],
+        benefits: '',
+        interest_rate: 0,
+        minimum_requirement: 0,
+        tenor: 0,
+        investment_approach_id: 0,
+      },
+      relatedProductsReady: false,
+    };
+  },
+  computed: {
+    ...mapGetters(['getProductCategories']),
+  },
+  methods: {
+    ...mapActions([
+      'getAllProductCategories',
+      'deleteProductCategory',
+      'updateProductCategory',
+    ]),
+    deleteCategory(productId) {
+      this.toast.msg = 'Deleting...';
+      this.toast.show = true;
+      this.deleteProductCategory({ id: productId, snackbar: this.toast });
+    },
+    updateCategory(productId) {
+      this.toast.msg = 'Sending...';
+      this.toast.show = true;
+      this.updateProductCategory({
+        id: productId,
+        snackbar: this.toast,
+        form: this.form,
+      });
+    },
+    getRelatedProducts(productId) {
+      this.axios.get(`product_category/${productId}`).then((res) => {
+        console.log(res.data.data);
+        this.relatedProductsReady = true;
+      });
+    },
+    fillForm(item) {
+      this.form = item;
+    },
+  },
+  created() {
+    this.getAllProductCategories();
+  },
+};
+</script>

@@ -68,8 +68,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .link {
   float: right !important;
+}
+.v-btn {
+  float: left !important;
 }
 </style>

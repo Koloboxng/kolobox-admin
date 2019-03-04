@@ -89,22 +89,34 @@ export default {
     products: [
       { name: 'Create Product', route: '/index/create-product' },
       { name: 'All Products', route: '/index/get-products' },
-      { name: 'See products(self-managed)', route: '/index/create-admin' },
-      { name: 'Move users', route: '/index/move-users' },
-      { name: 'See Product Analytics', route: '/index/product-analytics' },
-      { name: 'Create Investment Approach', route: '/index/create-admin' },
       {
-        name: 'Update/Delete Investment Approach',
-        route: '/index/create-admin',
+        name: 'See products(self-managed)',
+        route: '/index/get-selfmanaged-products',
       },
-      { name: 'Create Product Category', route: '/index/create-admin' },
-      { name: 'Update/Delete Product Category', route: '/index/create-admin' },
+      { name: 'Move users', route: '/index/move-users' },
+      {
+        name: 'Create Investment Approach',
+        route: '/index/create-investment-approach',
+      },
+      {
+        name: 'View All Investment Approaches',
+        route: '/index/get-investment-approaches',
+      },
+      {
+        name: 'Create Product Category',
+        route: '/index/create-product-category',
+      },
+      {
+        name: 'View All Product Categories',
+        route: '/index/get-product-category',
+      },
     ],
     settings: [
       { name: 'Enable/Disable OTP', route: '/index/create-product' },
       { name: 'Finalize disable OTP', route: '/index/create-admin' },
       { name: 'Update Password', route: '/index/create-admin' },
     ],
+    paystack: [{ name: 'Run Callback', route: '/index/run-paystack-callback' }],
     email: null,
   }),
   computed: {
@@ -137,5 +149,6 @@ export default {
 .link {
   text-decoration: none !important;
   color: white !important;
+  margin-left: 50px !important;
 }
 </style>

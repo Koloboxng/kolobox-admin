@@ -1,2 +1,4 @@
 /* eslint-disable import/prefer-default-export */
 export const UPDATE_ALL_PRODUCTS = 'UPDATE_ALL_PRODUCTS';
+export const UPDATE_SELF_MANAGED_PRODUCTS = 'UPDATE_SELF_MANAGED_PRODUCTS';
+export const UPDATE_PRODUCT_CATEGORIES = 'UPDATE_PRODUCT_CATEGORIES';

@@ -5,10 +5,16 @@ import * as mutate from './mutation-types';
 
 const state = {
   allProducts: null,
+  allSelfManagedProducts: null,
+  allInvestmentApproaches: null,
+  allProductCategories: null,
 };
 
 const getters = {
   getProducts: state => state.allProducts,
+  getSelfManagedProducts: state => state.allSelfManagedProducts,
+  getAllInvestmentApproaches: state => state.allInvestmentApproaches,
+  getProductCategories: state => state.allProductCategories,
 };
 
 const actions = {
@@ -101,11 +107,161 @@ const actions = {
       })
       .finally(snackbar.show = true);
   },
+  selfManagedProducts({
+    commit,
+  }) {
+    Vue.axios.get('admin/me/product')
+      .then((res) => {
+        console.log(res.data.data);
+        commit(mutate.UPDATE_SELF_MANAGED_PRODUCTS, res.data.data);
+      });
+  },
+  createInvestmentApproach({
+    dispatch,
+  }, data) {
+    const {
+      router,
+      snackbar,
+      form,
+    } = data;
+    Vue.axios.post('investment_approach', {
+      form,
+    })
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+        dispatch('getInvestmentApproaches');
+        router.push('/index/get-investment-approaches');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
+  getInvestmentApproaches({
+    commit,
+  }) {
+    Vue.axios.get('investment_approach')
+      .then((res) => {
+        console.log('investment_approaches', res.data.data);
+        commit(mutate.UPDATE_INVESTMENT_APPROACHES, res.data.data);
+      });
+  },
+  deleteInvestmentApproach({
+    dispatch,
+  }, data) {
+    const {
+      id,
+      snackbar,
+    } = data;
+    Vue.axios.delete(`investment_approach/${id}`)
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
+  updateInvestmentApproach({
+    dispatch,
+  }, data) {
+    const {
+      snackbar,
+      id,
+      form,
+    } = data;
+    Vue.axios.put(`investment_approach/${id}`, {
+      form,
+    })
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+        dispatch('getInvestmentApproaches');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
+  getAllProductCategories({
+    commit,
+  }) {
+    Vue.axios.get('product_category')
+      .then((res) => {
+        commit(mutate.UPDATE_PRODUCT_CATEGORIES, res.data.data);
+      });
+  },
+  updateProductCategory({
+    dispatch,
+  }, data) {
+    const {
+      id,
+      form,
+      snackbar,
+    } = data;
+    Vue.axios.put(`product_category/${id}`, {
+      form,
+    })
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+        dispatch('getAllProductCategories');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
+  deleteProductCategory({
+    dispatch,
+  }, data) {
+    const {
+      id,
+      snackbar,
+    } = data;
+    Vue.axios.delete(`product_category/${id}`)
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+        dispatch('getAllProductCategories');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
+  createProductCategory({
+    dispatch,
+  }, data) {
+    const {
+      form,
+      router,
+      snackbar,
+    } = data;
+    Vue.axios.post('product_category', {
+      form,
+    })
+      .then((res) => {
+        snackbar.msg = res.data.data.msg;
+        dispatch('getAllProductCategories');
+        router.push('/index/get-product-categories');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally(snackbar.show = true);
+  },
 };
 
 const mutations = {
   [mutate.UPDATE_ALL_PRODUCTS](state, data) {
     state.allProducts = data.p;
+  },
+  [mutate.UPDATE_SELF_MANAGED_PRODUCTS](state, data) {
+    state.allSelfManagedProducts = data.p;
+  },
+  [mutate.UPDATE_INVESTMENT_APPROACHES](state, data) {
+    state.allInvestmentApproaches = data;
+  },
+  [mutate.UPDATE_PRODUCT_CATEGORIES](state, data) {
+    state.allProductCategories = data;
   },
 };
 

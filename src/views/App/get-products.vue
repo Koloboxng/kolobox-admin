@@ -281,6 +281,7 @@ export default {
         product_category_id: '',
         busy: false,
       },
+      requiredRules: [v => !!v || 'This Field is required'],
     };
   },
   computed: {
@@ -306,7 +307,7 @@ export default {
     viewProduct(item) {
       this.$router.push({
         name: 'GetSingleProduct',
-        params: { item, id: item.id },
+        params: { product: item, id: item.id },
       });
     },
   },
