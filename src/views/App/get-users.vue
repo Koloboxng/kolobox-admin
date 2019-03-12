@@ -39,7 +39,7 @@
       <loader/>
     </div>
     <div v-else>
-      <v-flex xs11 ml-4 mt-4>
+      <v-flex xs12 ml-4 mt-4>
         <h1>All Users</h1>
         <v-flex mt-2>
           <v-card>
