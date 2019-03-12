@@ -11,7 +11,7 @@
                   <v-text-field
                     v-model="form.name"
                     label="Name of Investment Approach"
-                    rules="[v => !!v || 'This Field is required']"
+                    :rules="[v => !!v || 'This Field is required']"
                     required
                   ></v-text-field>
                   <v-btn :disabled="!valid" color="primary" @click="validate">Create</v-btn>

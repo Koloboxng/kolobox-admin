@@ -2,18 +2,21 @@
   <v-app>
     <v-flex xs11 ml-4 mt-4>
       <h1>All Products Managed By This Admin</h1>
-      <v-data-table
-        :headers="headers"
-        :items="allSelfManagedProducts"
-        class="elevation-1"
-        v-if="allSelfManagedProducts"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.email }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
-        </template>
-      </v-data-table>
+      <v-flex mt-3 v-if="getSelfManagedProducts">
+        <v-data-table :headers="headers" :items="getSelfManagedProducts" class="elevation-1">
+          <template v-slot:no-data>
+            <v-alert :value="true" color="error" icon="warning">Sorry, nothing to display here :(</v-alert>
+          </template>
+          <template slot="items" slot-scope="props">
+            <td>{{ props.item.email }}</td>
+            <td>{{ props.item.phone }}</td>
+            <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+          </template>
+        </v-data-table>
+      </v-flex>
+      <v-flex v-else>
+        <v-alert :value="true" color="error" icon="warning">Sorry, nothing to display here :(</v-alert>
+      </v-flex>
     </v-flex>
   </v-app>
 </template>
@@ -47,13 +50,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['allSelfManagedProducts']),
+    ...mapGetters(['getSelfManagedProducts']),
   },
   methods: {
-    ...mapActions(['getAllSelfManagedProducts']),
+    ...mapActions(['selfManagedProducts']),
   },
   created() {
-    this.getAllSelfManagedProducts();
+    this.selfManagedProducts();
   },
 };
 </script>

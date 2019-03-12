@@ -50,3 +50,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.grey.darken-2 {
+    margin-top: 160px;
+}
+</style>

@@ -8,6 +8,7 @@ const state = {
   allSelfManagedProducts: null,
   allInvestmentApproaches: null,
   allProductCategories: null,
+  allTransactions: null,
 };
 
 const getters = {
@@ -15,6 +16,7 @@ const getters = {
   getSelfManagedProducts: state => state.allSelfManagedProducts,
   getAllInvestmentApproaches: state => state.allInvestmentApproaches,
   getProductCategories: state => state.allProductCategories,
+  getAllTransactions: state => state.allTransactions,
 };
 
 const actions = {
@@ -187,6 +189,7 @@ const actions = {
   }) {
     Vue.axios.get('product_category')
       .then((res) => {
+        console.log(res.data.data);
         commit(mutate.UPDATE_PRODUCT_CATEGORIES, res.data.data);
       });
   },
@@ -248,6 +251,15 @@ const actions = {
       })
       .finally(snackbar.show = true);
   },
+  allTransactions({
+    commit,
+  }) {
+    Vue.axios.get('payment/transactions')
+      .then((res) => {
+        console.log(res.data.data);
+        commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
+      });
+  },
 };
 
 const mutations = {
@@ -262,6 +274,9 @@ const mutations = {
   },
   [mutate.UPDATE_PRODUCT_CATEGORIES](state, data) {
     state.allProductCategories = data;
+  },
+  [mutate.UPDATE_ALL_TRANSACTIONS](state, data) {
+    state.allTransactions = data;
   },
 };
 

@@ -14,7 +14,7 @@
     </v-toolbar>
     <v-container fluid>
       <v-layout row>
-        <v-flex xs2>
+        <v-flex xs3>
           <v-navigation-drawer stateless value="showNav" dark>
             <v-list>
               <v-list-group prepend-icon="home" value="true">
@@ -29,7 +29,7 @@
                 </v-list-tile>
               </v-list-group>
 
-              <v-list-group prepend-icon="home" value="true">
+              <v-list-group prepend-icon="folder_open" value="true">
                 <v-list-tile slot="activator">
                   <v-list-tile-title>Users</v-list-tile-title>
                 </v-list-tile>
@@ -41,7 +41,7 @@
                 </v-list-tile>
               </v-list-group>
 
-              <v-list-group prepend-icon="home" value="true">
+              <v-list-group prepend-icon="widgets" value="true">
                 <v-list-tile slot="activator">
                   <v-list-tile-title>Products</v-list-tile-title>
                 </v-list-tile>
@@ -53,7 +53,7 @@
                 </v-list-tile>
               </v-list-group>
 
-              <v-list-group prepend-icon="home" value="true">
+              <v-list-group prepend-icon="settings" value="true">
                 <v-list-tile slot="activator">
                   <v-list-tile-title>Settings</v-list-tile-title>
                 </v-list-tile>
@@ -61,6 +61,18 @@
                 <v-list-tile v-for="(setting,index) in settings" :key="index">
                   <v-list-tile-title>
                     <router-link class="link" :to="setting.route">{{setting.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
+
+              <v-list-group prepend-icon="money" value="true">
+                <v-list-tile slot="activator">
+                  <v-list-tile-title>Paystack</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(paystack,index) in paystack" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="paystack.route">{{paystack.name}}</router-link>
                   </v-list-tile-title>
                 </v-list-tile>
               </v-list-group>
@@ -85,7 +97,10 @@ export default {
       { name: 'Create Admin', route: '/index/create-admin' },
       { name: 'Show All Admins', route: '/index/show-all-admins' },
     ],
-    users: [{ name: 'All Users', route: '/index/all-users' }],
+    users: [
+      { name: 'All Users', route: '/index/all-users' },
+      { name: 'All Transactions', route: '/index/all-transactions' },
+    ],
     products: [
       { name: 'Create Product', route: '/index/create-product' },
       { name: 'All Products', route: '/index/get-products' },
@@ -108,15 +123,14 @@ export default {
       },
       {
         name: 'View All Product Categories',
-        route: '/index/get-product-category',
+        route: '/index/get-product-categories',
       },
     ],
     settings: [
-      { name: 'Enable/Disable OTP', route: '/index/create-product' },
-      { name: 'Finalize disable OTP', route: '/index/create-admin' },
-      { name: 'Update Password', route: '/index/create-admin' },
+      { name: 'Enable/Disable/Finalize OTP', route: '/index/otp-handler' },
+      { name: 'Update Password', route: '/index/update-password' },
     ],
-    paystack: [{ name: 'Run Callback', route: '/index/run-paystack-callback' }],
+    paystack: [{ name: 'Run Callback', route: '/index/paystack-callback' }],
     email: null,
   }),
   computed: {

@@ -26,6 +26,9 @@ Vue.filter('percent', (value, decimals) => (
   `${Math.round(value * (10 ** decimals)) / (10 ** decimals)}%`
 ));
 
+Vue.filter('currency', (value, curr, decimalPoints) => (
+  `${curr}${(Math.floor(value * (10 ** decimalPoints)) / (10 ** decimalPoints)).toFixed(decimalPoints)}`
+));
 
 Vue.config.productionTip = false;
 
@@ -34,5 +37,7 @@ new Vue({ // eslint-disable-line no-new
   router,
   store,
   template: '<App/>',
-  components: { App },
+  components: {
+    App,
+  },
 });

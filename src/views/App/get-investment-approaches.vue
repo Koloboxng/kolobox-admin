@@ -1,28 +1,25 @@
 <template>
   <v-app>
-    <v-dialog v-model="enableDialog" width="500">
-      <v-card v-if="enableItem">
-        <v-card-title>Toggle Admin Activeness</v-card-title>
-        <v-card-text>Are you sure you want to {{enableItem.active ? 'disable' : 'enable'}} this account ?</v-card-text>
-        <v-card-actions>
-          <v-btn
-            flat
-            @click="toggleAdmin(enableItem.id);enableItem = null"
-            class="green --text"
-          >{{enableItem.active ? 'Disable' : 'Enable'}}</v-btn>
-          <v-btn
-            color="error"
-            class="red --text"
-            flat
-            @click="enableDialog = false;enableItem = null;"
-          >CANCEL</v-btn>
-        </v-card-actions>
+    <v-dialog v-model="updateDialog" width="500">
+      <v-card v-if="updateItem">
+        <v-card-title>Update Approach</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="form.name" label="First Name" required></v-text-field>
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              @click="validate(updateItem.id);updateItem = null;"
+            >Update</v-btn>
+            <v-btn class="red --text" flat @click="updateDialog = false;updateItem = null;">CANCEL</v-btn>
+          </v-form>
+        </v-card-text>
       </v-card>
     </v-dialog>
     <v-dialog v-model="deleteDialog" width="500">
       <v-card v-if="deleteItem">
-        <v-card-title>Delete Admin</v-card-title>
-        <v-card-text>Are you sure you want to delete the {{deleteItem.email}} account ?</v-card-text>
+        <v-card-title>Delete Approach</v-card-title>
+        <v-card-text>Are you sure you want to delete the {{deleteItem.name}} approach ?</v-card-text>
         <v-card-actions>
           <v-btn
             class="green --text"
@@ -34,12 +31,17 @@
       </v-card>
     </v-dialog>
     <v-flex xs11 ml-4 mt-4>
-      <h1>All Admins</h1>
-      <v-data-table :headers="headers" :items="allAdmins" class="elevation-1" v-if="allAdmins">
+      <h1>All Investment Approaches</h1>
+      <v-data-table
+        :headers="headers"
+        :items="getAllInvestmentApproaches"
+        class="elevation-1"
+        v-if="getAllInvestmentApproaches"
+      >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.email }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.created_at.split('T')[0] }}</td>
+          <td>{{ props.item.updated_at.split('T')[0] }}</td>
           <td>
             <v-btn
               color="error"
@@ -51,11 +53,11 @@
           </td>
           <td>
             <v-btn
-              :class="props.item.active ? 'blue --text' : 'green --text'"
+              class="blue --text"
               flat
               slot="activator"
-              @click="enableDialog = true;enableItem = props.item"
-            >{{props.item.active ? 'Disable' : 'Enable'}}</v-btn>
+              @click="populateForm(props.item);updateDialog = true;updateItem = props.item"
+            >Update</v-btn>
           </td>
         </template>
       </v-data-table>
@@ -75,20 +77,20 @@ export default {
     return {
       headers: [
         {
-          text: 'Email',
-          value: 'email',
-          align: 'left',
-          sortable: true,
-        },
-        {
-          text: 'Phone Number',
-          value: 'phone',
-          align: 'left',
-          sortable: true,
-        },
-        {
           text: 'Name',
-          value: 'firstname',
+          value: 'name',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Created At',
+          value: 'created_at',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Updated At',
+          value: 'updated_at',
           align: 'left',
           sortable: true,
         },
@@ -96,12 +98,15 @@ export default {
         {},
       ],
       deleteDialog: false,
-      enableDialog: false,
+      updateDialog: false,
       deleteItem: null,
-      enableItem: null,
+      updateItem: null,
       toast: {
         show: false,
         msg: '',
+      },
+      form: {
+        name: '',
       },
     };
   },
@@ -119,21 +124,15 @@ export default {
       this.toast.show = true;
       this.deleteInvestmentApproach({ id: approachId, snackbar: this.toast });
     },
-    updateApproach(approachId) {
-      this.toast.msg = 'Sending...';
-      this.toast.show = true;
-      this.updateInvestmentApproach({ id: approachId, snackbar: this.toast });
+    validate(id) {
+      if (this.$refs.form.validate()) {
+        this.toast.msg = 'Sending...';
+        this.toast.show = true;
+        this.updateInvestmentApproach({ id, snackbar: this.toast });
+      }
     },
-    getRelatedCategories(approachId) {
-      this.axios
-        .get(`investment_approach/${approachId}`)
-        .then((res) => {
-          console.log(res.data.data);
-        })
-        .catch((e) => {
-          this.toast.msg = e.data.data.msg;
-          this.toast.show = true;
-        });
+    populateForm(item) {
+      this.form = item;
     },
   },
   created() {

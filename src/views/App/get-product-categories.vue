@@ -37,25 +37,68 @@
       <v-card v-if="updateItem">
         <v-card-title>Update Product Category</v-card-title>
         <v-card-text>
-          <v-form></v-form>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field
+              v-model="form.name"
+              label="Name"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.performance"
+              label="Performance"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.benefits"
+              label="Benefits"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.interest_rate"
+              label="Interest Rate"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.minimum_requirement"
+              label="Minimum Requirement"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.tenor"
+              label="Name of Investment Approach"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="form.investment_approach_id"
+              label="Investment Approach Id e.g 2"
+              :rules="[v => !!v || 'This Field is required']"
+              required
+            ></v-text-field>
+            <v-btn :disabled="!valid" color="primary" @click="validate">Update</v-btn>
+            <v-btn class="red --text" flat @click="updateDialog = false;updateItem = null;">Cancel</v-btn>
+          </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-btn
-            class="green --text"
-            flat
-            @click="updateCategory(updateItem.id);updateItem = null;"
-          >YES</v-btn>
-          <v-btn class="red --text" flat @click="deleteDialog = false;deleteItem = null;">NO</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-flex xs11 ml-4 mt-4>
-      <h1>All Admins</h1>
-      <v-data-table :headers="headers" :items="allAdmins" class="elevation-1" v-if="allAdmins">
+      <h1>All Product Categories</h1>
+      <v-data-table
+        :headers="headers"
+        :items="getProductCategories"
+        class="elevation-1"
+        v-if="getProductCategories"
+      >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.email }}</td>
-          <td>{{ props.item.phone }}</td>
-          <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.tenor }} days</td>
+          <td>{{ props.item.interest_rate | percent(2) }}</td>
+          <td>{{ props.item.minimum_requirement | currency("₦", 2) }}</td>
           <td>
             <v-btn
               color="error"
@@ -67,7 +110,7 @@
           </td>
           <td>
             <v-btn
-              :class="props.item.active ? 'blue --text' : 'green --text'"
+              class="blue --text"
               flat
               slot="activator"
               @click="fillForm(props.item);updateDialog = true;updateItem = props.item"
@@ -91,20 +134,26 @@ export default {
     return {
       headers: [
         {
-          text: 'Email',
-          value: 'email',
-          align: 'left',
-          sortable: true,
-        },
-        {
-          text: 'Phone Number',
-          value: 'phone',
-          align: 'left',
-          sortable: true,
-        },
-        {
           text: 'Name',
-          value: 'firstname',
+          value: 'name',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Tenor',
+          value: 'tenor',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Interest Rate',
+          value: 'interest_rate',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Minimum Requirement',
+          value: 'minimum_requirement',
           align: 'left',
           sortable: true,
         },

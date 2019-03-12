@@ -159,6 +159,56 @@ const router = new Router({
         requiresAuth: true,
       },
     },
+    {
+      path: 'get-single-user/:id',
+      name: 'GetSingleUser',
+      component: () => import(/* webpackChunkName: "users" */
+        './views/App/get-single-user.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'otp-handler',
+      name: 'OtpHandler',
+      component: () => import(/* webpackChunkName: "users" */
+        './views/App/otp-handler.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'all-transactions',
+      name: 'GetAllTransactions',
+      component: () => import(/* webpackChunkName: "users" */
+        './views/App/get-all-transactions.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'update-password',
+      name: 'UpdatePassword',
+      component: () => import(/* webpackChunkName: "users" */
+        './views/App/update-password.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: 'paystack-callback',
+      name: 'PaystackCallback',
+      component: () => import(/* webpackChunkName: "users" */
+        './views/App/paystack-callback.vue'
+      ),
+      meta: {
+        requiresAuth: true,
+      },
+    },
     ],
   },
   ],
