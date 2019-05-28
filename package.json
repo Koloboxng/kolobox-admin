@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "prettify": "node_modules/.bin/eslint --fix src/views/App/**.vue"
+    "prettify": "node_modules/.bin/eslint --fix src/views/App/**.vue",
+    "deploy": "scp -i C:/Users/pbaba/Desktop/kolonaija/koloboxapikey.pem -r dist/* ubuntu@ec2-18-224-212-17.us-east-2.compute.amazonaws.com:~/admin-dashboard/"
   },
   "dependencies": {
     "axios": "^0.18.0",

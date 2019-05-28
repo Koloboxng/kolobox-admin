@@ -221,8 +221,8 @@ export default {
       console.log({ numberOfPages });
 
       return Number(numberOfPages.split('.')[1]) > 0
-        ? Number(numberOfPages) + 1
-        : Number(numberOfPages);
+        ? Math.round(Number(numberOfPages)) + 1
+        : Math.round(Number(numberOfPages));
     },
   },
   created() {
