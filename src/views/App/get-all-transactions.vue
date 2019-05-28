@@ -20,17 +20,17 @@
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="getUsers"
+              :items="getAllTransactions"
               :search="search"
               class="elevation-1"
-              v-if="getUsers"
+              v-if="getAllTransactions"
             >
               <template slot="items" slot-scope="props">
-                <td>{{ props.item.email }}</td>
-                <td>{{ props.item.phone }}</td>
-                <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
-                <td></td>
-                <td></td>
+                <td>{{ props.item.user_email }}</td>
+                <td>{{ props.item.user_firstname }} {{props.item.user_lastname}}</td>
+                <td>{{ props.item.product_name }}</td>
+                <td>{{props.item.transaction_deposit_amount | currency('₦',2) | commas}}</td>
+                <td>{{props.item.product_start_date ? props.item.product_start_date.split('T')[0] : 0}}</td>
                 <td></td>
               </template>
               <v-alert
@@ -67,20 +67,29 @@ export default {
           sortable: true,
         },
         {
-          text: 'Phone Number',
-          value: 'phone',
-          align: 'left',
-          sortable: true,
-        },
-        {
-          text: 'Name',
+          text: 'Full Name',
           value: 'firstname',
           align: 'left',
           sortable: true,
         },
-        {},
-        {},
-        {},
+        {
+          text: 'Product Name',
+          value: 'product_name',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Deposit Amount',
+          value: 'transaction_deposit_amount',
+          align: 'left',
+          sortable: true,
+        },
+        {
+          text: 'Start Date',
+          value: 'product_start_date',
+          align: 'left',
+          sortable: true,
+        },
       ],
     };
   },

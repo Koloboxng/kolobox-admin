@@ -12,27 +12,27 @@ const getters = {
 };
 
 const actions = {
-  getAllUsers({
-    commit,
-  }) {
-    Vue.axios.get('user')
-      .then((res) => {
-        console.log('users', res.data.data.users);
-        commit(mutation.UPDATE_ALL_USERS, res.data.data.users);
-      });
+  getAllUsers({ commit }, data) {
+    const pageNumber = data.pageNumber || 1;
+    const { snackbar } = data;
+
+    snackbar.msg = 'Fetching Data...';
+    snackbar.show = true;
+
+    Vue.axios.get(`user/?page=${pageNumber}`).then((res) => {
+      console.log(res.data.data);
+      snackbar.msg = 'Data retrieved!!';
+      snackbar.show = true;
+      console.log('users', res.data.data);
+      commit(mutation.UPDATE_ALL_USERS, res.data.data);
+    });
   },
-  updateUser({
-    commit,
-    dispatch,
-  }, data) {
-    const {
-      form,
-      snackbar,
-      id,
-    } = data;
-    Vue.axios.post(`user/${id}`, {
-      form,
-    })
+  updateUser({ commit, dispatch }, data) {
+    const { form, snackbar, id } = data;
+    Vue.axios
+      .post(`user/${id}`, {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllUsers');
@@ -40,19 +40,14 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  toggleUser({
-    commit,
-    dispatch,
-  }, data) {
-    const {
-      id,
-      snackbar,
-    } = data;
-    Vue.axios.post('toggle/toggle-active', {
-      id,
-    })
+  toggleUser({ commit, dispatch }, data) {
+    const { id, snackbar } = data;
+    Vue.axios
+      .post('toggle/toggle-active', {
+        id,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllUsers');
@@ -60,7 +55,7 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
 };
 

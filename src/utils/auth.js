@@ -3,19 +3,19 @@
 import Vue from 'vue';
 import axios from 'axios';
 // set defaults
-axios.defaults.baseURL = 'https://api-staging.kolobox.ng';
+axios.defaults.baseURL = 'https://api.kolobox.ng';
+// 'https://api.kolobox.ng';
 // axios.defaults.
 
 const redirect = (context, redirectUrl) => {
   if (redirectUrl) context.$router.replace(redirectUrl);
 };
 
-const validToken = token => (!!token);
+const validToken = token => !!token;
 
 const handleErrors = errorHandler => (errors) => {
   if (errorHandler) errorHandler(errors);
 };
-
 
 class Authenticate {
   constructor(context, loginUrl, logoutUrl) {
@@ -26,14 +26,13 @@ class Authenticate {
   }
 
   login(context, input, redirectUrl = false, errorHandler = false) {
-    axios.post(this.loginUrl, input)
-      .then((response) => {
-        console.log('response', response);
-        this.setToken(response.data.data.token);
-        this.authenticated = true;
-        localStorage.setItem('email', response.data.data.email);
-        redirect(context, redirectUrl);
-      }, handleErrors(errorHandler));
+    axios.post(this.loginUrl, input).then((response) => {
+      console.log('response', response);
+      this.setToken(response.data.data.token);
+      this.authenticated = true;
+      localStorage.setItem('email', response.data.data.email);
+      redirect(context, redirectUrl);
+    }, handleErrors(errorHandler));
   }
 
   logout(context, refreshUrl = false) {
@@ -57,6 +56,7 @@ class Authenticate {
 
   removeToken() {
     localStorage.removeItem('token');
+    localStorage.removeItem('email');
   }
 }
 
@@ -69,23 +69,25 @@ const Auth = {
       refresh: false,
     },
   ) {
-    vue.prototype.$auth = new Authenticate(
-      vue,
-      options.loginUrl,
-      options.logoutUrl,
-    );
+    vue.prototype.$auth = new Authenticate(vue, options.loginUrl, options.logoutUrl);
     if (options.refresh) {
-      axios.interceptors.request.use((config) => {
-        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-        config.headers.Accept = 'application/json';
-        return config;
-      }, err => Promise.reject(err.request));
+      axios.interceptors.request.use(
+        (config) => {
+          config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+          config.headers.Accept = 'application/json';
+          return config;
+        },
+        err => Promise.reject(err.request),
+      );
 
-      axios.interceptors.response.use((response) => {
-        if (response.status === 401) vue.prototype.$auth.removeToken();
-        if (response.data.data.token) vue.prototype.$auth.setToken(response.data.data.token);
-        return response;
-      }, err => Promise.reject(err.response));
+      axios.interceptors.response.use(
+        (response) => {
+          if (response.status === 401) vue.prototype.$auth.removeToken();
+          if (response.data.data.token) vue.prototype.$auth.setToken(response.data.data.token);
+          return response;
+        },
+        err => Promise.reject(err.response),
+      );
     }
   },
 };

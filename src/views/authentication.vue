@@ -16,7 +16,7 @@
                   required
                 ></v-text-field>
                 <v-btn :disabled="!valid" color="primary" @click="validate">Login</v-btn>
-                <router-link class="link mt-3" to="/forgot-password">Forgot password?</router-link>
+                <router-link class="link ml-3" to="/forgot-password">Forgot password?</router-link>
               </v-form>
             </v-flex>
           </v-layout>

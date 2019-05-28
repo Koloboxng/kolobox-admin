@@ -6,13 +6,16 @@
     <v-container fluid v-else>
       <v-layout row>
         <v-flex xs3 ml-5>
-          <home-card :title="Titles[0].name" :number="account.paystackBalance"/>
+          <home-card
+            :title="Titles[0].name"
+            :number="account.paystackBalance | currency('₦',2) | commas"
+          />
         </v-flex>
         <v-flex xs3 ml-5>
-          <home-card :title="Titles[1].name" :number="account.userCount"/>
+          <home-card :title="Titles[1].name" :number="account.userCount | commas"/>
         </v-flex>
         <v-flex xs3 ml-5>
-          <home-card :title="Titles[2].name" :number="account.transactionCount"/>
+          <home-card :title="Titles[2].name" :number="account.transactionCount | commas"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -53,6 +56,6 @@ export default {
 
 <style scoped>
 .grey.darken-2 {
-    margin-top: 160px;
+  margin-top: 160px;
 }
 </style>

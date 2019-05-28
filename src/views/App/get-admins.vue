@@ -1,5 +1,8 @@
 <template>
-  <v-app>
+  <div v-if="!allAdmins">
+    <loader/>
+  </div>
+  <v-app v-else>
     <v-dialog v-model="enableDialog" width="500">
       <v-card v-if="enableItem">
         <v-card-title>Toggle Admin Activeness</v-card-title>
@@ -68,9 +71,13 @@
 </template>
 
 <script>
+import loader from '@/components/loader.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
+  components: {
+    loader,
+  },
   data() {
     return {
       headers: [

@@ -1,5 +1,8 @@
 <template>
-  <v-app>
+  <div v-if="!getProductCategories">
+    <loader/>
+  </div>
+  <v-app v-else>
     <v-dialog v-model="relatedProductsDialog" width="500">
       <v-card v-if="relatedProductsItem">
         <v-card-title>Get Related Products</v-card-title>
@@ -98,7 +101,7 @@
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.tenor }} days</td>
           <td>{{ props.item.interest_rate | percent(2) }}</td>
-          <td>{{ props.item.minimum_requirement | currency("₦", 2) }}</td>
+          <td>{{ props.item.minimum_requirement | currency("₦", 2) | commas }}</td>
           <td>
             <v-btn
               color="error"
@@ -128,8 +131,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import loader from '@/components/loader.vue';
 
 export default {
+  components: {
+    loader,
+  },
   data() {
     return {
       headers: [

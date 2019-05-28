@@ -39,7 +39,7 @@
       <loader/>
     </div>
     <div v-else>
-      <v-flex xs12 ml-4 mt-4>
+      <v-flex xs12 mt-4>
         <h1>All Users</h1>
         <v-flex mt-2>
           <v-card>
@@ -55,15 +55,16 @@
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="getUsers"
+              :items="getUsers.users"
               :search="search"
               class="elevation-1"
-              v-if="getUsers"
+              v-if="getUsers.users"
+              hide-actions
             >
               <template slot="items" slot-scope="props">
-                <td>{{ props.item.email }}</td>
+                <td>{{ props.item.email.toUpperCase() }}</td>
                 <td>{{ props.item.phone }}</td>
-                <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+                <td>{{ props.item.firstname.toUpperCase() }} {{props.item.lastname.toUpperCase()}}</td>
                 <td>
                   <v-btn
                     class="brown --text"
@@ -100,6 +101,13 @@
           </v-card>
         </v-flex>
       </v-flex>
+      <paginate
+        :page-count="pageCount"
+        :click-handler="fetchNext"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'"
+      />
     </div>
     <v-snackbar v-model="toast.show" top right color="black">
       {{ toast.msg }}
@@ -164,6 +172,9 @@ export default {
         {},
         {},
       ],
+      pagination: {
+        rowsPerPage: -1,
+      },
       toggleItem: null,
       updateItem: null,
       updateDialog: false,
@@ -175,6 +186,7 @@ export default {
       this.form = item;
     },
     viewDetails(item) {
+      console.log(item);
       this.$router.push({
         name: 'GetSingleUser',
         params: { id: item.id, user: item },
@@ -196,12 +208,25 @@ export default {
         });
       }
     },
+    fetchNext() {
+      const { pageNumber } = this.getUsers;
+      this.getAllUsers({ pageNumber: pageNumber + 1, snackbar: this.toast });
+    },
   },
   computed: {
     ...mapGetters(['getUsers']),
+    pageCount() {
+      const { total, users } = this.getUsers;
+      const numberOfPages = (Number(total) / users.length).toFixed(1);
+      console.log({ numberOfPages });
+
+      return Number(numberOfPages.split('.')[1]) > 0
+        ? Number(numberOfPages) + 1
+        : Number(numberOfPages);
+    },
   },
   created() {
-    this.getAllUsers();
+    this.getAllUsers({ pageNumber: 1, snackbar: this.toast });
   },
 };
 </script>
@@ -210,5 +235,21 @@ export default {
 .v-datatable__actions {
   background-color: rgb(124, 119, 119) !important;
   color: white !important;
+}
+.pagination li {
+  border: 1px rgb(56, 191, 245) solid;
+  display: inline;
+  padding: 20px;
+  background-color: #424242;
+}
+.pagination ul {
+  list-style: none;
+  min-width: 696px;
+}
+.pagination {
+  margin: 50px 0px 50px 0px;
+}
+.pagination li a {
+  color: white;
 }
 </style>

@@ -3,7 +3,9 @@
     <v-toolbar color="blue darken-2" flat clipped-left>
       <v-toolbar-side-icon class="hidden-sm-and-up" @click="showNav = !showNav"></v-toolbar-side-icon>
       <v-flex>
-        <v-img :src="require('../../assets/logo.png')" alt="logo" height="54px" width="150px"></v-img>
+        <router-link to="/index/home">
+          <v-img :src="require('../../assets/logo.png')" alt="logo" height="54px" width="150px"></v-img>
+        </router-link>
       </v-flex>
 
       <v-spacer></v-spacer>

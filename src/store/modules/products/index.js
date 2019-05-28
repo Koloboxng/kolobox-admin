@@ -254,7 +254,15 @@ const actions = {
   allTransactions({
     commit,
   }) {
-    Vue.axios.get('payment/transactions')
+    const startDate = '1999-01-01';
+    const endDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}`
+      .split('-').map(
+        (e, index, array) => {
+          if (e.length < 2) array[index] = `0${e}`;
+          return array[index];
+        },
+      ).join('-');
+    Vue.axios.get(`payment/transactions/?start_date=${startDate}&end_date=${endDate}`)
       .then((res) => {
         console.log(res.data.data);
         commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
