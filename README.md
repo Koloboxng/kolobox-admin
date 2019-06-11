@@ -1,5 +1,7 @@
 # kolobox-dashboard
 
+The Official documentation of Kolobox NG Admin Dashboard, built with Vue JS and Pouch DB.
+
 ## Project setup
 
 ```

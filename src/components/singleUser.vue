@@ -411,7 +411,6 @@ export default {
       this.subscriptionForm.group_id = null;
       this.subscriptionForm.created_at = new Date().toISOString();
       this.subscriptionForm.updated_at = new Date().toISOString();
-      console.log(this.subscriptionForm);
     },
     createNewProduct() {
       this.createProductDialog = true;
