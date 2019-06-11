@@ -9,6 +9,7 @@ const state = {
   allInvestmentApproaches: null,
   allProductCategories: null,
   allTransactions: null,
+  allUserProducts: null,
 };
 
 const getters = {
@@ -17,30 +18,39 @@ const getters = {
   getAllInvestmentApproaches: state => state.allInvestmentApproaches,
   getProductCategories: state => state.allProductCategories,
   getAllTransactions: state => state.allTransactions,
+  getAllUserProducts: state => state.allUserProducts,
 };
 
 const actions = {
-  getAllProducts({
-    commit,
-  }) {
-    Vue.axios.get('product')
+  fetchAllUserProducts({ commit }, data) {
+    // eslint-disable-next-line camelcase
+    const { product_id, snackbar } = data;
+    snackbar.msg = 'Sending...';
+    snackbar.show = true;
+    Vue.axios
+      .post('admin/products/users', { product_id })
       .then((res) => {
-        console.log('products', res.data.data);
-        commit(mutate.UPDATE_ALL_PRODUCTS, res.data.data);
-      });
+        snackbar.msg = 'Data Retrieved';
+        console.log('products response', res.data.data);
+        commit(mutate.UPDATE_ALL_USER_PRODUCTS, res.data.data);
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.msg;
+      })
+      .finally((snackbar.show = true));
   },
-  createProduct({
-    commit,
-    dispatch,
-  }, data) {
-    const {
-      form,
-      snackbar,
-      router,
-    } = data;
-    Vue.axios.post('product', {
-      form,
-    })
+  getAllProducts({ commit }) {
+    Vue.axios.get('product').then((res) => {
+      console.log('products', res.data.data);
+      commit(mutate.UPDATE_ALL_PRODUCTS, res.data.data);
+    });
+  },
+  createProduct({ commit, dispatch }, data) {
+    const { form, snackbar, router } = data;
+    Vue.axios
+      .post('product', {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProducts');
@@ -49,18 +59,12 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  updateProduct({
-    commit,
-    dispatch,
-  }, data) {
-    const {
-      form,
-      snackbar,
-      router,
-    } = data;
-    Vue.axios.put(`product/${form.id}`)
+  updateProduct({ commit, dispatch }, data) {
+    const { form, snackbar, router } = data;
+    Vue.axios
+      .put(`product/${form.id}`)
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProducts');
@@ -69,19 +73,14 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  deleteProduct({
-    commit,
-    dispatch,
-  }, data) {
-    const {
-      id,
-      snackbar,
-    } = data;
-    Vue.axios.delete(`product/${id}`, {
-      id,
-    })
+  deleteProduct({ commit, dispatch }, data) {
+    const { id, snackbar } = data;
+    Vue.axios
+      .delete(`product/${id}`, {
+        id,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProducts');
@@ -89,46 +88,34 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  moveUsers({
-    commit,
-  }, data) {
-    const {
-      form,
-      snackbar,
-    } = data;
-    Vue.axios.post('product/movement', {
-      form,
-    })
+  moveUsers({ commit }, data) {
+    const { form, snackbar } = data;
+    Vue.axios
+      .post('product/movement', {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
       })
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  selfManagedProducts({
-    commit,
-  }) {
-    Vue.axios.get('admin/me/product')
-      .then((res) => {
-        console.log(res.data.data);
-        commit(mutate.UPDATE_SELF_MANAGED_PRODUCTS, res.data.data);
-      });
+  selfManagedProducts({ commit }) {
+    Vue.axios.get('admin/me/product').then((res) => {
+      console.log(res.data.data);
+      commit(mutate.UPDATE_SELF_MANAGED_PRODUCTS, res.data.data);
+    });
   },
-  createInvestmentApproach({
-    dispatch,
-  }, data) {
-    const {
-      router,
-      snackbar,
-      form,
-    } = data;
-    Vue.axios.post('investment_approach', {
-      form,
-    })
+  createInvestmentApproach({ dispatch }, data) {
+    const { router, snackbar, form } = data;
+    Vue.axios
+      .post('investment_approach', {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getInvestmentApproaches');
@@ -137,44 +124,32 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  getInvestmentApproaches({
-    commit,
-  }) {
-    Vue.axios.get('investment_approach')
-      .then((res) => {
-        console.log('investment_approaches', res.data.data);
-        commit(mutate.UPDATE_INVESTMENT_APPROACHES, res.data.data);
-      });
+  getInvestmentApproaches({ commit }) {
+    Vue.axios.get('investment_approach').then((res) => {
+      console.log('investment_approaches', res.data.data);
+      commit(mutate.UPDATE_INVESTMENT_APPROACHES, res.data.data);
+    });
   },
-  deleteInvestmentApproach({
-    dispatch,
-  }, data) {
-    const {
-      id,
-      snackbar,
-    } = data;
-    Vue.axios.delete(`investment_approach/${id}`)
+  deleteInvestmentApproach({ dispatch }, data) {
+    const { id, snackbar } = data;
+    Vue.axios
+      .delete(`investment_approach/${id}`)
       .then((res) => {
         snackbar.msg = res.data.data.msg;
       })
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  updateInvestmentApproach({
-    dispatch,
-  }, data) {
-    const {
-      snackbar,
-      id,
-      form,
-    } = data;
-    Vue.axios.put(`investment_approach/${id}`, {
-      form,
-    })
+  updateInvestmentApproach({ dispatch }, data) {
+    const { snackbar, id, form } = data;
+    Vue.axios
+      .put(`investment_approach/${id}`, {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getInvestmentApproaches');
@@ -182,28 +157,20 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  getAllProductCategories({
-    commit,
-  }) {
-    Vue.axios.get('product_category')
-      .then((res) => {
-        console.log(res.data.data);
-        commit(mutate.UPDATE_PRODUCT_CATEGORIES, res.data.data);
-      });
+  getAllProductCategories({ commit }) {
+    Vue.axios.get('product_category').then((res) => {
+      console.log(res.data.data);
+      commit(mutate.UPDATE_PRODUCT_CATEGORIES, res.data.data);
+    });
   },
-  updateProductCategory({
-    dispatch,
-  }, data) {
-    const {
-      id,
-      form,
-      snackbar,
-    } = data;
-    Vue.axios.put(`product_category/${id}`, {
-      form,
-    })
+  updateProductCategory({ dispatch }, data) {
+    const { id, form, snackbar } = data;
+    Vue.axios
+      .put(`product_category/${id}`, {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProductCategories');
@@ -211,16 +178,12 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  deleteProductCategory({
-    dispatch,
-  }, data) {
-    const {
-      id,
-      snackbar,
-    } = data;
-    Vue.axios.delete(`product_category/${id}`)
+  deleteProductCategory({ dispatch }, data) {
+    const { id, snackbar } = data;
+    Vue.axios
+      .delete(`product_category/${id}`)
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProductCategories');
@@ -228,19 +191,14 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  createProductCategory({
-    dispatch,
-  }, data) {
-    const {
-      form,
-      router,
-      snackbar,
-    } = data;
-    Vue.axios.post('product_category', {
-      form,
-    })
+  createProductCategory({ dispatch }, data) {
+    const { form, router, snackbar } = data;
+    Vue.axios
+      .post('product_category', {
+        form,
+      })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
         dispatch('getAllProductCategories');
@@ -249,22 +207,26 @@ const actions = {
       .catch((e) => {
         snackbar.msg = e.data.data.msg;
       })
-      .finally(snackbar.show = true);
+      .finally((snackbar.show = true));
   },
-  allTransactions({
-    commit,
-  }) {
+  allTransactions({ commit }, data) {
+    const { pageNumber, snackbar } = data;
     const startDate = '1999-01-01';
     const endDate = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDay()}`
-      .split('-').map(
-        (e, index, array) => {
-          if (e.length < 2) array[index] = `0${e}`;
-          return array[index];
-        },
-      ).join('-');
-    Vue.axios.get(`payment/transactions/?start_date=${startDate}&end_date=${endDate}`)
+      .split('-')
+      .map((e, index, array) => {
+        if (e.length < 2) array[index] = `0${e}`;
+        return array[index];
+      })
+      .join('-');
+    snackbar.msg = 'Fetching data...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`payment/transactions/?start_date=${startDate}&end_date=${endDate}&page=${pageNumber}`)
       .then((res) => {
         console.log(res.data.data);
+        snackbar.msg = 'Data retrieved';
+        snackbar.show = true;
         commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
       });
   },
@@ -285,6 +247,9 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_TRANSACTIONS](state, data) {
     state.allTransactions = data;
+  },
+  [mutate.UPDATE_ALL_USER_PRODUCTS](state, data) {
+    state.allUserProducts = data;
   },
 };
 

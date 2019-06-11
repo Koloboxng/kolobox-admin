@@ -7,6 +7,8 @@ import admin from './modules/admin/index';
 import users from './modules/users/index';
 import settings from './modules/settings/index';
 import products from './modules/products/index';
+import referrals from './modules/referrals/index';
+import subscriptions from './modules/subscriptions/index';
 
 Vue.use(Vuex);
 
@@ -23,5 +25,7 @@ export default new Vuex.Store({
     users,
     settings,
     products,
+    referrals,
+    subscriptions,
   },
 });

@@ -2,8 +2,9 @@
 /* eslint-disable class-methods-use-this */
 import Vue from 'vue';
 import axios from 'axios';
+
 // set defaults
-axios.defaults.baseURL = 'https://api.kolobox.ng';
+axios.defaults.baseURL = 'http://localhost:9200';
 // 'https://api.kolobox.ng';
 // axios.defaults.
 

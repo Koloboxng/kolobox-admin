@@ -16,7 +16,7 @@
     </v-toolbar>
     <v-container fluid>
       <v-layout row>
-        <v-flex xs3>
+        <v-flex xs2>
           <v-navigation-drawer stateless value="showNav" dark>
             <v-list>
               <v-list-group prepend-icon="home" value="true">
@@ -51,6 +51,30 @@
                 <v-list-tile v-for="(product,index) in products" :key="index">
                   <v-list-tile-title>
                     <router-link class="link" :to="product.route">{{product.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
+
+              <v-list-group prepend-icon="widgets" value="true">
+                <v-list-tile slot="activator">
+                  <v-list-tile-title>Referrals</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(referral,index) in referrals" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="referral.route">{{referral.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
+
+              <v-list-group prepend-icon="widgets" value="true">
+                <v-list-tile slot="activator">
+                  <v-list-tile-title>Subscriptions</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(subscription,index) in subscriptions" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="subscription.route">{{subscription.name}}</router-link>
                   </v-list-tile-title>
                 </v-list-tile>
               </v-list-group>
@@ -99,13 +123,16 @@ export default {
       { name: 'Create Admin', route: '/index/create-admin' },
       { name: 'Show All Admins', route: '/index/show-all-admins' },
     ],
+    referrals: [{ name: 'All Referrals', route: '/index/all-referrals' }],
+    subscriptions: [
+      { name: 'All Subscriptions', route: '/index/all-subscriptions' },
+    ],
     users: [
       { name: 'All Users', route: '/index/all-users' },
       { name: 'All Transactions', route: '/index/all-transactions' },
     ],
     products: [
-      { name: 'Create Product', route: '/index/create-product' },
-      { name: 'All Products', route: '/index/get-products' },
+      { name: 'All Products', route: '/index/all-user-products' },
       {
         name: 'See products(self-managed)',
         route: '/index/get-selfmanaged-products',
@@ -141,11 +168,8 @@ export default {
   methods: {
     logOut() {
       this.$auth.logout(this, '/');
-    },
-  },
-  watch: {
-    account() {
-      console.log(this.account);
+      // Close Pouch DB
+      this.$pouch.close();
     },
   },
   created() {

@@ -35,12 +35,25 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <div v-if="!getUsers">
+    <div v-if="!cachedUsers">
       <loader/>
     </div>
     <div v-else>
       <v-flex xs12 mt-4>
         <h1>All Users</h1>
+        <h3>Number of Users: {{getUsers.total}}</h3>
+        <v-flex ml-2 mt-3>
+          <v-card max-width="690px" style="border-radius: 20px;">
+            <v-form ref="findUserForm" v-model="formToFind">
+              <v-layout row wrap>
+                <v-text-field v-model="useremail" label="Find Any User(Email)" required></v-text-field>
+                <v-btn @click="findUser()" color="primary" :disabled="!formToFind">
+                  <v-icon>search</v-icon>
+                </v-btn>
+              </v-layout>
+            </v-form>
+          </v-card>
+        </v-flex>
         <v-flex mt-2>
           <v-card>
             <v-card-title>
@@ -48,7 +61,7 @@
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search"
+                label="Search for users on this page"
                 single-line
                 hide-details
               ></v-text-field>
@@ -120,6 +133,8 @@
 import loader from '@/components/loader.vue';
 import { mapActions, mapGetters } from 'vuex';
 
+// eslint-disable-next-line no-unused-vars
+
 export default {
   components: {
     loader,
@@ -130,6 +145,7 @@ export default {
         msg: '',
         show: true,
       },
+      useremail: '',
       search: '',
       valid: true,
       emailRules: [
@@ -178,10 +194,16 @@ export default {
       toggleItem: null,
       updateItem: null,
       updateDialog: false,
+      formToFind: true,
     };
   },
   methods: {
-    ...mapActions(['getAllUsers', 'toggleUser', 'updateUser']),
+    ...mapActions([
+      'getAllUsers',
+      'toggleUser',
+      'updateUser',
+      'findSingleUser',
+    ]),
     populateForm(item) {
       this.form = item;
     },
@@ -208,15 +230,41 @@ export default {
         });
       }
     },
-    fetchNext() {
-      const { pageNumber } = this.getUsers;
-      this.getAllUsers({ pageNumber: pageNumber + 1, snackbar: this.toast });
+    fetchNext(event) {
+      this.$pouch
+        .get(`${event}`)
+        .then((doc) => {
+          this.cachedUsers = doc.users;
+        })
+        .catch((e) => {
+          console.log({ e });
+          if (e.name === 'not_found') {
+            return this.getAllUsers({
+              pageNumber: event,
+              snackbar: this.toast,
+              pouch: this.$pouch,
+            });
+          }
+          this.toast.msg = e;
+          this.toast.show = true;
+        });
+    },
+    findUser() {
+      if (this.$refs.findUserForm.validate()) {
+        this.toast.msg = 'Searching...';
+        this.toast.show = true;
+        this.findSingleUser({
+          useremail: this.useremail,
+          router: this.$router,
+          snackbar: this.toast,
+        });
+      }
     },
   },
   computed: {
     ...mapGetters(['getUsers']),
     pageCount() {
-      const { total, users } = this.getUsers;
+      const { total, users } = this.cachedUsers;
       const numberOfPages = (Number(total) / users.length).toFixed(1);
       console.log({ numberOfPages });
 
@@ -224,9 +272,21 @@ export default {
         ? Math.round(Number(numberOfPages)) + 1
         : Math.round(Number(numberOfPages));
     },
+    cachedUsers: {
+      get() {
+        return this.getUsers;
+      },
+      set(newValue) {
+        this.getUsers.users = newValue;
+      },
+    },
   },
   created() {
-    this.getAllUsers({ pageNumber: 1, snackbar: this.toast });
+    this.getAllUsers({
+      pageNumber: 1,
+      snackbar: this.toast,
+      pouch: this.$pouch,
+    });
   },
 };
 </script>

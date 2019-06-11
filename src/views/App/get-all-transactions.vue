@@ -6,6 +6,7 @@
     <div v-else>
       <v-flex xs11 ml-4 mt-4>
         <h1>All Transactions</h1>
+        <h3>Total Number of Transactions: {{getAllTransactions.total}}</h3>
         <v-flex mt-2>
           <v-card>
             <v-card-title>
@@ -20,10 +21,11 @@
             </v-card-title>
             <v-data-table
               :headers="headers"
-              :items="getAllTransactions"
+              :items="getAllTransactions.transactions"
               :search="search"
               class="elevation-1"
               v-if="getAllTransactions"
+              hide-actions
             >
               <template slot="items" slot-scope="props">
                 <td>{{ props.item.user_email }}</td>
@@ -43,6 +45,13 @@
           </v-card>
         </v-flex>
       </v-flex>
+      <paginate
+        :page-count="pageCount"
+        :click-handler="fetchNext"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'"
+      />
     </div>
   </v-app>
 </template>
@@ -58,6 +67,10 @@ export default {
   data() {
     return {
       search: '',
+      toast: {
+        msg: '',
+        show: true,
+      },
       valid: true,
       headers: [
         {
@@ -95,12 +108,29 @@ export default {
   },
   methods: {
     ...mapActions(['allTransactions']),
+    fetchNext() {
+      const { pageNumber } = this.getAllTransactions;
+      this.allTransactions({
+        pageNumber: pageNumber + 1,
+        snackbar: this.toast,
+      });
+    },
   },
   computed: {
     ...mapGetters(['getAllTransactions']),
+    pageCount() {
+      console.log(this.getAllTransactions);
+      const { total, transactions } = this.getAllTransactions;
+      const numberOfPages = (Number(total) / transactions.length).toFixed(1);
+      console.log({ numberOfPages });
+
+      return Number(numberOfPages.split('.')[1]) > 0
+        ? Math.round(Number(numberOfPages)) + 1
+        : Math.round(Number(numberOfPages));
+    },
   },
   created() {
-    this.allTransactions();
+    this.allTransactions({ pageNumber: 1, snackbar: this.toast });
   },
 };
 </script>
@@ -109,5 +139,21 @@ export default {
 .v-datatable__actions {
   background-color: rgb(124, 119, 119) !important;
   color: white !important;
+}
+.pagination li {
+  border: 1px rgb(56, 191, 245) solid;
+  display: inline;
+  padding: 20px;
+  background-color: #424242;
+}
+.pagination ul {
+  list-style: none;
+  min-width: 696px;
+}
+.pagination {
+  margin: 50px 0px 50px 0px;
+}
+.pagination li a {
+  color: white;
 }
 </style>
