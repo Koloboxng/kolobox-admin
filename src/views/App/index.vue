@@ -133,19 +133,7 @@ export default {
     ],
     products: [
       { name: 'All Products', route: '/index/all-user-products' },
-      {
-        name: 'See products(self-managed)',
-        route: '/index/get-selfmanaged-products',
-      },
       { name: 'Move users', route: '/index/move-users' },
-      {
-        name: 'Create Investment Approach',
-        route: '/index/create-investment-approach',
-      },
-      {
-        name: 'View All Investment Approaches',
-        route: '/index/get-investment-approaches',
-      },
       {
         name: 'Create Product Category',
         route: '/index/create-product-category',

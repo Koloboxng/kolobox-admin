@@ -25,6 +25,7 @@
       </div>
       <v-flex xs11 ml-4 mt-4 v-else>
         <h3>{{product_name}} Users</h3>
+        <h4>Amount in {{product_name}}: {{totalAmount | currency('₦', 2) | commas }}</h4>
         <h4>Number of Users: {{getAllUserProducts.length}}</h4>
         <v-data-table
           :headers="headers"
@@ -114,6 +115,14 @@ export default {
   },
   computed: {
     ...mapGetters(['getAllUserProducts', 'getProducts']),
+    totalAmount() {
+      let total = 0;
+      this.getAllUserProducts.forEach((x) => {
+        console.log(x.deposit_amount);
+        total += Number(x.deposit_amount);
+      });
+      return total;
+    },
   },
   methods: {
     ...mapActions(['fetchAllUserProducts', 'getAllProducts']),

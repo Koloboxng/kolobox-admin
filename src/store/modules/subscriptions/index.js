@@ -34,15 +34,36 @@ const actions = {
       .finally((snackbar.show = true));
   },
   createSubscription({ commit }, data) {
-    const { form } = data;
+    const { form, snackbar } = data;
+    let {dialog} = data;
+    snackbar.msg = 'Creating...';
+    snackbar.show = true;
     Vue.axios
-      .post('admin/createSubscription', { form })
+      .post('admin/subscriptions/create', form)
       .then((res) => {
-        alert('This subscription has been added successfully');
+        snackbar.msg = 'This subscription has been added successfully';
+        dialog = false;
       })
       .catch((e) => {
-        alert(e);
-      });
+        snackbar.msg = e.data.msg;
+      })
+      .finally((snackbar.show = true));
+  },
+  updateOneSubscription({ commit }, data) {
+    const { form, snackbar } = data;
+    let {dialog} = data;
+    snackbar.msg = 'Updating...';
+    snackbar.show = true;
+    Vue.axios
+      .post('admin/subscriptions/update', form)
+      .then((res) => {
+        snackbar.msg = 'This subscribtion has been updated';
+        dialog = false;
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.msg;
+      })
+      .finally((snackbar.show = true));
   },
 };
 

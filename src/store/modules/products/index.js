@@ -230,6 +230,54 @@ const actions = {
         commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
       });
   },
+  createSubscription({ commit }, data) {
+    const { form, snackbar } = data;
+    snackbar.msg = 'Creating...';
+    snackbar.show = true;
+    Vue.axios
+      .post('admin/subscriptions/create', form)
+      .then(() => {
+        snackbar.msg = 'Subscription has been created for the user';
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.msg;
+      })
+      .finally((snackbar.show = true));
+  },
+  createOneProduct({ commit }, data) {
+    const { form, snackbar } = data;
+    let { dialog } = data;
+    console.log('product form', form);
+    snackbar.msg = 'Creating...';
+    snackbar.show = true;
+    Vue.axios
+      .post('admin/product/create', form)
+      .then(() => {
+        snackbar.msg = 'Product has been created for the user';
+        dialog = false;
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.msg;
+      })
+      .finally((snackbar.show = true));
+  },
+  updateOneProduct({ commit }, data) {
+    const { form, snackbar } = data;
+    let { dialog } = data;
+    console.log({ form });
+    snackbar.msg = 'Updating...';
+    snackbar.show = true;
+    Vue.axios
+      .post('admin/product/update', form)
+      .then(() => {
+        snackbar.msg = 'Product has been updated for the user';
+        dialog = false;
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.msg;
+      })
+      .finally((snackbar.show = true));
+  },
 };
 
 const mutations = {

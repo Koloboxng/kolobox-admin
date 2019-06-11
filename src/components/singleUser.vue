@@ -12,10 +12,15 @@
     </v-dialog>
     <v-dialog v-model="createSubDialog" max-width="690" data-app>
       <v-card>
-        <v-flex ml-2 xs10>
+        <v-flex ml-2 xs10 v-if="getProducts">
           <v-form ref="subForm" v-model="validateSubscriptionForm">
             <v-text-field label="Deposit Amount" v-model="subscriptionForm.deposit_amount" required></v-text-field>
-            <v-select :items="frequency" v-model="subscriptionForm.saving_frequency" required></v-select>
+            <v-select
+              :items="frequency"
+              label="Frequency"
+              v-model="subscriptionForm.saving_frequency"
+              required
+            ></v-select>
             <v-select
               :items="transformProduct(getProducts)"
               item-text="text"
@@ -27,7 +32,7 @@
             <v-btn
               color="primary"
               :disabled="!validateSubscriptionForm"
-              @click="createSubscription({form: subscriptionForm})"
+              @click="createSubscription({form: subscriptionForm, snackbar: toast, dialog: createSubDialog})"
             >CREATE</v-btn>
             <v-btn color="error" @click="clearForm(subscriptionForm);createSubDialog = false;">CLOSE</v-btn>
           </v-form>
@@ -66,7 +71,7 @@
             <v-btn
               color="primary"
               :disabled="!validateProductForm"
-              @click="createProduct({form: productForm})"
+              @click="createOneProduct({form: productForm, snackbar: toast, dialog: createProductDialog})"
             >CREATE</v-btn>
             <v-btn color="error" @click="clearForm(productForm);createProductDialog = false;">CLOSE</v-btn>
           </v-form>
@@ -77,7 +82,6 @@
       <v-card>
         <v-flex xs10 ml-2>
           <v-form v-model="validateUpdateProductForm">
-            <v-text-field label="Deposit Amount" v-model="updateProduct.deposit_amount" required></v-text-field>
             <v-select
               :items="binary"
               item-text="text"
@@ -105,7 +109,7 @@
             <v-btn
               color="primary"
               :disabled="!validateUpdateProductForm"
-              @click="updateOneProduct({form: updateProduct})"
+              @click="updateOneProduct({form: updateProduct, snackbar: toast, dialog: updateProductDialog})"
             >UPDATE</v-btn>
             <v-btn
               color="error"
@@ -141,7 +145,7 @@
             <v-btn
               color="primary"
               :disabled="!validateUpdateSubscriptionForm"
-              @click="updateOneSubscription({form: updateSub})"
+              @click="updateOneSubscription({form: updateSub, snackbar: toast, dialog: updateSubscriptionDialog})"
             >UPDATE</v-btn>
             <v-btn
               color="error"
@@ -319,6 +323,7 @@ export default {
         user_id: '',
         product_id: '',
         created_at: '',
+        updated_at: '',
         unit_price: '',
         units_purchased: '',
         verified: '',
@@ -356,21 +361,12 @@ export default {
     ...mapActions([
       'getAllProducts',
       'createSubscription',
-      'updateSubscription',
-      'createProduct',
+      'updateOneSubscription',
+      'createOneProduct',
       'updateOneProduct',
     ]),
     findProduct(productId) {
       return this.getProducts.find(x => x.id === productId).name;
-    },
-    clearSub() {
-      this.createSubDialog = false;
-      this.subscriptionForm.user_id = '';
-      this.subscriptionForm.id = '';
-      this.subscriptionForm.last_pay_day = '';
-      this.subscriptionForm.next_pay_day = '';
-      this.subscriptionForm.created_at = '';
-      this.subscriptionForm.updated_at = '';
     },
     updateSingleSubscription(item) {
       this.updateSubscriptionDialog = true;
@@ -390,7 +386,9 @@ export default {
     updateSingleProduct(item) {
       this.updateProductDialog = true;
       this.updateProduct.user_id = this.user.primary_id;
-      this.updateProduct.product_id = item.id;
+      this.updateProduct.product_id = item.product_id;
+      this.updateProduct.verified = item.verified;
+      this.updateProduct.canceled = item.canceled;
     },
     createNewSubscription() {
       this.createSubDialog = true;
@@ -406,13 +404,14 @@ export default {
       if (this.subscriptionForm.saving_frequency === 'monthly') {
         numberOfDays = 30;
       }
-      this.subscriptionForm.next_pay_day = this.getDate(
+      this.subscriptionForm.next_pay_day = this.getEndDate(
         this.subscriptionForm.last_pay_day,
         numberOfDays,
       );
       this.subscriptionForm.group_id = null;
       this.subscriptionForm.created_at = new Date().toISOString();
       this.subscriptionForm.updated_at = new Date().toISOString();
+      console.log(this.subscriptionForm);
     },
     createNewProduct() {
       this.createProductDialog = true;
@@ -422,18 +421,9 @@ export default {
       this.productForm.saving_frequency = null;
       this.productForm.user_id = this.user.primary_id;
       this.productForm.created_at = new Date().toISOString();
+      this.productForm.updated_at = new Date().toISOString();
       this.productForm.unit_price = null;
       this.productForm.units_purchased = null;
-    },
-    clearProduct() {
-      this.createProductDialog = false;
-      this.productForm.start_date = '';
-      this.productForm.saving_frequency = '';
-      this.productForm.investment_goal = '';
-      this.productForm.user_id = '';
-      this.productForm.created_at = '';
-      this.productForm.unit_price = '';
-      this.productForm.units_purchased = '';
     },
   },
   computed: {
