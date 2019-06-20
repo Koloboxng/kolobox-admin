@@ -29,7 +29,9 @@
           <td>{{ props.item.referred_email }}</td>
           <td>{{ props.item.referrer }}</td>
           <td>{{ props.item.amount | currency('₦',2) | commas }}</td>
-          <td>{{ props.item.credited }}</td>
+          <td>{{ props.item.amount_funded | currency('₦',2) | commas }}</td>
+          <td>{{ props.item.amount_funded > 0 ? 'True' : 'False' }}</td>
+          <td>{{ props.item.created_at.split('T')[0] }}</td>
         </template>
         <v-alert
           v-slot:no-results
@@ -83,12 +85,23 @@ export default {
           sortable: true,
         },
         {
-          text: 'Credited',
-          value: 'credited',
+          text: 'Locked Funds',
+          value: 'amount_funded',
           align: 'left',
           sortable: true,
         },
-        {},
+        {
+          text: 'Due For Credit',
+          value: 'boolean',
+          align: 'left',
+          sortable: true
+        },
+        {
+          text: 'Created At',
+          value: 'created_at',
+          align: 'left',
+          sortable: true
+        },
       ],
       toast: {
         show: false,

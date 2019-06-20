@@ -4,7 +4,7 @@ import Vue from 'vue';
 import axios from 'axios';
 
 // set defaults
-axios.defaults.baseURL = 'https://api.kolobox.ng';
+axios.defaults.baseURL = 'http://localhost:9300'//'https://api.kolobox.ng';
 
 const redirect = (context, redirectUrl) => {
   if (redirectUrl) context.$router.replace(redirectUrl);
