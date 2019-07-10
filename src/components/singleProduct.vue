@@ -143,12 +143,11 @@ export default {
         .get(`product/${id}/analytics`)
         .then((res) => {
           this.productMethodRunning = true;
-          console.log(res.data.data);
           this.results = res.data.data;
           this.toast.msg = 'Loaded. OK';
         })
         .catch((e) => {
-          console.log(e.data.data);
+
           this.toast.msg = e.data.data.msg;
           this.toast.show = true;
         });

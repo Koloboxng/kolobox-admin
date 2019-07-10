@@ -25,7 +25,6 @@ const actions = {
     Vue.axios
       .get('admin/subscriptions')
       .then((res) => {
-        console.log('subscriptions', res.data.data);
         commit(mutate.UPDATE_ALL_SUBSCRIPTIONS, res.data.data);
       })
       .catch((e) => {
@@ -35,7 +34,7 @@ const actions = {
   },
   createSubscription({ commit }, data) {
     const { form, snackbar } = data;
-    let {dialog} = data;
+    let { dialog } = data;
     snackbar.msg = 'Creating...';
     snackbar.show = true;
     Vue.axios
@@ -51,7 +50,7 @@ const actions = {
   },
   updateOneSubscription({ commit }, data) {
     const { form, snackbar } = data;
-    let {dialog} = data;
+    let { dialog } = data;
     snackbar.msg = 'Updating...';
     snackbar.show = true;
     Vue.axios

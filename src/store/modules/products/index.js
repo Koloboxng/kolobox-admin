@@ -31,7 +31,6 @@ const actions = {
       .post('admin/products/users', { product_id })
       .then((res) => {
         snackbar.msg = 'Data Retrieved';
-        console.log('products response', res.data.data);
         commit(mutate.UPDATE_ALL_USER_PRODUCTS, res.data.data);
       })
       .catch((e) => {
@@ -41,7 +40,6 @@ const actions = {
   },
   getAllProducts({ commit }) {
     Vue.axios.get('product').then((res) => {
-      console.log('products', res.data.data);
       commit(mutate.UPDATE_ALL_PRODUCTS, res.data.data);
     });
   },
@@ -106,7 +104,6 @@ const actions = {
   },
   selfManagedProducts({ commit }) {
     Vue.axios.get('admin/me/product').then((res) => {
-      console.log(res.data.data);
       commit(mutate.UPDATE_SELF_MANAGED_PRODUCTS, res.data.data);
     });
   },
@@ -128,7 +125,6 @@ const actions = {
   },
   getInvestmentApproaches({ commit }) {
     Vue.axios.get('investment_approach').then((res) => {
-      console.log('investment_approaches', res.data.data);
       commit(mutate.UPDATE_INVESTMENT_APPROACHES, res.data.data);
     });
   },
@@ -161,7 +157,6 @@ const actions = {
   },
   getAllProductCategories({ commit }) {
     Vue.axios.get('product_category').then((res) => {
-      console.log(res.data.data);
       commit(mutate.UPDATE_PRODUCT_CATEGORIES, res.data.data);
     });
   },
@@ -224,7 +219,6 @@ const actions = {
     Vue.axios
       .get(`payment/transactions/?start_date=${startDate}&end_date=${endDate}&page=${pageNumber}`)
       .then((res) => {
-        console.log(res.data.data);
         snackbar.msg = 'Data retrieved';
         snackbar.show = true;
         commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
@@ -247,7 +241,6 @@ const actions = {
   createOneProduct({ commit }, data) {
     const { form, snackbar } = data;
     let { dialog } = data;
-    console.log('product form', form);
     snackbar.msg = 'Creating...';
     snackbar.show = true;
     Vue.axios
@@ -264,7 +257,6 @@ const actions = {
   updateOneProduct({ commit }, data) {
     const { form, snackbar } = data;
     let { dialog } = data;
-    console.log({ form });
     snackbar.msg = 'Updating...';
     snackbar.show = true;
     Vue.axios

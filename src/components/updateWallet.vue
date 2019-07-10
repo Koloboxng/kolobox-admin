@@ -78,7 +78,6 @@ export default {
     validate() {
       if (this.$refs.form.validate()) {
         this.running = true;
-        console.log(this.form);
         const { form } = this;
         this.$http
           .post('admin/user/wallet', form)

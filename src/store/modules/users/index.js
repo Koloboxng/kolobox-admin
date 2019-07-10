@@ -20,18 +20,15 @@ const actions = {
     snackbar.show = true;
 
     Vue.axios.get(`user/?page=${pageNumber}`).then((res) => {
-      console.log(res.data.data);
       snackbar.msg = 'Data retrieved!!';
       snackbar.show = true;
-      console.log('users', res.data.data);
-      console.log({ Vue });
       pouch
         .put({
           _id: `${pageNumber}`,
           users: res.data.data.users,
         })
         .then(() => {
-          console.log('data has been stored');
+
         })
         .catch((e) => {
           console.log(e);
@@ -72,11 +69,9 @@ const actions = {
   findSingleUser({ commit }, data) {
     const { router, snackbar } = data;
     let { useremail } = data;
-    console.log({ data });
     Vue.axios
       .get(`admin/user/${useremail}`)
       .then((res) => {
-        console.log(res.data.data);
         snackbar.msg = 'User Found';
         useremail = '';
         // Use the single user component to render the result

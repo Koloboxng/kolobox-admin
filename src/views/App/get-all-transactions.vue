@@ -119,10 +119,8 @@ export default {
   computed: {
     ...mapGetters(['getAllTransactions']),
     pageCount() {
-      console.log(this.getAllTransactions);
       const { total, transactions } = this.getAllTransactions;
       const numberOfPages = (Number(total) / transactions.length).toFixed(1);
-      console.log({ numberOfPages });
 
       return Number(numberOfPages.split('.')[1]) > 0
         ? Math.round(Number(numberOfPages)) + 1

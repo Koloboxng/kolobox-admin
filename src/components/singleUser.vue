@@ -42,7 +42,7 @@
     <v-dialog v-model="createProductDialog" max-width="690" data-app>
       <v-card>
         <v-flex ml-2 xs10>
-          <v-form v-model="validateProductForm">
+          <v-form v-model="validateProductForm" v-if="getProducts" >
             <v-text-field label="Deposit Amount" v-model="productForm.deposit_amount" required></v-text-field>
             <v-select
               :items="binary"
@@ -193,6 +193,12 @@
                   <v-list-tile-content>
                     <v-list-tile-title>Phone</v-list-tile-title>
                     <v-list-tile-sub-title v-html="user.phone"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                 <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Kolobox ID</v-list-tile-title>
+                    <v-list-tile-sub-title v-html="user.kolobox_id || user.number"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>

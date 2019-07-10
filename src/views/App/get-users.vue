@@ -208,7 +208,6 @@ export default {
       this.form = item;
     },
     viewDetails(item) {
-      console.log(item);
       this.$router.push({
         name: 'GetSingleUser',
         params: { id: item.id, user: item },
@@ -266,7 +265,6 @@ export default {
     pageCount() {
       const { total, users } = this.cachedUsers;
       const numberOfPages = (Number(total) / users.length).toFixed(1);
-      console.log({ numberOfPages });
 
       return Number(numberOfPages.split('.')[1]) > 0
         ? Math.round(Number(numberOfPages)) + 1

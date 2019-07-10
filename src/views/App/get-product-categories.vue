@@ -227,7 +227,6 @@ export default {
     },
     getRelatedProducts(productId) {
       this.axios.get(`product_category/${productId}`).then((res) => {
-        console.log(res.data.data);
         this.relatedProductsReady = true;
       });
     },

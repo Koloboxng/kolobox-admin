@@ -24,7 +24,6 @@ const actions = {
     Vue.axios
       .get('admin/referrals')
       .then((res) => {
-        console.log('referrals', res.data.data);
         commit(mutate.UPDATE_ALL_REFERRALS, res.data.data);
       })
       .catch((e) => {

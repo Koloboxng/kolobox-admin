@@ -118,7 +118,6 @@ export default {
     totalAmount() {
       let total = 0;
       this.getAllUserProducts.forEach((x) => {
-        console.log(x.deposit_amount);
         total += Number(x.deposit_amount);
       });
       return total;
