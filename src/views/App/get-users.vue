@@ -253,7 +253,7 @@ export default {
         this.toast.msg = 'Searching...';
         this.toast.show = true;
         this.findSingleUser({
-          useremail: this.useremail,
+          useremail: this.useremail.toLowerCase().trim(),
           router: this.$router,
           snackbar: this.toast,
         });

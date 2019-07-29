@@ -42,6 +42,16 @@ const router = new Router({
           },
         },
         {
+          path: 'documentation',
+          name: 'Documentation',
+          component: () => import(/* webpackChunkName: "dashboard" */
+            './views/App/documentation.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'create-admin',
           name: 'CreateAdmin',
           component: () => import(/* webpackChunkName: "admin" */

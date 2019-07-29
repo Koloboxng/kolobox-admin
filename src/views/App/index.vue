@@ -102,6 +102,18 @@
                   </v-list-tile-title>
                 </v-list-tile>
               </v-list-group>
+
+              <v-list-group prepend-icon="money" value="true">
+                <v-list-tile slot="activator">
+                  <v-list-tile-title>Documentation</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(item,index) in documentation" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="item.route">{{item.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
             </v-list>
           </v-navigation-drawer>
         </v-flex>
@@ -148,6 +160,7 @@ export default {
       { name: 'Update Password', route: '/index/update-password' },
     ],
     paystack: [{ name: 'Run Callback', route: '/index/paystack-callback' }],
+    documentation: [{name:'Kolobox Documentation', route: '/index/documentation'}],
     email: null,
   }),
   computed: {

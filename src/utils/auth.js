@@ -3,8 +3,11 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+const LIVE_SERVER = 'https://api.kolobox.ng';
+const STAGING_SERVER = 'https://api-staging.kolobox.ng';
+
 // set defaults
-axios.defaults.baseURL = 'https://api.kolobox.ng';
+axios.defaults.baseURL = LIVE_SERVER;
 
 const redirect = (context, redirectUrl) => {
   if (redirectUrl) context.$router.replace(redirectUrl);
