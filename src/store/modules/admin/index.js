@@ -24,21 +24,25 @@ const actions = {
   }, data) {
     const {
       form,
-      snackbar,
+      toast,
       router,
     } = data;
+    const { firstname, lastname, email, phone, password, cpassword } = form;
+
     Vue.axios.post('admin', {
-      form,
+      firstname, lastname, email, phone, password, cpassword,
     })
       .then((res) => {
-        snackbar.msg = res.data.data.msg;
+        toast.show = true
+        toast.msg = "Admin created successfully";
         dispatch('getAllAdmins');
-        router.push('/index/get-all-admins');
+        router.push('/index/show-all-admins');
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        toast.show = true
+        toast.msg = e.data.message;
       })
-      .finally(snackbar.show = true);
+      .finally(toast.show = true);
   },
   getAllAdmins({
     commit,

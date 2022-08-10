@@ -82,7 +82,7 @@ export default {
         this.toast.show = true;
         this.createAdmin({
           form: this.form,
-          snackbar: this.snackbar,
+          toast: this.toast,
           router: this.$router,
         });
       }
