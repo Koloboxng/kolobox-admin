@@ -5,9 +5,10 @@ import axios from 'axios';
 
 const LIVE_SERVER = 'https://api.kolobox.ng';
 const STAGING_SERVER = 'https://api-staging.kolobox.ng';
+// const LOCAL_SERVER = 'http://localhost:9200';
 
 // set defaults
-axios.defaults.baseURL = STAGING_SERVER;
+axios.defaults.baseURL = LIVE_SERVER; 
 
 const redirect = (context, redirectUrl) => {
   if (redirectUrl) context.$router.replace(redirectUrl);
