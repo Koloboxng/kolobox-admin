@@ -30,6 +30,7 @@ export const getProfile = ({
 }) => {
   Vue.axios.post('payment/balance')
     .then((res) => {
+      console.log(res.data.data);
       commit(mutations.UPDATE_PROFILE, res.data.data);
       commit(mutations.UPDATE_APP_LOADED, true);
     });
