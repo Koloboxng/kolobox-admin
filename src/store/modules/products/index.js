@@ -4,7 +4,7 @@ import Vue from 'vue';
 import * as mutate from './mutation-types';
 
 const state = {
-  allProducts: null,
+  allProducts: [],
   allSelfManagedProducts: null,
   allInvestmentApproaches: null,
   allProductCategories: null,
@@ -14,6 +14,7 @@ const state = {
 
 const getters = {
   getProducts: state => state.allProducts,
+  allProduct: state => state.allProducts,
   getSelfManagedProducts: state => state.allSelfManagedProducts,
   getAllInvestmentApproaches: state => state.allInvestmentApproaches,
   getProductCategories: state => state.allProductCategories,
