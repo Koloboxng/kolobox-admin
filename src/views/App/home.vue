@@ -40,6 +40,15 @@
           <home-card :title="Titles[1].name" :number="account.userCount | commas"/>
         </v-flex>
         <v-flex xs3 ml-5>
+          <home-card :title="Titles[3].name" :number="account.userDailyCount"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[4].name" :number="account.userWeeklyCount"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[5].name" :number="account.userMonthlyCount"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
           <home-card :title="Titles[2].name" :number="account.transactionCount | commas"/>
         </v-flex>
       </v-layout>
@@ -65,6 +74,9 @@ export default {
         { name: 'Total Earnings' },
         { name: 'Total Users' },
         { name: 'Total Transactions' },
+        { name: 'Total Daily Registered User' },
+        { name: 'Total Weekly Registered User' },
+        { name: 'Total Monthly Registered User' },
       ],
       valid: true,
       start: null,
@@ -165,7 +177,7 @@ export default {
 
 <style scoped>
 .grey.darken-2 {
-  margin-top: 160px;
+  margin-top: 180px;
 }
 .mx-datepicker-main {
     top: 123.5px !important;

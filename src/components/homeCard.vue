@@ -1,6 +1,6 @@
 
 <template>
-  <v-card color="grey darken-2" height="160px">
+  <v-card color="grey darken-2" height="180px">
     <v-card-title primary-title>
       <div>
         <div class="headline white--text">{{title}}</div>

@@ -16,6 +16,13 @@ const router = new Router({
       ),
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import(/* webpackChunkName: "dashboard" */
+        './views/account.vue'
+      ),
+    },
+    {
       path: '/forgot-password',
       name: 'forgotPassword',
       component: () => import(/* webpackChunkName: "dashboard" */
