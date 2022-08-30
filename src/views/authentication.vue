@@ -71,6 +71,7 @@ export default {
 <style scoped>
 .link {
   float: right !important;
+  color: #1976d2;
 }
 .v-btn {
   float: left !important;
