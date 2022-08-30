@@ -13,6 +13,12 @@ import App from './App.vue';
 import router from './router';
 import store from './store/index';
 import './registerServiceWorker';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+
+Vue.config.productionTip = false;
+
+DatePicker.install(Vue);
 
 // PouchDB plugins
 PouchDB.plugin(require('pouchdb-find'));

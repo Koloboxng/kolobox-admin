@@ -142,6 +142,7 @@ export default {
     users: [
       { name: 'All Users', route: '/index/all-users' },
       { name: 'All Transactions', route: '/index/all-transactions' },
+      { name: 'Credit User', route: '/index/credit-account' },
     ],
     products: [
       { name: 'All Products', route: '/index/all-user-products' },

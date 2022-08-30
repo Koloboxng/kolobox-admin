@@ -49,6 +49,16 @@ const router = new Router({
           },
         },
         {
+          path: 'credit-account',
+          name: 'CreditAccount',
+          component: () => import(/* webpackChunkName: "admin" */
+            './views/App/credit-user-acct.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'documentation',
           name: 'Documentation',
           component: () => import(/* webpackChunkName: "dashboard" */
