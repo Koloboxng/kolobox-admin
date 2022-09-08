@@ -21,6 +21,14 @@
           :disabled-time="disabledEndTime"
           type="date"
         ></date-picker>
+        <v-select
+          v-if="allProduct"
+          v-model="product_id"
+          :items="transformProduct(allProduct)"
+          item-text="text"
+          item-value="value"
+          label="Select Product"
+        ></v-select>
         <v-btn :disabled="!valid" color="primary" @click="validate">Search</v-btn>
         <v-flex xs3 ml-5>
           <home-card
@@ -60,6 +68,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import loader from '@/components/loader.vue';
 import homeCard from '@/components/homeCard.vue';
+import productMixin from '../../mixins/products.mixin';
 import Vue from 'vue';
 
 export default {
@@ -68,6 +77,7 @@ export default {
     loader,
     homeCard,
   },
+  mixins: [productMixin],
   data() {
     return {
       Titles: [
@@ -81,6 +91,7 @@ export default {
       valid: true,
       start: null,
       end: null,
+      product_id: null,
       result: 0,
       title: '',
       toast: {
@@ -90,13 +101,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loaded', 'account']),
+    ...mapGetters(['loaded', 'account', 'allProduct']),
   },
   created() {
     this.getProfile();
+    this.getAllProducts();
   },
   methods: {
-    ...mapActions(['getProfile']),
+    ...mapActions(['getProfile', 'getAllProducts']),
     getRangeClasses(cellDate, currentDates, classnames) {
       const classes = [];
       const start = this.start && new Date(this.start).setHours(0, 0, 0, 0);
@@ -156,7 +168,8 @@ export default {
         this.valid = false;
         Vue.axios.post('admin/user-by-date', {
           'start': this.start,
-          'end': this.end
+          'end': this.end,
+          'product_id': this.product_id
         })
         .then((res) => {
           this.result = res.data.data.count;
