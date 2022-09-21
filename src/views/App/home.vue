@@ -5,38 +5,70 @@
     </div>
     <v-container fluid v-else>
       <div id="datePicker">
-        <date-picker
-          v-model="start"
-          :get-classes="getRangeClasses"
-          :default-value="end || new Date()"
-          :disabled-date="disabledStartDate"
-          :disabled-time="disabledStartTime"
-          type="date"
-        ></date-picker>
-        <date-picker
-          v-model="end"
-          :get-classes="getRangeClasses"
-          :default-value="start || new Date()"
-          :disabled-date="disabledEndDate"
-          :disabled-time="disabledEndTime"
-          type="date"
-        ></date-picker>
-        <v-select
-          v-if="allProduct"
-          v-model="product_id"
-          :items="transformProduct(allProduct)"
-          item-text="text"
-          item-value="value"
-          label="Select Product"
-        ></v-select>
+        <v-row>
+          <v-col
+            class="d-flex pr-1"
+            cols="12"
+            sm="6"
+          >
+          <date-picker
+            v-model="start"
+            :get-classes="getRangeClasses"
+            :default-value="end || new Date()"
+            :disabled-date="disabledStartDate"
+            :disabled-time="disabledStartTime"
+            type="date"
+            class="pr-1"
+          ></date-picker>
+          <date-picker
+            v-model="end"
+            :get-classes="getRangeClasses"
+            :default-value="start || new Date()"
+            :disabled-date="disabledEndDate"
+            :disabled-time="disabledEndTime"
+            type="date"
+            class="pr-1"
+          ></date-picker>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col
+            class="d-flex"
+            cols="12"
+            sm="6"
+          >
+          <v-select
+            v-if="allProduct"
+            v-model="product_id"
+            :items="transformProduct(allProduct)"
+            item-text="text"
+            item-value="value"
+            label="Select Product"
+            class="pr-1"
+          ></v-select>
+          <v-select
+            v-model="freq"
+            :items="items"
+            item-text="text"
+            item-value="value"
+            label="Frequently"
+          ></v-select>
+          </v-col>
+        </v-row>
         <v-btn :disabled="!valid" color="primary" @click="validate">Search</v-btn>
+      </div>
+
+      <v-layout row justify-center>
         <v-flex xs3 ml-5>
           <home-card
-            :title="title"
-            :number="result"
-          />
+              :title="title"
+              :number="result"
+              style="margin-top: 0px;"
+            />
         </v-flex>
-      </div>
+      </v-layout>
+
       <v-layout row>
         <v-flex xs3 ml-5>
           <home-card
@@ -92,12 +124,14 @@ export default {
       start: null,
       end: null,
       product_id: null,
+      freq: null,
       result: 0,
       title: '',
       toast: {
         show: false,
         msg: '',
       },
+      items: ['null', 'Daily', 'Weekly', 'Monthly'],
     };
   },
   computed: {
@@ -161,6 +195,11 @@ export default {
         return;
       }
 
+      if(this.product_id === null && this.freq) {
+        this.valid = true;
+        return;
+      }
+
       this.toast.msg = 'Validating ...';
       this.toast.show = true;
 
@@ -169,7 +208,8 @@ export default {
         Vue.axios.post('admin/user-by-date', {
           'start': this.start,
           'end': this.end,
-          'product_id': this.product_id
+          'product_id': this.product_id,
+          "freq": this.freq,
         })
         .then((res) => {
           this.result = res.data.data.count;

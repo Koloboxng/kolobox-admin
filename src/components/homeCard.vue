@@ -4,7 +4,7 @@
     <v-card-title primary-title>
       <div>
         <div class="headline white--text">{{title}}</div>
-        <span class="white--text">{{number}}</span>
+        <span class="white--text" style="text-align: center;">{{number}}</span>
       </div>
     </v-card-title>
   </v-card>
@@ -25,3 +25,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .headline {
+    font-size: 16px !important;
+  }
+</style>

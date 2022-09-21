@@ -32,7 +32,6 @@
 
                   <v-text-field
                     v-model="form.reference"
-                    :rules="requiredRules"
                     label="Reference Id"
                   ></v-text-field>
 
