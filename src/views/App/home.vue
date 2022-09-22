@@ -8,7 +8,7 @@
         <v-row>
           <v-col
             class="d-flex pr-1"
-            cols="12"
+            cols="6"
             sm="6"
           >
           <date-picker
@@ -18,7 +18,7 @@
             :disabled-date="disabledStartDate"
             :disabled-time="disabledStartTime"
             type="date"
-            class="pr-1"
+            class="pr-1 pl-1"
           ></date-picker>
           <date-picker
             v-model="end"
@@ -33,6 +33,38 @@
         </v-row>
 
         <v-row>
+          <v-col
+            class="d-flex pr-1"
+            cols="3"
+          >
+          <v-select
+            v-model="option"
+            :items="options"
+            item-text="text"
+            item-value="value"
+            label="Select Option"
+            class="pr-1"
+            @change="onChange($event)"
+          ></v-select>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="option === 'Payment'">
+          <v-col
+            class="d-flex"
+            cols="3"
+          >
+          <v-select
+            v-model="payments"
+            :items="paymentOptions"
+            item-text="text"
+            item-value="value"
+            label="Payments Options"
+          ></v-select>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="option === 'Product'">
           <v-col
             class="d-flex"
             cols="12"
@@ -53,6 +85,22 @@
             item-text="text"
             item-value="value"
             label="Frequently"
+          ></v-select>
+          </v-col>
+        </v-row>
+
+        <v-row v-if="option === 'Bank'">
+          <v-col
+            class="d-flex"
+            cols="12"
+            sm="6"
+          >
+          <v-select
+            v-model="accounts"
+            :items="accountOptions"
+            item-text="text"
+            item-value="value"
+            label="Bank Account"
           ></v-select>
           </v-col>
         </v-row>
@@ -125,13 +173,19 @@ export default {
       end: null,
       product_id: null,
       freq: null,
+      option: null,
+      payments: null,
+      accounts: null,
       result: 0,
       title: '',
       toast: {
         show: false,
         msg: '',
       },
-      items: ['null', 'Daily', 'Weekly', 'Monthly'],
+      items: [null, 'Daily', 'Weekly', 'Monthly'],
+      options: [null,'Payment','Product', 'Bank'],
+      paymentOptions: ['Yes', 'No'],
+      accountOptions: ['Yes', 'No'],
     };
   },
   computed: {
@@ -180,17 +234,17 @@ export default {
     },
     validate() {
 
-      if(this.start === '' && this.end === '') {
+      if(this.start === null && this.end === null) {
         this.valid = true;
         return;
       }
 
-      if(this.start === '') {
+      if(this.start === null) {
         this.valid = true;
         return;
       }
 
-      if(this.end === '') {
+      if(this.end === null) {
         this.valid = true;
         return;
       }
@@ -203,13 +257,16 @@ export default {
       this.toast.msg = 'Validating ...';
       this.toast.show = true;
 
-      if(this.start !== '' && this.end !== '') {
+      if(this.start !== null && this.end !== null) {
         this.valid = false;
         Vue.axios.post('admin/user-by-date', {
           'start': this.start,
           'end': this.end,
           'product_id': this.product_id,
           "freq": this.freq,
+          "payment": this.payments,
+          "account": this.accounts,
+          "option": this.option
         })
         .then((res) => {
           this.result = res.data.data.count;
@@ -223,7 +280,10 @@ export default {
         });
       }
       
-    }
+    },
+    onChange(event) {
+      
+    },
   },
 };
 </script>
