@@ -57,6 +57,18 @@
 
               <v-list-group prepend-icon="widgets" value="true">
                 <v-list-tile slot="activator">
+                  <v-list-tile-title>Withdrawal</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(withdraw,index) in withdrawals" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="withdraw.route">{{withdraw.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
+
+              <v-list-group prepend-icon="widgets" value="true">
+                <v-list-tile slot="activator">
                   <v-list-tile-title>Referrals</v-list-tile-title>
                 </v-list-tile>
 
@@ -155,6 +167,9 @@ export default {
         name: 'View All Product Categories',
         route: '/index/get-product-categories',
       },
+    ],
+    withdrawals: [
+      { name: 'Withdrawal Deatils', route: '/index/withdrawal-details' },
     ],
     settings: [
       { name: 'Enable/Disable/Finalize OTP', route: '/index/otp-handler' },

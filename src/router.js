@@ -239,6 +239,16 @@ const router = new Router({
           },
         },
         {
+          path: 'withdrawal-details',
+          name: 'WithdrawalDetails',
+          component: () => import(/* webpackChunkName: "admin" */
+            './views/App/get-all-withdrawal-details.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'all-referrals',
           name: 'AllReferrals',
           component: () => import(/* webpackChunkName: "referrrals" */

@@ -23,14 +23,21 @@
 
 <script>
 export default {
-    // props: ['start', 'end'],
+    name: "DatePickerComponent",
     props: {
-        
+        start: {
+            type: String,
+            required: true
+        },
+        end: {
+            type: String,
+            required: true
+        },
     },
     data() {
         return {
-            start: null,
-            end: null
+            /* start: this.start,
+            end: this.end */
         };
     },
     methods: {

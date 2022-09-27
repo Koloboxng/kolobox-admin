@@ -9,6 +9,7 @@ const state = {
   allInvestmentApproaches: null,
   allProductCategories: null,
   allTransactions: null,
+  allWithdrawalTransactions: null,
   allUserProducts: null,
 };
 
@@ -19,6 +20,7 @@ const getters = {
   getAllInvestmentApproaches: state => state.allInvestmentApproaches,
   getProductCategories: state => state.allProductCategories,
   getAllTransactions: state => state.allTransactions,
+  getAllWithdrawalTransactions: state => state.allWithdrawalTransactions,
   getAllUserProducts: state => state.allUserProducts,
 };
 
@@ -225,6 +227,20 @@ const actions = {
         commit(mutate.UPDATE_ALL_TRANSACTIONS, res.data.data);
       });
   },
+  allWithdrawalTransactions({ commit }, data) {
+    const { pageNumber, snackbar, startDate, endDate } = data;
+    const start = (startDate) ? new Date(startDate).toISOString().split('T')[0] : null;
+    const end = (startDate) ? new Date(endDate).toISOString().split('T')[0] : null;
+    snackbar.msg = 'Fetching data...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`payment/withdrawal-transactions/?start_date=${start}&end_date=${end}&page=${pageNumber}`)
+      .then((res) => {
+        snackbar.msg = 'Data retrieved';
+        snackbar.show = true;
+        commit(mutate.UPDATE_ALL_WITHDRAWAL_TRANSACTIONS, res.data.data);
+      });
+  },
   createSubscription({ commit }, data) {
     const { form, snackbar } = data;
     snackbar.msg = 'Creating...';
@@ -288,6 +304,9 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_TRANSACTIONS](state, data) {
     state.allTransactions = data;
+  },
+  [mutate.UPDATE_ALL_WITHDRAWAL_TRANSACTIONS](state, data) {
+    state.allWithdrawalTransactions = data;
   },
   [mutate.UPDATE_ALL_USER_PRODUCTS](state, data) {
     state.allUserProducts = data;
