@@ -59,6 +59,16 @@ const router = new Router({
           },
         },
         {
+          path: 'login-details',
+          name: 'LoginDetails',
+          component: () => import(/* webpackChunkName: "admin" */
+            './views/App/get-all-login-details.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'documentation',
           name: 'Documentation',
           component: () => import(/* webpackChunkName: "dashboard" */

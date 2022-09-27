@@ -5,10 +5,12 @@ import * as mutation from './mutation-types';
 
 const state = {
   allUsers: null,
+  allLoginUsers: null,
 };
 
 const getters = {
   getUsers: state => state.allUsers,
+  getLoginDetails: state => state.allLoginUsers,
 };
 
 const actions = {
@@ -86,11 +88,28 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
+  allUserLoginsDetails({ commit }, data) {
+    const { pageNumber, snackbar, startDate, endDate } = data;
+    const start = (startDate) ? new Date(startDate).toISOString().split('T')[0] : null;
+    const end = (startDate) ? new Date(endDate).toISOString().split('T')[0] : null;
+    snackbar.msg = 'Fetching data...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`admin/login-details/?start_date=${start}&end_date=${end}&page=${pageNumber}`)
+      .then((res) => {
+        snackbar.msg = 'Data retrieved';
+        snackbar.show = true;
+        commit(mutation.UPDATE_ALL_USER_LOGIN_DETAILS, res.data.data);
+      });
+  },
 };
 
 const mutations = {
   [mutation.UPDATE_ALL_USERS](state, data) {
     state.allUsers = data;
+  },
+  [mutation.UPDATE_ALL_USER_LOGIN_DETAILS](state, data) {
+    state.allLoginUsers = data;
   },
 };
 
