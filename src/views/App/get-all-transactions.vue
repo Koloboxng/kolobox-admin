@@ -50,8 +50,7 @@
         :click-handler="fetchNext"
         :prev-text="'Prev'"
         :next-text="'Next'"
-        :container-class="'pagination'"
-      />
+        :container-class="'pagination'"/>
     </div>
   </v-app>
 </template>
