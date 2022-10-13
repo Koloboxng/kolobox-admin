@@ -85,6 +85,7 @@ export default {
             alert('Successfully Updated!');
             this.running = false;
             this.validDialog = false;
+            this.$store.dispatch('getSingleUser', {id: this.id})
           })
           .catch((e) => {
             this.toast.msg = e.data.data.msg;

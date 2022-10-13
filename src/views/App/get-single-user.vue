@@ -15,7 +15,9 @@ export default {
     };
   },
   created() {
-    if (this.$route.params.user) this.user = this.$route.params.user;
+    if (this.$route.params.user) {
+      this.user = this.$route.params.user
+    };
   },
 };
 </script>

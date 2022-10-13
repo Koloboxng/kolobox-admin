@@ -1,15 +1,18 @@
+
 <template>
   <v-app>
+
     <v-dialog v-model="walletDialog" persistent max-width="690" max-height="500" data-app>
       <v-layout row wrap>
         <v-flex xs10>
-          <update-wallet :id="user.primary_id"/>
+          <update-wallet :id="user.id"/>
         </v-flex>
         <v-flex xs1>
           <v-btn color="error" @click="walletDialog = false">Close</v-btn>
         </v-flex>
       </v-layout>
     </v-dialog>
+
     <v-dialog v-model="createSubDialog" max-width="690" data-app>
       <v-card>
         <v-flex ml-2 xs10 v-if="getProducts">
@@ -39,6 +42,7 @@
         </v-flex>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="createProductDialog" max-width="690" data-app>
       <v-card>
         <v-flex ml-2 xs10>
@@ -78,6 +82,7 @@
         </v-flex>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="updateProductDialog" max-width="690" data-app>
       <v-card>
         <v-flex xs10 ml-2>
@@ -186,7 +191,7 @@
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Occupation</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.banker"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="user.occupation"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
@@ -198,29 +203,32 @@
                  <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Kolobox ID</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.number ? user.number : user.kolobox_id"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="user.id"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Next of Kin</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.Next_Of_Kin | 'None'"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="user.Next_Of_Kin ? user.Next_Of_Kin : 'None'"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
+
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Amount of Subscriptions</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.subscriptions.length"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="getSingleUserSubscriptions.length"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <div v-if="user.subscriptions.length > 0" class="products">
+
+                <div v-if="getSingleUserSubscriptions.length > 0" class="products">
                   <h2>Subscription Details</h2>
                   <div
-                    v-for="(item, index) in user.subscriptions"
+                    v-for="(item, index) in getSingleUserSubscriptions"
                     :key="index"
                     class="particularItem"
                   >
                     <h3>[{{index + 1}}]</h3>
+                    <h3>Product Name -- {{item.name}}</h3>
                     <h3>Amount -- {{item.deposit_amount | currency('₦',2) | commas}}</h3>
                     <h3>Last Pay Day -- {{item.last_pay_day.split('T')[0]}}</h3>
                     <h3>Next Pay Day -- {{item.next_pay_day.split('T')[0]}}</h3>
@@ -233,34 +241,53 @@
                   </div>
                   <v-btn color="success" @click="createNewSubscription()">Create Subscription</v-btn>
                 </div>
+                <div v-else class="products">
+                  <v-btn color="success" @click="createNewSubscription()">Create Subscription</v-btn>
+                </div>
+
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Amount of Products</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.products.length"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="getSingleUserEarnings.length"></v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <div v-if="user.products.length > 0" class="products">
+                <div v-if="getSingleUserEarnings.length > 0" class="products">
                   <h2>Products Details</h2>
-                  <div v-for="(item, index) in user.products" :key="index" class="particularItem">
+                  <div v-for="(item, index) in getSingleUserEarnings" :key="index" class="particularItem">
                     <h3>[{{index + 1}}]</h3>
-                    <h3>Product Name -- {{findProduct(item.product_id)}}</h3>
-                    <h3>Amount -- {{item.deposit_amount | currency('₦',2) | commas}}</h3>
-                    <h3>Verified -- {{item.verified}}</h3>
-                    <h3>Canceled -- {{item.canceled}}</h3>
+                    <h3>Product Name -- {{item.name}}</h3>
+                    <h3>Start Date -- {{formatDate(item.start_date)}}</h3>
+                    <h3>End Date -- 
+                      {{
+                        item.name !== "KOLO-FLEX"
+                          ? formatDate(
+                              getEndDate(item.start_date, Number(item.tenor))
+                            ) || "00-00-00"
+                          : "-"
+                      }}
+                    </h3>
+                    <h3>Tenure -- {{item.name !== "KOLO-FLEX" ? item.tenor + " days" : "-"}}</h3>
+                    <h3>Interest Rate -- {{item.interest_rate | percent(2)}}</h3>
+                    <h3>Interest -- {{item.interest | currency("₦", 2)}}</h3>
+                    <h3>Investment -- {{item.amount | currency("₦", 2)}}</h3>
                     <v-btn color="primary" @click="updateSingleProduct(item)">Update Product</v-btn>
                   </div>
                   <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
                 </div>
-                <v-list-tile>
+                <div v-else class="products">
+                  <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
+                </div>
+
+                <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Unlocked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{user.account_balance | currency('₦',2) | commas}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].account_balance) ? '₦'+formatPrice(getSingleUserDetails[0].account_balance): "₦0.00"}}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile>
+                <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Locked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{user.book_balance | currency('₦',2) | commas}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].book_balance) ? '₦'+formatPrice(getSingleUserDetails[0].book_balance): "₦0.00"}}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
@@ -271,8 +298,45 @@
               </template>
             </v-list>
           </v-card>
+
+          <v-card>
+            <v-toolbar color="blue" dark>
+              <v-toolbar-title>Bank Details</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-list class="ml-3 mt-2 mb-2" v-if="getSingleUserDetails">
+              <template>
+                <div v-for="(item, index) in getSingleUserDetails" :key="index" class="mb-4">
+                  <v-list-title>
+                    <v-list-content>
+                      <v-list-tile-title>Bank Name</v-list-tile-title>
+                      <v-list-tile-sub-title v-html="item.bank_name ? item.bank_name : 'None'"></v-list-tile-sub-title>
+                    </v-list-content>
+                  </v-list-title>
+
+                  <v-list-title>
+                    <v-list-content>
+                      <v-list-tile-title>Account Number</v-list-tile-title>
+                      <v-list-tile-sub-title v-html="item.account_number ? item.account_number : 'None'"></v-list-tile-sub-title>
+                    </v-list-content>
+                  </v-list-title>
+
+                  <v-list-title>
+                    <v-list-content>
+                      <v-list-tile-title>Account Name</v-list-tile-title>
+                      <v-list-tile-sub-title v-html="item.account_name ? item.account_name : 'None'"></v-list-tile-sub-title>
+                    </v-list-content>
+                  </v-list-title>
+                </div>
+
+              </template>
+            </v-list>
+            
+          </v-card>
         </v-flex>
       </v-layout>
+
       <v-snackbar v-model="toast.show" top right color="black">
         {{ toast.msg }}
         <v-btn flat dark small @click.native="toast.show = false">Close</v-btn>
@@ -308,49 +372,50 @@ export default {
       validateSubscriptionForm: true,
       createSubDialog: false,
       walletDialog: false,
+      product_id: null,
       subscriptionForm: {
-        id: '',
-        deposit_amount: '',
-        saving_frequency: '',
-        user_id: '',
-        product_id: '',
-        last_pay_day: '',
-        next_pay_day: '',
-        group_id: '',
-        created_at: '',
-        updated_at: '',
+        id: null,
+        deposit_amount: null,
+        saving_frequency: null,
+        user_id: null,
+        product_id: null,
+        last_pay_day: null,
+        next_pay_day: null,
+        group_id: null,
+        created_at: null,
+        updated_at: null,
       },
       productForm: {
-        id: '',
-        deposit_amount: '',
-        start_date: '',
-        investment_goal: '',
-        saving_frequency: '',
-        user_id: '',
-        product_id: '',
-        created_at: '',
-        updated_at: '',
-        unit_price: '',
-        units_purchased: '',
-        verified: '',
-        canceled: '',
+        id: null,
+        deposit_amount: null,
+        start_date: null,
+        investment_goal: null,
+        saving_frequency: null,
+        user_id: null,
+        product_id: null,
+        created_at: null,
+        updated_at: null,
+        unit_price: null,
+        units_purchased: null,
+        verified: null,
+        canceled: null,
       },
       updateSub: {
-        deposit_amount: '',
-        saving_frequency: '',
-        next_pay_day: '',
-        auto_subscription: '',
-        product_id: '',
-        id: '',
-        user_id: '',
+        deposit_amount: null,
+        saving_frequency: null,
+        next_pay_day: null,
+        auto_subscription: null,
+        product_id: null,
+        id: null,
+        user_id: null,
       },
       updateProduct: {
-        verified: '',
-        canceled: '',
-        product_id: '',
-        user_id: '',
+        verified: null,
+        canceled: null,
+        product_id: null,
+        user_id: null,
       },
-      frequency: ['daily', 'weekly', 'momthly'],
+      frequency: ['daily', 'weekly', 'monthly'],
       binary: [{ text: 'true', value: true }, { text: 'false', value: false }],
       createProductDialog: false,
       updateSubscriptionDialog: false,
@@ -361,7 +426,24 @@ export default {
     };
   },
   created() {
+    this.$watch(
+      () => this.$route.params,
+      () => this.user.id,
+      () => {
+        this.getSingleUser({id: this.$route.params.id});
+        this.getSingleEarnings({id: this.$route.params.id});
+        this.getSingleUserSub({id: this.$route.params.id});
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    );
     this.getAllProducts();
+    this.getSingleUser({id: this.$route.params.id});
+    this.getSingleEarnings({id: this.$route.params.id});
+    this.getSingleUserSub({id: this.$route.params.id});
+    
+    // console.log(this.$route.params.id)
   },
   methods: {
     ...mapActions([
@@ -370,13 +452,16 @@ export default {
       'updateOneSubscription',
       'createOneProduct',
       'updateOneProduct',
+      'getSingleUser',
+      'getSingleUserSub',
+      'getSingleEarnings'
     ]),
     findProduct(productId) {
       return this.getProducts.find(x => x.id === productId).name;
     },
     updateSingleSubscription(item) {
       this.updateSubscriptionDialog = true;
-      this.updateSub.user_id = this.user.primary_id;
+      this.updateSub.user_id = this.$route.params.id;
       this.updateSub.id = item.id;
       this.updateSub.auto_subscription = item.auto_subscription;
       this.updateSub.next_pay_day = item.next_pay_day;
@@ -390,30 +475,26 @@ export default {
       });
     },
     updateSingleProduct(item) {
+      if (item.name === this.getProducts[0].name) {
+        this.product_id = this.getProducts[0].id;
+      } else {
+        this.product_id = this.getProducts.filter(
+          x => x.name === item.name
+        )[0].id;
+      }
       this.updateProductDialog = true;
-      this.updateProduct.user_id = this.user.primary_id;
-      this.updateProduct.product_id = item.product_id;
+      this.updateProduct.user_id = this.$route.params.id;
+      this.updateProduct.product_id = this.product_id;
       this.updateProduct.verified = item.verified;
       this.updateProduct.canceled = item.canceled;
     },
     createNewSubscription() {
       this.createSubDialog = true;
-      this.subscriptionForm.user_id = this.user.primary_id;
-      this.subscriptionForm.id = this.generate(11);
+      this.subscriptionForm.user_id = this.$route.params.id;
+      this.subscriptionForm.id = this.generate(14);
       [this.subscriptionForm.last_pay_day] = new Date()
         .toISOString()
         .split('T');
-
-      let numberOfDays = 0;
-      if (this.subscriptionForm.saving_frequency === 'daily') numberOfDays = 1;
-      if (this.subscriptionForm.saving_frequency === 'weekly') numberOfDays = 7;
-      if (this.subscriptionForm.saving_frequency === 'monthly') {
-        numberOfDays = 30;
-      }
-      this.subscriptionForm.next_pay_day = this.getEndDate(
-        this.subscriptionForm.last_pay_day,
-        numberOfDays,
-      );
       this.subscriptionForm.group_id = null;
       this.subscriptionForm.created_at = new Date().toISOString();
       this.subscriptionForm.updated_at = new Date().toISOString();
@@ -424,15 +505,24 @@ export default {
       [this.productForm.start_date] = new Date().toISOString().split('T');
       this.productForm.investment_goal = null;
       this.productForm.saving_frequency = null;
-      this.productForm.user_id = this.user.primary_id;
+      this.productForm.user_id = this.$route.params.id;
       this.productForm.created_at = new Date().toISOString();
       this.productForm.updated_at = new Date().toISOString();
       this.productForm.unit_price = null;
       this.productForm.units_purchased = null;
     },
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
   },
   computed: {
-    ...mapGetters(['getProducts']),
+    ...mapGetters([
+      'getProducts', 
+      'getSingleUserDetails', 
+      'getSingleUserSubscriptions', 
+      'getSingleUserEarnings'
+    ]),
   },
 };
 </script>

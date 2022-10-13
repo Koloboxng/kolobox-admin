@@ -6,14 +6,27 @@ import * as mutation from './mutation-types';
 const state = {
   allUsers: null,
   allLoginUsers: null,
+  singleUserDetails: null,
+  singleUserSubscriptions: null,
+  singleUserEarnings: null,
 };
 
 const getters = {
   getUsers: state => state.allUsers,
   getLoginDetails: state => state.allLoginUsers,
+  getSingleUserDetails: state => state.singleUserDetails,
+  getSingleUserSubscriptions: state => state.singleUserSubscriptions,
+  getSingleUserEarnings: state => state.singleUserEarnings,
 };
 
 const actions = {
+  getSingleUser({commit}, data) {
+    const {id} = data;
+    if(!id) return;
+    Vue.axios.get(`admin/user-details/${id}`).then((res) => {
+      commit(mutation.UPDATE_SINGLE_USER_DETAILS, res.data.data);
+    })
+  },
   getAllUsers({ commit }, data) {
     const pageNumber = data.pageNumber || 1;
     const { snackbar, pouch } = data;
@@ -102,6 +115,20 @@ const actions = {
         commit(mutation.UPDATE_ALL_USER_LOGIN_DETAILS, res.data.data);
       });
   },
+  getSingleUserSub({commit}, data) {
+    const {id} = data;
+    if(!id) return;
+    Vue.axios.get(`admin/user/user-subscription/${id}`).then((res) => {
+      commit(mutation.UPDATE_SINGLE_USER_SUBSCRIPTIONS, res.data.data);
+    })
+  },
+  getSingleEarnings({commit}, data) {
+    const {id} = data
+    if(!id) return;
+    Vue.axios.get(`admin/user/user-earning/${id}`).then((res) => {
+      commit(mutation.UPDATE_SINGLE_USER_EARNINGS, res.data.data)
+    })
+  },
 };
 
 const mutations = {
@@ -110,6 +137,15 @@ const mutations = {
   },
   [mutation.UPDATE_ALL_USER_LOGIN_DETAILS](state, data) {
     state.allLoginUsers = data;
+  },
+  [mutation.UPDATE_SINGLE_USER_DETAILS](state, data) {
+    state.singleUserDetails = data;
+  },
+  [mutation.UPDATE_SINGLE_USER_SUBSCRIPTIONS](state, data) {
+    state.singleUserSubscriptions = data;
+  },
+  [mutation.UPDATE_SINGLE_USER_EARNINGS](state, data) {
+    state.singleUserEarnings = data;
   },
 };
 

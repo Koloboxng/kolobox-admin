@@ -241,7 +241,7 @@ const actions = {
         commit(mutate.UPDATE_ALL_WITHDRAWAL_TRANSACTIONS, res.data.data);
       });
   },
-  createSubscription({ commit }, data) {
+  /* createSubscription({ commit }, data) {
     const { form, snackbar } = data;
     snackbar.msg = 'Creating...';
     snackbar.show = true;
@@ -251,11 +251,11 @@ const actions = {
         snackbar.msg = 'Subscription has been created for the user';
       })
       .catch((e) => {
-        snackbar.msg = e.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
-  },
-  createOneProduct({ commit }, data) {
+  }, */
+  createOneProduct({ commit, dispatch }, data) {
     const { form, snackbar } = data;
     let { dialog } = data;
     snackbar.msg = 'Creating...';
@@ -265,13 +265,14 @@ const actions = {
       .then(() => {
         snackbar.msg = 'Product has been created for the user';
         dialog = false;
+        dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
       })
       .catch((e) => {
-        snackbar.msg = e.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
   },
-  updateOneProduct({ commit }, data) {
+  updateOneProduct({ commit, dispatch }, data) {
     const { form, snackbar } = data;
     let { dialog } = data;
     snackbar.msg = 'Updating...';
@@ -281,6 +282,7 @@ const actions = {
       .then(() => {
         snackbar.msg = 'Product has been updated for the user';
         dialog = false;
+        dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
       })
       .catch((e) => {
         snackbar.msg = e.data.msg;

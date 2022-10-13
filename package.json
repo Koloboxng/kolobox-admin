@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "moment-business-days": "^1.2.0",
     "pouch-vue": "^0.3.4",
     "pouchdb-browser": "^7.0.0",
     "pouchdb-find": "^7.0.0",
