@@ -209,6 +209,16 @@ const router = new Router({
           },
         },
         {
+          path: 'get-group-product',
+          name: 'GetAllGroups',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/all-group-products.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'otp-handler',
           name: 'OtpHandler',
           component: () => import(/* webpackChunkName: "users" */
@@ -283,6 +293,16 @@ const router = new Router({
           name: 'AllUserProducts',
           component: () => import(/* webpackChunkName: "subscriptions" */
             './views/App/get-all-user-products.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'get-single-group/:id',
+          name: 'GetSingleGroup',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/get-single-group.vue'
           ),
           meta: {
             requiresAuth: true,

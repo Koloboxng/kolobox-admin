@@ -11,6 +11,8 @@ const state = {
   allTransactions: null,
   allWithdrawalTransactions: null,
   allUserProducts: null,
+  allGroupProducts: null,
+  allGroupMembers: null,
 };
 
 const getters = {
@@ -22,6 +24,8 @@ const getters = {
   getAllTransactions: state => state.allTransactions,
   getAllWithdrawalTransactions: state => state.allWithdrawalTransactions,
   getAllUserProducts: state => state.allUserProducts,
+  getAllGroupProducts: state => state.allGroupProducts,
+  getGroupMembers: state => state.allGroupMembers,
 };
 
 const actions = {
@@ -101,7 +105,7 @@ const actions = {
         snackbar.msg = res.data.data.msg;
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
   },
@@ -289,6 +293,41 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
+  moveSingleUserProduct({ commit }, data) {
+    const { form, snackbar } = data;
+    Vue.axios
+      .post('product/single-user/movement',
+        form,
+      )
+      .then((res) => {
+        snackbar.msg = res.data.data;
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.message;
+      })
+      .finally((snackbar.show = true));
+  },
+  fetchAllGroupProducts({ commit }, data) {
+    const { pageNumber, snackbar } = data;
+    snackbar.msg = 'Fetching data...';
+    snackbar.show = true;
+    Vue.axios.get(`group/all-group/?page=${pageNumber}`).then((res) => {
+      snackbar.msg = 'Data retrieved';
+      snackbar.show = true;
+      commit(mutate.UPDATE_ALL_GROUP_PRODUCTS, res.data.data);
+    });
+  },
+  fetchGroupmembers({ commit}, data) {
+    const { id, snackbar } = data;
+    if(!id) return;
+    snackbar.msg = 'Getting Membership List';
+    snackbar.show = true;
+    Vue.axios.get(`group/all-group-members/${id}`).then((res) => {
+      snackbar.msg = 'Data retrieved';
+      snackbar.show = true;
+      commit(mutate.UPDATE_ALL_GROUP_MEMBERS, res.data.data);
+    });
+  },
 };
 
 const mutations = {
@@ -312,6 +351,12 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_USER_PRODUCTS](state, data) {
     state.allUserProducts = data;
+  },
+  [mutate.UPDATE_ALL_GROUP_PRODUCTS](state, data) {
+    state.allGroupProducts = data;
+  },
+  [mutate.UPDATE_ALL_GROUP_MEMBERS](state, data) {
+    state.allGroupMembers = data;
   },
 };
 
