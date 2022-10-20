@@ -57,6 +57,18 @@
 
               <v-list-group prepend-icon="widgets" value="true">
                 <v-list-tile slot="activator">
+                  <v-list-tile-title>Groups</v-list-tile-title>
+                </v-list-tile>
+
+                <v-list-tile v-for="(group,index) in groups" :key="index">
+                  <v-list-tile-title>
+                    <router-link class="link" :to="group.route">{{group.name}}</router-link>
+                  </v-list-tile-title>
+                </v-list-tile>
+              </v-list-group>
+
+              <v-list-group prepend-icon="widgets" value="true">
+                <v-list-tile slot="activator">
                   <v-list-tile-title>Withdrawal</v-list-tile-title>
                 </v-list-tile>
 
@@ -168,6 +180,9 @@ export default {
         name: 'View All Product Categories',
         route: '/index/get-product-categories',
       },
+    ],
+    groups: [
+      { name: 'All Groups', route: '/index/get-group-product' },
     ],
     withdrawals: [
       { name: 'Withdrawal Deatils', route: '/index/withdrawal-details' },
