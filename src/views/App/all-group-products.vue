@@ -133,7 +133,6 @@
     methods: {
       ...mapActions(['fetchAllGroupProducts']),
       fetchNext(pageNum) {
-        const { pageNumber } = this.getAllGroupProducts;
         this.fetchAllGroupProducts({
           pageNumber: pageNum,
           snackbar: this.toast,

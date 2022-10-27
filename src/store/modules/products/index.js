@@ -11,6 +11,8 @@ const state = {
   allTransactions: null,
   allWithdrawalTransactions: null,
   allUserProducts: null,
+  allGroupProducts: null,
+  allGroupMembers: null,
   allFundedAndUnFundedProduct: {},
   allFundedProduct: null,
   allUnFundedProduct: null,
@@ -26,6 +28,8 @@ const getters = {
   getAllTransactions: state => state.allTransactions,
   getAllWithdrawalTransactions: state => state.allWithdrawalTransactions,
   getAllUserProducts: state => state.allUserProducts,
+  getAllGroupProducts: state => state.allGroupProducts,
+  getGroupMembers: state => state.allGroupMembers,
   getAllFundedAndUnFundedProduct: state => state.allFundedAndUnFundedProduct,
   getAllFundedProduct: state => state.allFundedProduct,
   getAllUnFundedProduct: state => state.allUnFundedProduct,
@@ -400,6 +404,12 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_USER_PRODUCTS](state, data) {
     state.allUserProducts = data;
+  },
+  [mutate.UPDATE_ALL_GROUP_PRODUCTS](state, data){
+    state.allGroupProducts = data;
+  },
+  [mutate.UPDATE_ALL_GROUP_MEMBERS](state, data){
+    state.allGroupMembers = data;
   },
   [mutate.UPDATE_ALL_USER_FUDED_AND_UNFUNDED_PRODUCTS](state, data) {
     state.allFundedAndUnFundedProduct.fundedProduct = data.fundedProduct;

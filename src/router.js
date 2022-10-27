@@ -299,6 +299,16 @@ const router = new Router({
           },
         },
         {
+          path: 'get-single-group/:id',
+          name: 'GetSingleGroup',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/get-single-group.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'all-funded-user-products',
           name: 'AllFundedUserProducts',
           component: () => import(/* webpackChunkName: "subscriptions" */
