@@ -180,6 +180,14 @@ export default {
         name: 'View All Product Categories',
         route: '/index/get-product-categories',
       },
+      {
+        name: 'Funded Products',
+        route: '/index/all-funded-user-products'
+      },
+      {
+        name: 'UnFunded Products',
+        route: '/index/all-unfunded-user-products'
+      },
     ],
     groups: [
       { name: 'All Groups', route: '/index/get-group-product' },

@@ -6,6 +6,8 @@ const mutations = {
     state.account.paystackBalance = data.paystackBalance;
     state.account.transactionCount = data.transactionCount;
     state.account.userCount = data.userCount;
+    state.account.userFundedCount = data.userFundedCount;
+    state.account.userUnFundedCount = data.userUnFundedCount;
   },
   [mutate.UPDATE_APP_LOADED](state) {
     state.loaded = true;

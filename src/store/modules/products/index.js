@@ -11,8 +11,9 @@ const state = {
   allTransactions: null,
   allWithdrawalTransactions: null,
   allUserProducts: null,
-  allGroupProducts: null,
-  allGroupMembers: null,
+  allFundedAndUnFundedProduct: {},
+  allFundedProduct: null,
+  allUnFundedProduct: null,
 };
 
 const getters = {
@@ -24,8 +25,9 @@ const getters = {
   getAllTransactions: state => state.allTransactions,
   getAllWithdrawalTransactions: state => state.allWithdrawalTransactions,
   getAllUserProducts: state => state.allUserProducts,
-  getAllGroupProducts: state => state.allGroupProducts,
-  getGroupMembers: state => state.allGroupMembers,
+  getAllFundedAndUnFundedProduct: state => state.allFundedAndUnFundedProduct,
+  getAllFundedProduct: state => state.allFundedProduct,
+  getAllUnFundedProduct: state => state.allUnFundedProduct,
 };
 
 const actions = {
@@ -289,7 +291,47 @@ const actions = {
         dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
       })
       .catch((e) => {
-        snackbar.msg = e.data.msg;
+        snackbar.msg = e.data.message;
+      })
+      .finally((snackbar.show = true));
+  },
+  getFundedAndUnFundedProductById({ commit, dispatch }, data) {
+    const { id } = data;
+    Vue.axios
+      .get(`admin/products-funded-unfunded/users/${id}`)
+      .then((res) => {
+        // dispatch('getSingleEarnings', {id: id}, { root: true});
+        commit(mutate.UPDATE_ALL_USER_FUDED_AND_UNFUNDED_PRODUCTS, res.data.data);
+      })
+      .catch((e) => {
+        console.log(`Error fetching funded and un funded products for specific user: ${e}`)
+      });
+  },
+  fetchAllFundedProduct({ commit }, data) {
+    const { pageNumber, snackbar } = data;
+    snackbar.msg = 'Updating...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`admin/user-funded-product?page=${pageNumber}`)
+      .then((res) => {
+        commit(mutate.UPDATE_ALL_USER_FUDED_PRODUCTS, res.data.data);
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.message;
+      })
+      .finally((snackbar.show = true));
+  },
+  fetchAllUnFundedProduct({ commit }, data) {
+    const { pageNumber, snackbar } = data;
+    snackbar.msg = 'Updating...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`admin/user-unfunded-product?page=${pageNumber}`)
+      .then((res) => {
+        commit(mutate.UPDATE_ALL_USER_UNFUDED_PRODUCTS, res.data.data);
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
   },
@@ -352,11 +394,15 @@ const mutations = {
   [mutate.UPDATE_ALL_USER_PRODUCTS](state, data) {
     state.allUserProducts = data;
   },
-  [mutate.UPDATE_ALL_GROUP_PRODUCTS](state, data) {
-    state.allGroupProducts = data;
+  [mutate.UPDATE_ALL_USER_FUDED_AND_UNFUNDED_PRODUCTS](state, data) {
+    state.allFundedAndUnFundedProduct.fundedProduct = data.fundedProduct;
+    state.allFundedAndUnFundedProduct.unFundedProduct = data.unFundedProduct;
   },
-  [mutate.UPDATE_ALL_GROUP_MEMBERS](state, data) {
-    state.allGroupMembers = data;
+  [mutate.UPDATE_ALL_USER_FUDED_PRODUCTS](state, data) {
+    state.allFundedProduct = data;
+  },
+  [mutate.UPDATE_ALL_USER_UNFUDED_PRODUCTS](state, data){
+    state.allUnFundedProduct = data;
   },
 };
 
