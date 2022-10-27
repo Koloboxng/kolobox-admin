@@ -14,6 +14,7 @@ const state = {
   allFundedAndUnFundedProduct: {},
   allFundedProduct: null,
   allUnFundedProduct: null,
+  allProductEarnings: null,
 };
 
 const getters = {
@@ -28,6 +29,7 @@ const getters = {
   getAllFundedAndUnFundedProduct: state => state.allFundedAndUnFundedProduct,
   getAllFundedProduct: state => state.allFundedProduct,
   getAllUnFundedProduct: state => state.allUnFundedProduct,
+  getAllProductEarnings: state => state.allProductEarnings,
 };
 
 const actions = {
@@ -359,7 +361,7 @@ const actions = {
       commit(mutate.UPDATE_ALL_GROUP_PRODUCTS, res.data.data);
     });
   },
-  fetchGroupmembers({ commit}, data) {
+  fetchGroupmembers({ commit }, data) {
     const { id, snackbar } = data;
     if(!id) return;
     snackbar.msg = 'Getting Membership List';
@@ -369,6 +371,11 @@ const actions = {
       snackbar.show = true;
       commit(mutate.UPDATE_ALL_GROUP_MEMBERS, res.data.data);
     });
+  },
+  fetchAllProductEarnings({ commit }, data){
+    Vue.axios.get('admin/all-products-earnings').then((res) => {
+      commit(mutate.UPDATE_PRODUCTS_EARNINGS, res.data.data);
+    })
   },
 };
 
@@ -403,6 +410,9 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_USER_UNFUDED_PRODUCTS](state, data){
     state.allUnFundedProduct = data;
+  },
+  [mutate.UPDATE_PRODUCTS_EARNINGS](state, data){
+    state.allProductEarnings = data;
   },
 };
 
