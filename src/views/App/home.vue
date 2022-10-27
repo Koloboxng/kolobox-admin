@@ -136,8 +136,17 @@
         <v-flex xs3 ml-5>
           <home-card :title="Titles[5].name" :number="account.userMonthlyCount"/>
         </v-flex>
+      </v-layout>
+
+      <v-layout row>
         <v-flex xs3 ml-5>
           <home-card :title="Titles[2].name" :number="account.transactionCount | commas"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[6].name" :number="account.userFundedCount | commas"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[7].name" :number="account.userUnFundedCount | commas"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -167,6 +176,8 @@ export default {
         { name: 'Total Daily Registered User' },
         { name: 'Total Weekly Registered User' },
         { name: 'Total Monthly Registered User' },
+        { name: 'Funded Users' },
+        { name: 'Unfunded Users' },
       ],
       valid: true,
       start: null,

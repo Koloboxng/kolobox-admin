@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <div>
+      
       <v-flex ml-3 mt-3>
         <v-card max-width="550px">
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -53,6 +54,7 @@
 
 <script>
 import loader from '@/components/loader.vue';
+import homeCard from '@/components/homeCard.vue';
 import { mapActions, mapGetters } from 'vuex';
 import productMixin from '../../mixins/products.mixin';
 

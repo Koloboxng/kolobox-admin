@@ -108,7 +108,6 @@ export default {
   methods: {
     ...mapActions(['allTransactions']),
     fetchNext(pageNum) {
-      // const { pageNumber } = this.getAllTransactions;
       this.allTransactions({
         pageNumber: pageNum,
         snackbar: this.toast,
@@ -118,16 +117,9 @@ export default {
   computed: {
     ...mapGetters(['getAllTransactions']),
     pageCount() {
-      const limit = 20;
-      const { total } = this.getAllTransactions;
+      const { total, limit } = this.getAllTransactions;
       const numberOfPages = Math.ceil(Number(total) / limit);
       return numberOfPages;
-      /* const { total, transactions } = this.getAllTransactions;
-      const numberOfPages = (Number(total) / transactions.length).toFixed(1);
-
-      return Number(numberOfPages.split('.')[1]) > 0
-        ? Math.round(Number(numberOfPages)) + 1
-        : Math.round(Number(numberOfPages)); */
     },
   },
   created() {
@@ -158,6 +150,6 @@ export default {
   color: white;
 }
 .pagination li.active {
-  background-color: #007bff;
-}
+    background-color: #007bff;
+  }
 </style>

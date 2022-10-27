@@ -299,10 +299,20 @@ const router = new Router({
           },
         },
         {
-          path: 'get-single-group/:id',
-          name: 'GetSingleGroup',
-          component: () => import(/* webpackChunkName: "users" */
-            './views/App/get-single-group.vue'
+          path: 'all-funded-user-products',
+          name: 'AllFundedUserProducts',
+          component: () => import(/* webpackChunkName: "subscriptions" */
+            './views/App/get-all-user-funded-products.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'all-unfunded-user-products',
+          name: 'AllUnFundedUserProducts',
+          component: () => import(/* webpackChunkName: "subscriptions" */
+            './views/App/get-all-user-unfunded-products.vue'
           ),
           meta: {
             requiresAuth: true,

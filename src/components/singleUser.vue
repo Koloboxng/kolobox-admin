@@ -334,6 +334,48 @@
             </v-list>
             
           </v-card>
+
+          <v-card>
+            <v-toolbar color="blue" dark>
+              <v-toolbar-title>User Products</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-divider></v-divider>
+
+            <v-card-title>
+              Funded Products
+            </v-card-title>
+            <v-list class="ml-3 mt-2 mb-2" v-if="getAllFundedAndUnFundedProduct">
+              <template>
+                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.fundedProduct" :key="index" class="mb-4">
+                  <v-list-title>
+                    <v-list-content>
+                      <v-list-tile-sub-title v-html="item.name"></v-list-tile-sub-title>
+                    </v-list-content>
+                  </v-list-title>
+
+                </div>
+
+              </template>
+            </v-list>
+
+            <v-card-title>
+              UnFunded Products
+            </v-card-title>
+
+            <v-list class="ml-3 mt-2 mb-2" v-if="getAllFundedAndUnFundedProduct">
+              <template>
+                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.unFundedProduct" :key="index" class="mb-4">
+                  <v-list-title>
+                    <v-list-content>
+                      <v-list-tile-sub-title v-html="item.name"></v-list-tile-sub-title>
+                    </v-list-content>
+                  </v-list-title>
+                </div>
+
+              </template>
+            </v-list>
+          </v-card>
         </v-flex>
       </v-layout>
 
@@ -433,6 +475,7 @@ export default {
         this.getSingleUser({id: this.$route.params.id});
         this.getSingleEarnings({id: this.$route.params.id});
         this.getSingleUserSub({id: this.$route.params.id});
+        this.getFundedAndUnFundedProductById({id: this.$route.params.id});
       },
       // fetch the data when the view is created and the data is
       // already being observed
@@ -442,6 +485,7 @@ export default {
     this.getSingleUser({id: this.$route.params.id});
     this.getSingleEarnings({id: this.$route.params.id});
     this.getSingleUserSub({id: this.$route.params.id});
+    this.getFundedAndUnFundedProductById({id: this.$route.params.id});
     
     // console.log(this.$route.params.id)
   },
@@ -454,7 +498,8 @@ export default {
       'updateOneProduct',
       'getSingleUser',
       'getSingleUserSub',
-      'getSingleEarnings'
+      'getSingleEarnings',
+      'getFundedAndUnFundedProductById'
     ]),
     findProduct(productId) {
       return this.getProducts.find(x => x.id === productId).name;
@@ -521,7 +566,8 @@ export default {
       'getProducts', 
       'getSingleUserDetails', 
       'getSingleUserSubscriptions', 
-      'getSingleUserEarnings'
+      'getSingleUserEarnings',
+      'getAllFundedAndUnFundedProduct'
     ]),
   },
 };
