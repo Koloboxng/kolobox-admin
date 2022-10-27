@@ -318,6 +318,16 @@ const router = new Router({
             requiresAuth: true,
           },
         },
+        {
+          path: 'product-earnings',
+          name: 'ProductsEarnings',
+          component: () => import(/* webpackChunkName: "subscriptions" */
+            './views/App/product-earnings.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
       ],
     },
   ],

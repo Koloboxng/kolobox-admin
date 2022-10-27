@@ -188,12 +188,16 @@ export default {
         name: 'UnFunded Products',
         route: '/index/all-unfunded-user-products'
       },
+      {
+        name: 'Product Earnings',
+        route: '/index/product-earnings'
+      },
     ],
     groups: [
       { name: 'All Groups', route: '/index/get-group-product' },
     ],
     withdrawals: [
-      { name: 'Withdrawal Deatils', route: '/index/withdrawal-details' },
+      { name: 'Withdrawal Details', route: '/index/withdrawal-details' },
     ],
     settings: [
       { name: 'Enable/Disable/Finalize OTP', route: '/index/otp-handler' },
