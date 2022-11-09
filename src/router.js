@@ -338,6 +338,16 @@ const router = new Router({
             requiresAuth: true,
           },
         },
+        {
+          path: 'failed-subscriptions',
+          name: 'AllFailedSubscriptions',
+          component: () => import(/* webpackChunkName: "subscriptions" */
+            './views/App/get-failed-subscriptions.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
       ],
     },
   ],

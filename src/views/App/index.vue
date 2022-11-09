@@ -162,6 +162,7 @@ export default {
     referrals: [{ name: 'All Referrals', route: '/index/all-referrals' }],
     subscriptions: [
       { name: 'All Subscriptions', route: '/index/all-subscriptions' },
+      { name: 'Failed Subscriptions', route: '/index/failed-subscriptions' },
     ],
     users: [
       { name: 'All Users', route: '/index/all-users' },
