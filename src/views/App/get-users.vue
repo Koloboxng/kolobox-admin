@@ -38,10 +38,31 @@
     <div v-if="!cachedUsers">
       <loader/>
     </div>
-    <div v-else>
+    <v-container fluid v-else>
+      <div id="datePicker">
+        <v-row>
+          <v-col
+            class="d-flex pr-1"
+            cols="6"
+            sm="6"
+          >
+          <v-select
+            v-model="notification"
+            :items="items"
+            item-text="text"
+            item-value="value"
+            label="Email Subscription"
+          ></v-select>
+
+          </v-col>
+        </v-row>
+
+        <v-btn :disabled="!validNotification" color="primary" @click="validateNotification">Search</v-btn>
+      </div>
+
       <v-flex xs12 mt-4>
         <h1>All Users</h1>
-        <h3>Number of Users: {{getUsers.total}}</h3>
+        <h3>Number of Users: {{getUsers.total_user_count}}</h3>
         <v-flex ml-2 mt-3>
           <v-card max-width="690px" style="border-radius: 20px;">
             <v-form ref="findUserForm" v-model="formToFind">
@@ -121,11 +142,12 @@
         :next-text="'Next'"
         :container-class="'pagination'"
       />
-    </div>
     <v-snackbar v-model="toast.show" top right color="black">
       {{ toast.msg }}
       <v-btn flat dark small @click.native="toast.show = false">Close</v-btn>
     </v-snackbar>
+
+    </v-container>
   </v-app>
 </template>
 
@@ -148,6 +170,7 @@ export default {
       useremail: '',
       search: '',
       valid: true,
+      validNotification: true,
       emailRules: [
         v => !!v || 'Email is required',
         v => /.+@.+/.test(v) || 'Email must be valid',
@@ -195,6 +218,8 @@ export default {
       updateItem: null,
       updateDialog: false,
       formToFind: true,
+      notification: null,
+      items: ['subscribed', 'unsubscribed'],
     };
   },
   methods: {
@@ -230,7 +255,13 @@ export default {
       }
     },
     fetchNext(event) {
-      this.$pouch
+      this.getAllUsers({
+        pageNumber: event,
+        snackbar: this.toast,
+        notification: this.notification,
+        pouch: this.$pouch,
+      });
+      /* this.$pouch
         .get(`${event}`)
         .then((doc) => {
           this.cachedUsers = doc.users;
@@ -241,12 +272,13 @@ export default {
             return this.getAllUsers({
               pageNumber: event,
               snackbar: this.toast,
+              notification: this.notification,
               pouch: this.$pouch,
             });
           }
           this.toast.msg = e;
           this.toast.show = true;
-        });
+        }); */
     },
     findUser() {
       if (this.$refs.findUserForm.validate()) {
@@ -259,12 +291,30 @@ export default {
         });
       }
     },
+    validateNotification(){
+      if (this.notification === null) {
+        this.validNotification = true;
+        return;
+      }
+
+      this.toast.msg = 'Validating ...';
+      this.toast.show = true;
+
+      if (this.notification !== null) {
+        this.getAllUsers({
+          pageNumber: 1,
+          snackbar: this.toast,
+          notification: this.notification,
+          pouch: this.$pouch,
+        });
+      }
+    },
   },
   computed: {
     ...mapGetters(['getUsers']),
     pageCount() {
-      const { total, users } = this.cachedUsers;
-      const numberOfPages = (Number(total) / users.length).toFixed(1);
+      const { total_user_count, users } = this.cachedUsers;
+      const numberOfPages = (Number(total_user_count) / users.length).toFixed(1);
 
       return Number(numberOfPages.split('.')[1]) > 0
         ? Math.round(Number(numberOfPages)) + 1
@@ -283,6 +333,7 @@ export default {
     this.getAllUsers({
       pageNumber: 1,
       snackbar: this.toast,
+      notification: this.notification,
       pouch: this.$pouch,
     });
   },
@@ -290,6 +341,13 @@ export default {
 </script>
 
 <style>
+#datePicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 .v-datatable__actions {
   background-color: rgb(124, 119, 119) !important;
   color: white !important;
@@ -309,5 +367,9 @@ export default {
 }
 .pagination li a {
   color: white;
+}
+
+.pagination li.active {
+  background-color: #007bff;
 }
 </style>
