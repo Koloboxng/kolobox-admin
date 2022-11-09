@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div v-if="!allSubscriptions">
+    <div v-if="!allFailedSubscriptions">
       <loader/>
     </div>
     <v-container fluid v-else>
@@ -48,13 +48,6 @@
             class="pr-1"
           ></v-select>
           <v-select
-            v-model="option"
-            :items="subSTatus"
-            item-text="text"
-            item-value="value"
-            label="Status"
-          ></v-select>
-          <v-select
             v-model="freq"
             :items="items"
             item-text="text"
@@ -68,8 +61,8 @@
       </div>
 
       <v-flex xs11 ml-4 mt-4>
-          <h1>All Subscriptions</h1>
-          <h3>Total Number of Subscriptions: {{allSubscriptions.total}}</h3>
+          <h1>All Failed Subscriptions</h1>
+          <h3>Total Number of Failed Subscriptions: {{allFailedSubscriptions.total}}</h3>
           <v-flex mt-2>
             <v-card>
               <v-card-title>
@@ -84,19 +77,16 @@
               </v-card-title>
               <v-data-table
                 :headers="headers"
-                :items="allSubscriptions.subscriptions"
+                :items="allFailedSubscriptions.failedSubscriptions"
                 :search="search"
                 class="elevation-1"
-                v-if="allSubscriptions"
+                v-if="allFailedSubscriptions"
                 hide-actions
               >
                 <template slot="items" slot-scope="props">
                   <td>{{ props.item.email }}</td>
-                  <td>{{ props.item.deposit_amount }}</td>
                   <td>{{ props.item.saving_frequency }}</td>
-                  <td>{{props.item.auto_subscription}}</td>
-                  <td>{{props.item.last_pay_day.split('T')[0]}}</td>
-                  <td>{{props.item.next_pay_day.split('T')[0]}}</td>
+                  <td>{{props.item.created_at.split('T')[0]}}</td>
                   <td>{{getActualProduct(props.item.product_id)}}</td>
                 </template>
                 <v-alert
@@ -147,32 +137,14 @@ export default {
           sortable: true,
         },
         {
-          text: 'Amount',
-          value: 'deposit_amount',
-          align: 'left',
-          sortable: true,
-        },
-        {
           text: 'Frequency',
           value: 'saving_frequency',
           align: 'left',
           sortable: true,
         },
         {
-          text: 'Auto Sub',
-          value: 'auto_subscription',
-          align: 'left',
-          sortable: true,
-        },
-        {
-          text: 'Last Pay Day',
-          value: 'last_pay_day',
-          align: 'left',
-          sortable: true,
-        },
-        {
-          text: 'Next Pay Day',
-          value: 'next_pay_day',
+          text: 'Date',
+          value: 'created_at',
           align: 'left',
           sortable: true,
         },
@@ -188,29 +160,34 @@ export default {
       end: null,
       product_id: null,
       freq: null,
-      option: null,
       toast: {
         show: false,
         msg: '',
       },
       items: [null, 'Daily', 'Weekly', 'Monthly'],
-      subSTatus: ['Active', 'Not Active'],
     };
   },
   computed: {
-    ...mapGetters(['allSubscriptions', 'getProducts', 'allProduct']),
+    ...mapGetters(['allFailedSubscriptions', 'getProducts', 'allProduct']),
     pageCount() {
-      const { total, limit } = this.allSubscriptions;
+      const { total, limit } = this.allFailedSubscriptions;
       const numberOfPages = Math.ceil(Number(total) / limit);
       return numberOfPages;
     },
   },
   created() {
-    this.getAllSubscriptions({ pageNumber: 1, snackbar: this.toast });
+    this.getFailedSubscripton({ 
+      pageNumber: 1, 
+      startDate: this.start,
+      EndDate: this.end,
+      product: this.product_id,
+      freq: this.freq,
+      snackbar: this.toast 
+    });
     this.getAllProducts();
   },
   methods: {
-    ...mapActions(['getAllSubscriptions', 'getAllProducts']),
+    ...mapActions(['getFailedSubscripton', 'getAllProducts']),
     getRangeClasses(cellDate, currentDates, classnames) {
       const classes = [];
       const start = this.start && new Date(this.start).setHours(0, 0, 0, 0);
@@ -250,22 +227,16 @@ export default {
       return this.getProducts.find(x => x.id === item).name;
     },
     fetchNext(pageNum) {
-      this.getAllSubscriptions({
+      this.getFailedSubscripton({
         pageNumber: pageNum,
+        startDate: this.start,
+        EndDate: this.end,
+        product: this.product_id,
+        freq: this.freq,
         snackbar: this.toast,
       });
     },
     validate() {
-
-      if(this.option === null && this.product_id === null) {
-        this.valid = true;
-        return;
-      }
-
-      if(this.option === null) {
-        this.valid = true;
-        return;
-      }
 
       if(this.product_id === null) {
         this.valid = true;
@@ -275,14 +246,13 @@ export default {
       this.toast.msg = 'Validating ...';
       this.toast.show = true;
 
-      if(this.product_id !== null && this.option !== null) {
+      if(this.product_id !== null) {
         this.valid = false;
-        this.getAllSubscriptions({
+        this.getFailedSubscripton({
           pageNumber: 1,
           startDate: this.start,
           EndDate: this.end,
           product: this.product_id,
-          status: this.option,
           freq: this.freq,
           snackbar: this.toast,
         }).then(() => {

@@ -5,19 +5,21 @@ import * as mutate from './mutation-types';
 
 const state = {
   allSubscriptions: null,
+  allFailedSubscriptions: null,
 };
 
 const getters = {
   allSubscriptions: state => state.allSubscriptions,
+  allFailedSubscriptions: state => state.allFailedSubscriptions,
 };
 
 const actions = {
   getAllSubscriptions({ commit }, data) {
     // eslint-disable-next-line camelcase
-    const { snackbar } = data;
+    const { pageNumber, snackbar, startDate, EndDate, product, status, freq } = data;
 
     Vue.axios
-      .get('admin/subscriptions')
+      .get(`admin/subscriptions?page=${pageNumber}&start=${startDate}&end=${EndDate}&product=${product}&status=${status}&freq=${freq}`)
       .then((res) => {
         commit(mutate.UPDATE_ALL_SUBSCRIPTIONS, res.data.data);
       })
@@ -59,7 +61,7 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
-  updateOneSubscription({ commit, dispatch }, data) {
+  updateOneSubscription({ dispatch }, data) {
     const { form, snackbar } = data;
     let { dialog } = data;
     snackbar.msg = 'Updating...';
@@ -77,11 +79,29 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
+  getFailedSubscripton({ commit }, data) {
+    const { pageNumber, snackbar, startDate, EndDate, product, freq} = data;
+    snackbar.msg = 'Fetching data...';
+    snackbar.show = true;
+    Vue.axios
+      .get(`admin/failed-subscriptions?page=${pageNumber}&start=${startDate}&end=${EndDate}&product=${product}&freq=${freq}`)
+      .then((res) => {
+        commit(mutate.UPDATE_ALL_FAILED_SUBSCRIPTIONS, res.data.data);
+      })
+      .catch((e) => {
+        console.log({e})
+        snackbar.msg = e.data.message;
+      })
+      .finally((snackbar.show = true));
+  },
 };
 
 const mutations = {
   [mutate.UPDATE_ALL_SUBSCRIPTIONS](state, data) {
     state.allSubscriptions = data;
+  },
+  [mutate.UPDATE_ALL_FAILED_SUBSCRIPTIONS](state, data) {
+    state.allFailedSubscriptions = data;
   },
 };
 
