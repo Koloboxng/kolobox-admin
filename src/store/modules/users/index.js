@@ -29,12 +29,12 @@ const actions = {
   },
   getAllUsers({ commit }, data) {
     const pageNumber = data.pageNumber || 1;
-    const { snackbar, pouch } = data;
+    const { snackbar, pouch, notification } = data;
 
     snackbar.msg = 'Fetching Data...';
     snackbar.show = true;
 
-    Vue.axios.get(`user/?page=${pageNumber}`).then((res) => {
+    Vue.axios.get(`user/?page=${pageNumber}&notification=${notification}`).then((res) => {
       snackbar.msg = 'Data retrieved!!';
       snackbar.show = true;
       pouch

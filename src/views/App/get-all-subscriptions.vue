@@ -206,7 +206,17 @@ export default {
     },
   },
   created() {
-    this.getAllSubscriptions({ pageNumber: 1, snackbar: this.toast });
+    this.getAllSubscriptions(
+      { 
+        pageNumber: 1, 
+        startDate: this.start,
+        EndDate: this.end,
+        product: this.product_id,
+        status: this.option,
+        freq: this.freq,
+        snackbar: this.toast 
+      }
+    );
     this.getAllProducts();
   },
   methods: {
@@ -252,6 +262,11 @@ export default {
     fetchNext(pageNum) {
       this.getAllSubscriptions({
         pageNumber: pageNum,
+        startDate: this.start,
+        EndDate: this.end,
+        product: this.product_id,
+        status: this.option,
+        freq: this.freq,
         snackbar: this.toast,
       });
     },
