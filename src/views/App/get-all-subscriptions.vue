@@ -94,10 +94,10 @@
                   <td>{{ props.item.email }}</td>
                   <td>{{ props.item.deposit_amount }}</td>
                   <td>{{ props.item.saving_frequency }}</td>
-                  <td>{{props.item.auto_subscription}}</td>
-                  <td>{{props.item.last_pay_day.split('T')[0]}}</td>
-                  <td>{{props.item.next_pay_day.split('T')[0]}}</td>
-                  <td>{{getActualProduct(props.item.product_id)}}</td>
+                  <td>{{ props.item.auto_subscription }}</td>
+                  <td>{{ props.item.last_pay_day.split('T')[0] }}</td>
+                  <td>{{ props.item.next_pay_day.split('T')[0] }}</td>
+                  <td>{{ getActualProduct(props.item.product_id) }}</td>
                 </template>
                 <v-alert
                   v-slot:no-results
@@ -127,7 +127,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import loader from '@/components/loader.vue';
-import homeCard from '@/components/homeCard.vue';
 import productMixin from '../../mixins/products.mixin';
 
 export default {
