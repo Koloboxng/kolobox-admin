@@ -37,7 +37,7 @@ const actions = {
     Vue.axios.get(`user/?page=${pageNumber}&notification=${notification}`).then((res) => {
       snackbar.msg = 'Data retrieved!!';
       snackbar.show = true;
-      pouch
+      /* pouch
         .put({
           _id: `${pageNumber}`,
           users: res.data.data.users,
@@ -47,8 +47,11 @@ const actions = {
         })
         .catch((e) => {
           console.log(e);
-        });
+        }); */
       commit(mutation.UPDATE_ALL_USERS, res.data.data);
+    })
+    .catch((e) => {
+      console.log(e);
     });
   },
   updateUser({ commit, dispatch }, data) {
@@ -69,15 +72,17 @@ const actions = {
   toggleUser({ commit, dispatch }, data) {
     const { id, snackbar } = data;
     Vue.axios
-      .post('toggle/toggle-active', {
+      .post('user/toggle/toggle-active', {
         id,
       })
       .then((res) => {
-        snackbar.msg = res.data.data.msg;
-        dispatch('getAllUsers');
+        snackbar.msg = res.data.data;
+        // pageNumber: 1, notification: null
+        dispatch('getAllUsers', {pageNumber: 1, notification: null, snackbar: snackbar }, { root: true});
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        console.log({e})
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
   },
