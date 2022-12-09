@@ -8,10 +8,10 @@
             <v-layout justify-center>
               <v-flex xs10>
                 <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-text-field v-model="form.firstname" label="First Name" required></v-text-field>
-                  <v-text-field v-model="form.lastname" label="Last Name" required></v-text-field>
+                  <v-text-field v-model="form.firstname" label="First Name" :rules="firstName" required></v-text-field>
+                  <v-text-field v-model="form.lastname" label="Last Name" :rules="lastName" required></v-text-field>
                   <v-text-field v-model="form.email" :rules="emailRules" label="Email" required></v-text-field>
-                  <v-text-field v-model="form.phone" label="Phone" required></v-text-field>
+                  <v-text-field v-model="form.phone" :rules="phoneRules" label="Phone" required></v-text-field>
                   <v-text-field
                     v-model="form.password"
                     :rules="passwordRules"
@@ -26,6 +26,8 @@
                     type="password"
                     required
                   ></v-text-field>
+
+                  <v-select label="Role" v-model="form.role" :items="allRoles" item-text="name" item-value="id"></v-select>
                   <v-btn :disabled="!valid" color="primary" @click="validate">Create</v-btn>
                 </v-form>
               </v-flex>
@@ -42,15 +44,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       valid: true,
+      firstName: [
+        v => !!v || 'First Name is required',
+        v => (v && v.length >= 3) || 'First Name must be greater than 2 characters',
+      ],
+      lastName: [
+        v => !!v || 'Last Name is required',
+        v => (v && v.length >= 3) || 'Last Name must be greater than 2 characters',
+      ],
       emailRules: [
         v => !!v || 'Email is required',
         v => /.+@.+/.test(v) || 'Email must be valid',
+      ],
+      phoneRules: [
+        v => !!v || 'Phone Number is required',
+        v => /^0([89][01]|70)\d{8}$/.test(v) || 'Phone Number must be valid',
+        v => (v && v.length == 11) || 'Phone Number must be valid',
+        // ^(0[789][01]\d{8})$
       ],
       passwordRules: [
         v => !!v || 'Password is required',
@@ -66,7 +82,7 @@ export default {
         cpassword: '',
         phone: '',
         password: '',
-        busy: false,
+        role: '',
       },
       toast: {
         show: false,
@@ -74,8 +90,11 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(['allRoles']),
+  },
   methods: {
-    ...mapActions(['createAdmin']),
+    ...mapActions(['createAdmin', 'getAllRoles']),
     validate() {
       if (this.$refs.form.validate()) {
         this.toast.msg = 'Creating ...';
@@ -87,6 +106,9 @@ export default {
         });
       }
     },
+  },
+  created() {
+    this.getAllRoles();
   },
 };
 </script>

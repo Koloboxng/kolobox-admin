@@ -156,6 +156,10 @@ export default {
   data: () => ({
     showNav: false,
     Admins: [
+      { name: 'Create Role', route: '/index/create-role' },
+      { name: 'Show All Roles', route: '/index/all-roles' },
+      { name: 'Create Permission', route: '/index/create-permission' },
+      { name: 'Show All Permissions', route: '/index/all-permissions' },
       { name: 'Create Admin', route: '/index/create-admin' },
       { name: 'Show All Admins', route: '/index/show-all-admins' },
     ],
