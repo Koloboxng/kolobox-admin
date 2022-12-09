@@ -79,6 +79,56 @@ const router = new Router({
           },
         },
         {
+          path: 'all-roles',
+          name: 'GetRoles',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/get-all-roles.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'create-role',
+          name: 'CreateRole',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/create-role.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'create-permission',
+          name: 'CreatePermission',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/create-permission.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'all-permissions',
+          name: 'GetPermissions',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/get-all-permissions.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'get-single-role-details/:id',
+          name: 'GetSingleRoleDetails',
+          component: () => import(/* webpackChunkName: "users" */
+            './views/App/get-single-role-details.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'create-admin',
           name: 'CreateAdmin',
           component: () => import(/* webpackChunkName: "admin" */

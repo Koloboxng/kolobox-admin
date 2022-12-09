@@ -5,16 +5,36 @@ import * as mutate from './mutation-types';
 
 const state = {
   allAdmins: null,
+  allRoles: null,
+  allPermissions: null,
+  allExistingRolePermission: null,
+  allNonExistingRolePermission: null,
 };
 
 const getters = {
   allAdmins: state => state.allAdmins,
+  allRoles: state => state.allRoles,
+  allPermissions: state => state.allPermissions,
+  allExistingRolePermission: state => state.allExistingRolePermission,
+  allNonExistingRolePermission: state => state.allNonExistingRolePermission,
 };
 
 const mutations = {
   [mutate.UPDATE_ALL_ADMINS](state, data) {
     state.allAdmins = data;
   },
+  [mutate.UPDATE_ALL_ROLES](state, data) {
+    state.allRoles = data;
+  },
+  [mutate.UPDATE_ALL_PERMISSIONS](state, data) {
+    state.allPermissions = data;
+  },
+  [mutate.UPDATE_ALL_EXISTING_ROLE_PERMISSIONS](state, data) {
+    state.allExistingRolePermission = data;
+  },
+  [mutate.UPDATE_ALL_NONEXISTING_ROLE_PERMISSIONS](state, data){
+    state.allNonExistingRolePermission = data;
+  }
 };
 
 const actions = {
@@ -27,11 +47,8 @@ const actions = {
       toast,
       router,
     } = data;
-    const { firstname, lastname, email, phone, password, cpassword } = form;
 
-    Vue.axios.post('admin', {
-      firstname, lastname, email, phone, password, cpassword,
-    })
+    Vue.axios.post('admin', form)
       .then((res) => {
         toast.show = true
         toast.msg = "Admin created successfully";
@@ -39,8 +56,11 @@ const actions = {
         router.push('/index/show-all-admins');
       })
       .catch((e) => {
-        toast.show = true
-        toast.msg = e.data.message;
+        if (!e.data.status) {
+          toast.show = true
+          toast.msg = e.data.message;
+        }
+        return
       })
       .finally(toast.show = true);
   },
@@ -49,7 +69,6 @@ const actions = {
   }) {
     Vue.axios.get('admin')
       .then((res) => {
-        console.log('res', res);
         commit(mutate.UPDATE_ALL_ADMINS, res.data.data);
       });
   },
@@ -65,7 +84,7 @@ const actions = {
       id,
     })
       .then((res) => {
-        snackbar.msg = res.data.data.msg || 'Deleted successfully!';
+        snackbar.msg = res.data.data;
         dispatch('getAllAdmins');
       })
       .catch((e) => {
@@ -93,6 +112,195 @@ const actions = {
       })
       .finally(snackbar.show = true);
   },
+
+  getAllRoles({
+    commit,
+  }, data) {
+    const {snackbar} = data;
+    snackbar.msg = 'Fetching Data...';
+    snackbar.show = true
+    Vue.axios.get('admin/all-roles')
+      .then((res) => {
+        // console.log('res', res);
+        commit(mutate.UPDATE_ALL_ROLES, res.data.data);
+      }).catch((e) => {
+        snackbar.show = true
+        snackbar.msg = e.data.message;
+      }).finally(snackbar.show = true);
+  },
+
+  createRole({ commit, dispatch}, data) {
+    const { form, toast, router } = data;
+
+    Vue.axios.post('admin/role/create', form).then((res) => {
+      toast.show = true
+      // toast.msg = "Role created successfully";
+      toast.msg = res.data.data;
+      dispatch('getAllRoles', {snackbar: toast}, { root: true});
+      router.push('/index/all-roles');
+    }).catch((e) => {
+      if (!e.data.status) {
+        toast.show = true
+        toast.msg = e.data.message;
+      }
+      return
+    })
+    .finally(toast.show = true);
+  },
+
+  updateRole({ commit, dispatch }, data) {
+    const { form, snackbar, id } = data;
+    Vue.axios
+      .put(`admin/role/update/${id}`,
+        form
+      )
+      .then((res) => {
+        snackbar.msg = res.data.data;
+        dispatch('getAllRoles', {snackbar: snackbar}, { root: true});
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.message;
+      })
+      .finally((snackbar.show = true));
+  },
+
+  deleteRole({
+    commit,
+    dispatch,
+  }, data) {
+    const {
+      snackbar,
+      id,
+    } = data;
+    Vue.axios.delete(`admin/role/delete/${id}`, {
+      id,
+    })
+      .then((res) => {
+        snackbar.msg = res.data.data;
+        dispatch('getAllRoles', {snackbar: snackbar}, { root: true});
+      })
+      .catch((e) => {
+        // console.log({e})
+        snackbar.msg = e.data.message;
+      })
+      .finally(snackbar.show = true);
+  },
+  getAllPermissions({
+    commit,
+  }) {
+    Vue.axios.get('admin/all-permissions')
+      .then((res) => {
+        // console.log('res', res);
+        commit(mutate.UPDATE_ALL_PERMISSIONS, res.data.data);
+      });
+  },
+  createPermission({ commit, dispatch}, data) {
+    const { form, toast, router } = data;
+
+    Vue.axios.post('admin/permission/create', form).then((res) => {
+      toast.show = true
+      // toast.msg = "Permission created successfully";
+      toast.msg = res.data.data;
+      dispatch('getAllPermissions');
+      router.push('/index/all-permissions');
+    }).catch((e) => {
+      if (!e.data.status) {
+        toast.show = true
+        toast.msg = e.data.message;
+      }
+      return
+    })
+    .finally(toast.show = true);
+  },
+
+  deletePermission({
+      commit,
+      dispatch,
+    }, data) {
+      const {
+        snackbar,
+        id,
+      } = data;
+      Vue.axios.delete(`admin/permission/delete/${id}`, {
+        id,
+      })
+        .then((res) => {
+          snackbar.msg = res.data.data;
+          dispatch('getAllPermissions');
+        })
+        .catch((e) => {
+          snackbar.msg = e.data.data.msg;
+        })
+        .finally(snackbar.show = true);
+    },
+
+    getExistingRolePermissions({ commit }, data) {
+      const {id} = data;
+      Vue.axios.get(`admin/role-permission/existing/${id}`)
+      .then((res) => {
+        commit(mutate.UPDATE_ALL_EXISTING_ROLE_PERMISSIONS, res.data.data);
+      });
+    },
+
+    addRolePermissions({ commit, dispatch }, data) {
+      const {
+        snackbar,
+        permission_id,
+        role_id
+      } = data;
+      Vue.axios.post('admin/role-permission/create', {
+        permission_id, role_id
+      }).then((res) => {
+        snackbar.msg = res.data.data;
+        snackbar.show = true;
+        /* Promise.all([
+          dispatch('getExistingRolePermissions', {
+            id:role_id,
+          }, { root: true}),
+          dispatch('getNonExistingRolePermissions', {
+            id:role_id,
+          }, { root: true})
+        ]) */
+        dispatch('getExistingRolePermissions', {
+          id:role_id,
+        }, { root: true})
+        dispatch('getNonExistingRolePermissions', {
+          id:role_id,
+        }, { root: true})
+      });
+    },
+
+    getNonExistingRolePermissions({ commit }, data) {
+      const {id} = data;
+      Vue.axios.get(`admin/role-permission/nonexisting/${id}`)
+      .then((res) => {
+        commit(mutate.UPDATE_ALL_NONEXISTING_ROLE_PERMISSIONS, res.data.data);
+      });
+    },
+
+    removeRolePermissions ({ dispatch }, data) {
+      const {
+        snackbar,
+        permission_id,
+        role_id
+      } = data;
+
+      Vue.axios.delete('admin/role-permission/delete', {
+        headers: {},
+        data: {
+          permission_id, role_id
+        }
+      }).then((res) => {
+        snackbar.msg = res.data.data;
+        snackbar.show = true;
+        dispatch('getExistingRolePermissions', {
+          id:role_id,
+        }, { root: true})
+        dispatch('getNonExistingRolePermissions', {
+          id:role_id,
+        }, { root: true})
+      })
+    }
 
 };
 
