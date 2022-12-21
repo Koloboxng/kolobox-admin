@@ -121,12 +121,16 @@ export default {
     roleDeletion(roleId) {
       this.toast.msg = 'Deleting...';
       this.toast.show = true;
+      this.deleteDialog = true;
+      this.deleteItem = null;
       this.deleteRole({ id: roleId, snackbar: this.toast });
     },
     validate(id) {
       if (this.$refs.form.validate()) {
         this.toast.msg = 'Updating...';
         this.toast.show = true;
+        this.updateDialog = false
+        this.updateItem = null
         this.updateRole({
           form: this.form,
           snackbar: this.toast,
