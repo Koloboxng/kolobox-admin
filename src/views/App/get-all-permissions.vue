@@ -111,12 +111,16 @@ export default {
     permissionDeletion(permissionId) {
       this.toast.msg = 'Deleting...';
       this.toast.show = true;
+      this.deleteDialog = false;
+      this.deleteItem = null;
       this.deletePermission({ id: permissionId, snackbar: this.toast });
     },
     validate(id) {
       if (this.$refs.form.validate()) {
         this.toast.msg = 'Updating...';
         this.toast.show = true;
+        this.updateDialog = false;
+        this.updateItem = null;
         this.updateRole({
           form: this.form,
           snackbar: this.toast,

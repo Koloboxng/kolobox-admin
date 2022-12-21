@@ -1,6 +1,7 @@
 <template>
   <div v-if="!allAdmins">
-    <loader/>
+    <!-- <loader/> -->
+    {{ toast.msg }}
   </div>
   <v-app v-else>
     <v-dialog v-model="enableDialog" width="500">
@@ -36,13 +37,63 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-flex xs11 ml-4 mt-4>
+
+    <v-dialog v-model="updateDialog" width="500">
+      <v-card v-if="updateItem">
+        <v-card-title>Update Admin Details</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="form.firstname" :rules="firstName" label="First Name" required></v-text-field>
+            <v-text-field v-model="form.lastname" :rules="lastName" label="Last Name" required></v-text-field>
+            <v-text-field v-model="form.email" :rules="emailRules" label="Email" required></v-text-field>
+            <v-text-field v-model="form.phone" :rules="phoneRules" label="Phone" required></v-text-field>
+            <v-select label="Role" v-model="form.role_id" :rules="requiredRule" :items="allRoles" item-text="name" item-value="id" required></v-select>
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              @click="validate(updateItem.id);updateItem = null;"
+            >Update</v-btn>
+            <v-btn class="red --text" flat @click="updateDialog = false;updateItem = null;">CANCEL</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="passwordDialog" width="500">
+      <v-card v-if="passwordItem">
+        <v-card-title>Reset Admin Password</v-card-title>
+        <v-card-text>
+          <v-form ref="resetForm" v-model="valid" lazy-validation>
+            <v-text-field v-model="resetForm.password" :rules="passwordRules" type="password" label="Password" required></v-text-field>
+            <v-text-field v-model="resetForm.cpassword" :rules="cpasswordRules" type="password" label="Confirm Password" required></v-text-field>
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              @click="validateResetPassword(passwordItem.id);passwordItem = null;"
+            >Update</v-btn>
+            <v-btn class="red --text" flat @click="passwordDialog = false;passwordItem = null;">CANCEL</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+
+    <v-flex xs12 ml-2 mt-4>
       <h1>All Admins</h1>
       <v-data-table :headers="headers" :items="allAdmins" class="elevation-1" v-if="allAdmins">
         <template slot="items" slot-scope="props">
           <td>{{ props.item.email }}</td>
           <td>{{ props.item.phone }}</td>
           <td>{{ props.item.firstname }} {{props.item.lastname}}</td>
+          <td>
+            <v-btn
+              color="error"
+              class="brown --text"
+              flat
+              slot="activator"
+              @click="populateForm(props.item);updateDialog = true;updateItem = props.item"
+            >Update</v-btn>
+          </td>
           <td>
             <v-btn
               color="error"
@@ -59,6 +110,14 @@
               slot="activator"
               @click="enableDialog = true;enableItem = props.item"
             >{{props.item.active ? 'Disable' : 'Enable'}}</v-btn>
+          </td>
+          <td>
+            <v-btn
+              class="green --text"
+              flat
+              slot="activator"
+              @click="passwordDialog = true;passwordItem = props.item"
+            >Password</v-btn>
           </td>
         </template>
       </v-data-table>
@@ -101,23 +160,71 @@ export default {
         },
         {},
         {},
+        {},
       ],
       deleteDialog: false,
       enableDialog: false,
+      updateDialog: false,
+      passwordDialog: false,
       deleteItem: null,
       enableItem: null,
+      updateItem: null,
+      passwordItem: null,
+      form: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        role_id: '',
+      },
+      resetForm: {
+        password: '',
+        cpassword: '',
+      },
       toast: {
         show: false,
         msg: '',
       },
+      valid: true,
+      firstName: [
+        v => !!v || 'First Name is required',
+        v => (v && v.length >= 3) || 'First Name must be greater than 2 characters',
+      ],
+      lastName: [
+        v => !!v || 'Last Name is required',
+        v => (v && v.length >= 3) || 'Last Name must be greater than 2 characters',
+      ],
+      emailRules: [
+        v => !!v || 'Email is required',
+        v => /.+@.+/.test(v) || 'Email must be valid',
+      ],
+      phoneRules: [
+        v => !!v || 'Phone Number is required',
+        v => /^0([89][01]|70)\d{8}$/.test(v) || 'Phone Number must be valid',
+        v => (v && v.length == 11) || 'Phone Number must be valid',
+        // ^(0[789][01]\d{8})$
+      ],
+      requiredRule: [
+        v => !!v || 'Role is required',
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length > 6) || 'Password must be greater than 6 characters',
+      ],
+      cpasswordRules: [
+        v => !!v || 'Please Confirm password',
+        v => v === this.resetForm.password || 'Passwords dont match',
+      ],
     };
   },
   computed: {
-    ...mapGetters(['allAdmins']),
+    ...mapGetters(['allAdmins', 'allRoles']),
   },
   methods: {
-    ...mapActions(['getAllAdmins', 'deleteOne', 'toggleOne']),
+    ...mapActions(['getAllAdmins', 'deleteOne', 'toggleOne', 'updateAdmin', 'getAllRoles', 'resetAdminPassword']),
     deleteAdmin(adminId) {
+      this.deleteDialog = false
+      this.deleteItem = null
       this.toast.msg = 'Deleting...';
       this.toast.show = true;
       this.deleteOne({ id: adminId, snackbar: this.toast });
@@ -125,11 +232,61 @@ export default {
     toggleAdmin(adminId) {
       this.toast.msg = 'Sending...';
       this.toast.show = true;
+      this.enableDialog = false;
+      this.enableItem = null;
       this.toggleOne({ id: adminId, snackbar: this.toast });
     },
+    populateForm(item) {
+      this.form.firstname = item.firstname;
+      this.form.lastname = item.lastname;
+      this.form.email = item.email;
+      this.form.phone = item.phone;
+      this.form.role_id = item.role_id ? this.selectedRole(item.role_id).id : ''
+
+    },
+    validate(id) {
+      if (this.$refs.form.validate()) {
+        if (this.form.firstname !== "" && this.form.lastname !== "" && this.form.email !== "" &&
+          this.form.phone !== "" && this.form.role_id !== "") {
+            this.updateDialog = false
+            this.updateItem = null
+            this.toast.msg = 'Updating...';
+            this.toast.show = true;
+            this.updateAdmin({
+              form: this.form,
+              snackbar: this.toast,
+              id,
+            });
+        } else {
+          return
+        }
+      }
+    },
+    validateResetPassword(id) {
+      if (this.$refs.resetForm.validate()) {
+        if (this.resetForm.password !== "" && this.resetForm.cpassword !== "" &&
+          this.resetForm.password === this.resetForm.cpassword) {
+            this.passwordDialog = false
+            this.passwordItem = null
+            this.toast.msg = 'Resetting Admin User Password...';
+            this.toast.show = true;
+            this.resetAdminPassword({
+              form: this.resetForm,
+              snackbar: this.toast,
+              id,
+            });
+        } else {
+          return
+        }
+      }
+    },
+    selectedRole(role) {
+      return this.allRoles.find(x => x.id === role);
+    }
   },
   created() {
-    this.getAllAdmins();
+    this.getAllAdmins({snackbar: this.toast});
+    this.getAllRoles({snackbar: this.toast});
   },
 };
 </script>

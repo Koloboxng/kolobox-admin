@@ -27,7 +27,7 @@
                     required
                   ></v-text-field>
 
-                  <v-select label="Role" v-model="form.role" :items="allRoles" item-text="name" item-value="id"></v-select>
+                  <v-select label="Role" v-model="form.role" :rules="requiredRule" :items="allRoles" item-text="name" item-value="id"></v-select>
                   <v-btn :disabled="!valid" color="primary" @click="validate">Create</v-btn>
                 </v-form>
               </v-flex>
@@ -76,6 +76,9 @@ export default {
         v => !!v || 'Please Confirm password',
         v => v === this.form.password || 'Passwords dont match',
       ],
+      requiredRule: [
+        v => !!v || 'Role is required',
+      ],
       form: {
         firstname: '',
         lastname: '',
@@ -108,7 +111,7 @@ export default {
     },
   },
   created() {
-    this.getAllRoles();
+    this.getAllRoles({snackbar: this.toast});
   },
 };
 </script>

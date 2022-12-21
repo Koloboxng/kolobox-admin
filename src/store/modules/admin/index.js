@@ -50,9 +50,8 @@ const actions = {
 
     Vue.axios.post('admin', form)
       .then((res) => {
-        toast.show = true
         toast.msg = "Admin created successfully";
-        dispatch('getAllAdmins');
+        dispatch('getAllAdmins', {snackbar: toast}, { root: true});
         router.push('/index/show-all-admins');
       })
       .catch((e) => {
@@ -66,12 +65,49 @@ const actions = {
   },
   getAllAdmins({
     commit,
-  }) {
+  }, data) {
+    const {snackbar} = data;
     Vue.axios.get('admin')
       .then((res) => {
         commit(mutate.UPDATE_ALL_ADMINS, res.data.data);
-      });
+      }).catch((e) => {
+        snackbar.msg = e.data.message;
+      })
+      .finally(snackbar.show = true);;
   },
+  updateAdmin({commit, dispatch}, data) {
+    const {
+      form,
+      snackbar,
+      id,
+    } = data;
+
+    Vue.axios.put('admin/update/' + id, form)
+      .then((res) => {
+        snackbar.msg = res.data.data;
+        dispatch('getAllAdmins', {snackbar}, { root: true});
+      }).catch((e) => {
+        snackbar.msg = e.data.message;
+      })
+      .finally(snackbar.show = true);
+  },
+
+  resetAdminPassword({dispatch}, data) {
+    const {
+      form,
+      snackbar,
+      id
+    } = data;
+
+    Vue.axios.put('admin/reset-password/' + id, form)
+    .then((res) => {
+      snackbar.msg = res.data.data;
+        dispatch('getAllAdmins', {snackbar}, { root: true });
+    }).catch((e) => {
+      snackbar.msg = e.data.message;
+    }).finally(snackbar.show = true);
+  },
+
   deleteOne({
     commit,
     dispatch,
@@ -85,10 +121,10 @@ const actions = {
     })
       .then((res) => {
         snackbar.msg = res.data.data;
-        dispatch('getAllAdmins');
+        dispatch('getAllAdmins', {snackbar}, { root: true});
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally(snackbar.show = true);
   },
@@ -105,10 +141,10 @@ const actions = {
     })
       .then((res) => {
         snackbar.msg = res.data.data.msg;
-        dispatch('getAllAdmins');
+        dispatch('getAllAdmins', {snackbar}, { root: true});
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally(snackbar.show = true);
   },
@@ -252,7 +288,6 @@ const actions = {
         permission_id, role_id
       }).then((res) => {
         snackbar.msg = res.data.data;
-        snackbar.show = true;
         /* Promise.all([
           dispatch('getExistingRolePermissions', {
             id:role_id,
@@ -267,7 +302,7 @@ const actions = {
         dispatch('getNonExistingRolePermissions', {
           id:role_id,
         }, { root: true})
-      });
+      }).finally(snackbar.show = true);
     },
 
     getNonExistingRolePermissions({ commit }, data) {
@@ -292,14 +327,13 @@ const actions = {
         }
       }).then((res) => {
         snackbar.msg = res.data.data;
-        snackbar.show = true;
         dispatch('getExistingRolePermissions', {
           id:role_id,
         }, { root: true})
         dispatch('getNonExistingRolePermissions', {
           id:role_id,
         }, { root: true})
-      })
+      }).finally(snackbar.show = true)
     }
 
 };
