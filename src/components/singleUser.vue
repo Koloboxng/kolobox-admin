@@ -257,7 +257,7 @@
                     <h3>[{{index + 1}}]</h3>
                     <h3>Product Name -- {{item.name}}</h3>
                     <h3>Start Date -- {{formatDate(item.start_date)}}</h3>
-                    <h3>End Date -- 
+                    <h3>End Date --
                       {{
                         item.name !== "KOLO-FLEX"
                           ? formatDate(
@@ -269,7 +269,7 @@
                     <h3>Tenure -- {{item.name !== "KOLO-FLEX" ? item.tenor + " days" : "-"}}</h3>
                     <h3>Interest Rate -- {{item.interest_rate | percent(2)}}</h3>
                     <h3>Interest -- {{item.interest | currency("₦", 2)}}</h3>
-                    <h3>Investment -- {{item.amount | currency("₦", 2)}}</h3>
+                    <h3>Investment -- {{item.amount ? formatPrice(item.amount): "₦0.00"}}</h3>
                     <h3>Status -- {{ item.canceled ? "Canceled" : "Active" }}</h3>
                     <v-btn color="primary" v-if="!item.canceled" @click="updateSingleProduct(item)">Update Product</v-btn>
                   </div>
@@ -333,7 +333,7 @@
 
               </template>
             </v-list>
-            
+
           </v-card>
 
           <v-card>
@@ -487,7 +487,7 @@ export default {
     this.getSingleEarnings({id: this.$route.params.id});
     this.getSingleUserSub({id: this.$route.params.id});
     this.getFundedAndUnFundedProductById({id: this.$route.params.id});
-    
+
     // console.log(this.$route.params.id)
   },
   methods: {
@@ -558,15 +558,19 @@ export default {
       this.productForm.units_purchased = null;
     },
     formatPrice(value) {
-        let val = (value/1).toFixed(2).replace('.', ',')
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        /* let val = (value/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") */
+        return new Intl.NumberFormat('en-NG', {
+          style: 'currency',
+          currency: 'NGN',
+        }).format(value);
     },
   },
   computed: {
     ...mapGetters([
-      'getProducts', 
-      'getSingleUserDetails', 
-      'getSingleUserSubscriptions', 
+      'getProducts',
+      'getSingleUserDetails',
+      'getSingleUserSubscriptions',
       'getSingleUserEarnings',
       'getAllFundedAndUnFundedProduct'
     ]),
