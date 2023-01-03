@@ -282,13 +282,13 @@
                 <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Unlocked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].account_balance) ? '₦'+formatPrice(getSingleUserDetails[0].account_balance): "₦0.00"}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].account_balance) ? formatPrice(getSingleUserDetails[0].account_balance): "₦0.00"}}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Locked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].book_balance) ? '₦'+formatPrice(getSingleUserDetails[0].book_balance): "₦0.00"}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].book_balance) ? formatPrice(getSingleUserDetails[0].book_balance): "₦0.00"}}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
