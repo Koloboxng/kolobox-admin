@@ -64,17 +64,20 @@
         <h1>All Users</h1>
         <h3>Number of Users: {{getUsers.total_user_count}}</h3>
         <v-flex ml-2 mt-3>
+
           <v-card max-width="690px" style="border-radius: 20px;">
             <v-form ref="findUserForm" v-model="formToFind">
               <v-layout row wrap>
-                <v-text-field v-model="useremail" label="Find Any User(Email)" required></v-text-field>
+                <v-text-field v-model="useremail" label="Find Any User(Email)" :rules="emailRules" required></v-text-field>
                 <v-btn @click="findUser()" color="primary" :disabled="!formToFind">
                   <v-icon>search</v-icon>
                 </v-btn>
               </v-layout>
             </v-form>
           </v-card>
+
         </v-flex>
+
         <v-flex mt-2>
           <v-card>
             <v-card-title>
@@ -259,6 +262,7 @@ export default {
         pageNumber: event,
         snackbar: this.toast,
         notification: this.notification,
+        email: this.useremail,
         pouch: this.$pouch,
       });
       /* this.$pouch
@@ -273,6 +277,7 @@ export default {
               pageNumber: event,
               snackbar: this.toast,
               notification: this.notification,
+              email: this.useremail,
               pouch: this.$pouch,
             });
           }
@@ -282,13 +287,27 @@ export default {
     },
     findUser() {
       if (this.$refs.findUserForm.validate()) {
+        if (this.useremail === '') {
+          this.formToFind = true;
+          return
+        }
         this.toast.msg = 'Searching...';
         this.toast.show = true;
-        this.findSingleUser({
+
+        if (this.useremail !== '') {
+          this.getAllUsers({
+            pageNumber: 1,
+            snackbar: this.toast,
+            notification: this.notification,
+            email: this.useremail,
+            pouch: this.$pouch,
+          });
+        }
+        /* this.findSingleUser({
           useremail: this.useremail.toLowerCase().trim(),
           router: this.$router,
           snackbar: this.toast,
-        });
+        }); */
       }
     },
     validateNotification(){
@@ -305,6 +324,7 @@ export default {
           pageNumber: 1,
           snackbar: this.toast,
           notification: this.notification,
+          email: this.useremail,
           pouch: this.$pouch,
         });
       }
@@ -334,6 +354,7 @@ export default {
       pageNumber: 1,
       snackbar: this.toast,
       notification: this.notification,
+      email: this.useremail,
       pouch: this.$pouch,
     });
   },
