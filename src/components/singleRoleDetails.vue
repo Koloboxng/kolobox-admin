@@ -55,14 +55,20 @@
       nonExistingRolePermission: []
      };
     },
+    watch: {
+      /* existingRolePermission : {
+        handler(newValue, oldValue) {
+          this.existingRolePermission = newValue
+        },
+        immediate: true,
+      }, */
+    },
     methods: {
       ...mapActions([
         'getAllPermissions', 'getExistingRolePermissions', 'getNonExistingRolePermissions',
         'addRolePermissions', 'removeRolePermissions'
       ]),
       addRolePermission() {
-        // alert(this.nonExistingRolePermission)
-        // alert(this.nonExistingRolePermission.length)
         if (this.nonExistingRolePermission.length <= 0) {
           return alert('Select at least one permission')
         }
@@ -92,21 +98,26 @@
      ...mapGetters(['allPermissions', 'allExistingRolePermission', 'allNonExistingRolePermission']),
      existingRolePerms() {
       return this.allExistingRolePermission.map(x => x.id)
-     }
+     },
+     nonExistingRolePerms() {
+      return this.allNonExistingRolePermission.map(x => x.id)
+     },
     },
     created() {
-      this.getAllPermissions();
-      this.getExistingRolePermissions(this.role)
-      this.getNonExistingRolePermissions(this.role)
+      this.$watch(
+        () => {
+          this.getAllPermissions();
+          this.getExistingRolePermissions(this.role)
+          this.getNonExistingRolePermissions(this.role)
+        },
+        () => {
+          this.existingRolePermission = this.allExistingRolePermission.map(x => x.id)
+        }
+      )
     },
     mounted() {
       const existing = this.allExistingRolePermission.map(x => x.id)
       this.existingRolePermission = existing
-      // console.log(this.allExistingRolePermission.length)
-      /* const nonexisting = this.allNonExistingRolePermission.map(x => x.id)
-      console.log(nonexisting)
-      this.nonExistingRolePermission = nonexisting
-      console.log(this.nonExistingRolePermission) */
     }
   };
 </script>
