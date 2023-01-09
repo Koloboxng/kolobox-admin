@@ -271,7 +271,8 @@
                     <h3>Interest -- {{item.interest | currency("₦", 2)}}</h3>
                     <h3>Investment -- {{item.amount ? formatPrice(item.amount): "₦0.00"}}</h3>
                     <h3>Status -- {{ item.canceled ? "Canceled" : "Active" }}</h3>
-                    <v-btn color="primary" v-if="!item.canceled" @click="updateSingleProduct(item)">Update Product</v-btn>
+                    <v-btn color="primary" @click="updateSingleProduct(item)">Update Product</v-btn>
+                    <!-- v-if="!item.canceled" -->
                   </div>
                   <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
                 </div>
