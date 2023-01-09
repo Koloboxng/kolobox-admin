@@ -27,14 +27,8 @@
                   <v-text-field
                     v-model="form.amount"
                     :rules="amountRules"
-                    label="Amount to credit"
+                    label="Amount to Debit"
                   ></v-text-field>
-
-                  <v-text-field
-                    v-model="form.reference"
-                    label="Reference Id"
-                  ></v-text-field>
-
 
                   <v-btn :disabled="!valid" color="primary" @click="validate">Create</v-btn>
                 </v-form>
@@ -66,12 +60,11 @@ export default {
         v => /.+@.+/.test(v) || 'Email must be valid',
       ],
       requiredRules: [v => !!v || 'This Field is required'],
-      amountRules: [v => !!v && v < 1000 || 'This Field is required'],
+      amountRules: [v => !!v && v >= 1000 || 'This Field is required'],
       form: {
         product_id: '',
         user_email: '',
         amount: 0,
-        reference: '',
       },
       toast: {
         show: false,
@@ -86,24 +79,25 @@ export default {
     ...mapActions(['getAllProducts']),
     validate() {
       if (this.$refs.form.validate()) {
-        this.toast.msg = `Crediting user with emal: ${this.form.user_email} ...`;
+        this.toast.msg = `Debiting user with emal: ${this.form.user_email} ...`;
         this.toast.show = true;
         this.valid = false
         // credit-user-acct
-        Vue.axios.post('admin/credit-user-acct', {
+        Vue.axios.post('admin/debit-user-acct', {
           product_id: this.form.product_id,
           user_email: this.form.user_email,
           amount: this.form.amount,
-          reference: this.form.reference,
         }).then(res => {
+          console.log({res});
           if(res.status) {
-            this.toast.msg = `Success: ${res.data.data}`;
+            this.toast.msg = res.data.data ? `Success: ${res.data.data}`: `Success: ${this.form.user_email} Account Debited` ;
             this.toast.show = true;
             this.valid = true
             // router.push('/index/credit-account'); all-transactions
             window.location.reload();
           }
         }).catch(e => {
+          console.log({e})
           this.toast.msg = `Error: ${e.data.message}`;
           this.toast.show = true;
           this.valid = true

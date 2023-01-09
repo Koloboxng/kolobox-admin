@@ -59,6 +59,16 @@ const router = new Router({
           },
         },
         {
+          path: 'debit-account',
+          name: 'DebititAccount',
+          component: () => import(/* webpackChunkName: "admin" */
+            './views/App/debit-user-acct.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'login-details',
           name: 'LoginDetails',
           component: () => import(/* webpackChunkName: "admin" */
