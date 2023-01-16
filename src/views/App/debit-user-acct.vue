@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid>
       <v-flex xs10 ml-4 mt-2>
-        <h1>Credit User Account</h1>
+        <h1>Debit User Account</h1>
         <v-flex mt-4>
           <v-card>
             <v-layout justify-center>
@@ -82,7 +82,6 @@ export default {
         this.toast.msg = `Debiting user with emal: ${this.form.user_email} ...`;
         this.toast.show = true;
         this.valid = false
-        // credit-user-acct
         Vue.axios.post('admin/debit-user-acct', {
           product_id: this.form.product_id,
           user_email: this.form.user_email,
@@ -93,7 +92,6 @@ export default {
             this.toast.msg = res.data.data ? `Success: ${res.data.data}`: `Success: ${this.form.user_email} Account Debited` ;
             this.toast.show = true;
             this.valid = true
-            // router.push('/index/credit-account'); all-transactions
             window.location.reload();
           }
         }).catch(e => {
