@@ -69,6 +69,16 @@ const router = new Router({
           },
         },
         {
+          path: 'api-credit-user-acct',
+          name: 'apiCreditAccount',
+          component: () => import(
+            './views/App/api-reference-credit-user-acct.vue'
+          ),
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
           path: 'login-details',
           name: 'LoginDetails',
           component: () => import(/* webpackChunkName: "admin" */

@@ -2,7 +2,7 @@
   <v-app>
     <v-container fluid>
       <v-flex xs10 ml-4 mt-2>
-        <h1>Credit User Account</h1>
+        <h1>API Reference Credit User Account</h1>
         <v-flex mt-4>
           <v-card>
             <v-layout justify-center>
@@ -25,13 +25,8 @@
                   </v-text-field>
 
                   <v-text-field
-                    v-model="form.amount"
-                    :rules="amountRules"
-                    label="Amount to credit"
-                  ></v-text-field>
-
-                  <v-text-field
                     v-model="form.reference"
+                    :rules="requiredRules"
                     label="Reference Id"
                   ></v-text-field>
 
@@ -66,11 +61,9 @@ export default {
         v => /.+@.+/.test(v) || 'Email must be valid',
       ],
       requiredRules: [v => !!v || 'This Field is required'],
-      amountRules: [v => !!v && v >= 1000 || 'This Field is required'],
       form: {
         product_id: '',
         user_email: '',
-        amount: 0,
         reference: '',
       },
       toast: {
@@ -89,13 +82,13 @@ export default {
         this.toast.msg = `Crediting user with emal: ${this.form.user_email} ...`;
         this.toast.show = true;
         this.valid = false
-        // credit-user-acct
-        Vue.axios.post('admin/credit-user-acct', {
+        Vue.axios.post('admin/api-reference-credit', {
           product_id: this.form.product_id,
           user_email: this.form.user_email,
-          amount: this.form.amount,
           reference: this.form.reference,
         }).then(res => {
+          console.log({res})
+          console.table(res)
           if(res.status) {
             this.toast.msg = `Success: ${res.data.data}`;
             this.toast.show = true;

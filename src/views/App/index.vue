@@ -174,6 +174,7 @@ export default {
       { name: 'Credit User', route: '/index/credit-account' },
       { name: 'Debit User', route: '/index/debit-account' },
       { name: 'User Login', route: '/index/login-details' },
+      { name: 'API Reference', route: '/index/api-credit-user-acct'},
     ],
     products: [
       { name: 'All Products', route: '/index/all-user-products' },
