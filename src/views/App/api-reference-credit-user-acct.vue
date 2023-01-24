@@ -47,9 +47,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import productMixin from '../../mixins/products.mixin';
-import Vue from 'vue';
 
 export default {
   mixins: [productMixin],
@@ -81,25 +81,23 @@ export default {
       if (this.$refs.form.validate()) {
         this.toast.msg = `Crediting user with emal: ${this.form.user_email} ...`;
         this.toast.show = true;
-        this.valid = false
+        this.valid = false;
         Vue.axios.post('admin/api-reference-credit', {
           product_id: this.form.product_id,
           user_email: this.form.user_email,
           reference: this.form.reference,
-        }).then(res => {
-          console.log({res})
-          console.table(res)
-          if(res.status) {
+        }).then(( res ) => {
+          if (res.status) {
             this.toast.msg = `Success: ${res.data.data}`;
             this.toast.show = true;
-            this.valid = true
+            this.valid = true;
             // router.push('/index/credit-account'); all-transactions
             window.location.reload();
           }
-        }).catch(e => {
+        }).catch(( e ) => {
           this.toast.msg = `Error: ${e.data.message}`;
           this.toast.show = true;
-          this.valid = true
+          this.valid = true;
         });
 
       }
