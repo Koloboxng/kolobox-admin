@@ -9,21 +9,6 @@
               <v-flex xs10>
                 <v-form ref="form" v-model="valid" lazy-validation>
 
-                  <v-select
-                    v-if="allProduct"
-                    v-model="form.product_id"
-                    :items="transformProduct(allProduct)"
-                    item-text="text"
-                    item-value="value"
-                    required
-                    label="Select Product"
-                    :rules="requiredRules"
-                  ></v-select>
-
-                  <v-text-field
-                    v-model="form.user_email" :rules="emailRules" label="Email" required>
-                  </v-text-field>
-
                   <v-text-field
                     v-model="form.reference"
                     :rules="requiredRules"
@@ -62,8 +47,6 @@ export default {
       ],
       requiredRules: [v => !!v || 'This Field is required'],
       form: {
-        product_id: '',
-        user_email: '',
         reference: '',
       },
       toast: {
@@ -79,12 +62,10 @@ export default {
     ...mapActions(['getAllProducts']),
     validate() {
       if (this.$refs.form.validate()) {
-        this.toast.msg = `Crediting user with emal: ${this.form.user_email} ...`;
+        this.toast.msg = `Crediting user with payment reference id: ${this.form.reference} ...`;
         this.toast.show = true;
         this.valid = false;
         Vue.axios.post('admin/api-reference-credit', {
-          product_id: this.form.product_id,
-          user_email: this.form.user_email,
           reference: this.form.reference,
         }).then(( res ) => {
           if (res.status) {
