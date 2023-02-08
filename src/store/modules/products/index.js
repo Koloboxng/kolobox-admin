@@ -381,6 +381,18 @@ const actions = {
       commit(mutate.UPDATE_PRODUCTS_EARNINGS, res.data.data);
     })
   },
+  rolloverProduct({ commit, dispatch }, data){
+    const { id, user_id, snackbar } = data;
+    Vue.axios.post('admin/rollover-product/update',{
+      user_product_id: id
+    }).then((res) => {
+      snackbar.msg = 'Product successfully rolled over';
+      snackbar.show = true;
+      dispatch('getSingleEarnings', {id: id}, {root: true})
+      dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
+    })
+
+  },
 };
 
 const mutations = {
