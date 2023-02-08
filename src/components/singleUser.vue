@@ -161,6 +161,21 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="rolloverDialog" width="500">
+      <v-card>
+        <v-card-title>Rollover Product</v-card-title>
+        <v-card-text>Are you sure you want to rollover this product ?</v-card-text>
+        <v-card-actions>
+          <v-btn
+            flat
+            @click="rolloverSingleProduct(rolloverItem.id);rolloverItem = null"
+            class="green --text"
+          >Rollover Product</v-btn>
+          <v-btn class="red --text" flat @click="rolloverDialog = false;rolloverItem = null;">CANCEL</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-flex ml-1 mt-2>
       <router-link class="link" to="/index/all-users">&lt; &lt; Back To Users</router-link>
       <v-layout justify-center>
@@ -272,6 +287,7 @@
                     <h3>Investment -- {{item.amount ? formatPrice(item.amount): "₦0.00"}}</h3>
                     <h3>Status -- {{ item.canceled ? "Canceled" : "Active" }}</h3>
                     <v-btn color="primary" @click="updateSingleProduct(item)">Update Product</v-btn>
+                    <v-btn color="success" v-if="!item.canceled" @click="rolloverDialog = true; rolloverItem=item">Rollover Product</v-btn>
                     <!-- v-if="!item.canceled" -->
                   </div>
                   <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
@@ -416,6 +432,7 @@ export default {
       validateSubscriptionForm: true,
       createSubDialog: false,
       walletDialog: false,
+      rolloverDialog: false,
       product_id: null,
       subscriptionForm: {
         id: null,
@@ -467,6 +484,7 @@ export default {
       validateProductForm: true,
       validateUpdateProductForm: true,
       validateUpdateSubscriptionForm: true,
+      rolloverItem: null,
     };
   },
   created() {
@@ -501,7 +519,8 @@ export default {
       'getSingleUser',
       'getSingleUserSub',
       'getSingleEarnings',
-      'getFundedAndUnFundedProductById'
+      'getFundedAndUnFundedProductById',
+      'rolloverProduct'
     ]),
     findProduct(productId) {
       return this.getProducts.find(x => x.id === productId).name;
@@ -565,6 +584,14 @@ export default {
           style: 'currency',
           currency: 'NGN',
         }).format(value);
+    },
+    rolloverSingleProduct(value) {
+      this.toast.msg = 'Rolling product over...';
+      this.toast.show = true;
+      this.rolloverProduct({
+        id: value, user_id: this.$route.params.id, snackbar: this.toast
+      })
+      this.rolloverDialog = false;
     },
   },
   computed: {
