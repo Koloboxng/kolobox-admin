@@ -21,6 +21,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="toggleDialog" width="500">
       <v-card v-if="toggleItem">
         <v-card-title>Toggle User Activeness</v-card-title>
@@ -33,6 +34,24 @@
           >{{toggleItem.active ? 'Disable' : 'Enable'}}</v-btn>
           <v-btn class="red --text" flat @click="toggleDialog = false;toggleItem = null;">CANCEL</v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="updatePasswordDialog" width="500">
+      <v-card v-if="updatePasswordReset">
+        <v-card-title>Reset User Password</v-card-title>
+        <v-card-text>
+          <v-form v-if="resetForm" ref="resetForm" v-model="resetPasswordvalid" lazy-validation>
+            <v-text-field v-model="resetForm.new_password" :rules="passwordRules" label="Password" required type="password"></v-text-field>
+            <v-text-field v-model="resetForm.new_cpassword" :rules="cpasswordRules" label="Confirm Password" required type="password"></v-text-field>
+            <v-btn
+              :disabled="!resetPasswordvalid"
+              color="primary"
+              @click="validateResetPassword(updatePasswordReset.id);"
+            >Update</v-btn>
+            <v-btn class="red --text" flat @click="updatePasswordDialog = false;updatePasswordReset = null;">CANCEL</v-btn>
+          </v-form>
+        </v-card-text>
       </v-card>
     </v-dialog>
     <div v-if="!cachedUsers">
@@ -104,6 +123,14 @@
                 <td>{{ props.item.firstname.toUpperCase() }} {{props.item.lastname.toUpperCase()}}</td>
                 <td>
                   <v-btn
+                    class="green --text"
+                    flat
+                    slot="activator"
+                    @click="updatePasswordDialog = true;updatePasswordReset = props.item"
+                  >Password Reset</v-btn>
+                </td>
+                <td>
+                  <v-btn
                     class="brown --text"
                     flat
                     slot="activator"
@@ -173,6 +200,7 @@ export default {
       useremail: '',
       search: '',
       valid: true,
+      resetPasswordvalid: true,
       validNotification: true,
       emailRules: [
         v => !!v || 'Email is required',
@@ -182,6 +210,14 @@ export default {
         v => !!v || 'Phone is required',
         v => v.length === 11 || 'Invalid Phone number',
       ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => (v && v.length > 6) || 'Password must be greater than 6 characters',
+      ],
+      cpasswordRules: [
+        v => !!v || 'Please Confirm password',
+        v => v === this.resetForm.new_password || 'Passwords dont match',
+      ],
       toggleDialog: false,
       form: {
         firstname: '',
@@ -190,6 +226,10 @@ export default {
         dob: '',
         occupation: '',
         phone: '',
+      },
+      resetForm: {
+        new_password: '',
+        new_cpassword: ''
       },
       headers: [
         {
@@ -213,13 +253,16 @@ export default {
         {},
         {},
         {},
+        {},
       ],
       pagination: {
         rowsPerPage: -1,
       },
       toggleItem: null,
       updateItem: null,
+      updatePasswordReset: null,
       updateDialog: false,
+      updatePasswordDialog: false,
       formToFind: true,
       notification: null,
       items: ['subscribed', 'unsubscribed'],
@@ -231,6 +274,7 @@ export default {
       'toggleUser',
       'updateUser',
       'findSingleUser',
+      'resetUserPassword',
     ]),
     populateForm(item) {
       this.form = item;
@@ -255,6 +299,30 @@ export default {
           snackbar: this.toast,
           id,
         });
+      }
+    },
+    validateResetPassword(id) {
+      if (this.$refs.resetForm.validate()) {
+        if (this.resetForm.new_password !== '' && this.resetForm.new_cpassword !== '') {
+          this.toast.msg = 'Resetting Password...';
+          this.toast.show = true;
+          this.updatePasswordReset = null;
+
+          this.resetUserPassword({
+            form: this.resetForm,
+            snackbar: this.toast,
+            id,
+          })
+          .then(() => {
+            this.resetForm = {
+              new_password: '',
+              new_cpassword: ''
+            }
+            this.updatePasswordDialog = false;
+          })
+
+        }
+        return
       }
     },
     fetchNext(event) {

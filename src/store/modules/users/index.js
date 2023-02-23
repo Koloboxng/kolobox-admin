@@ -135,6 +135,22 @@ const actions = {
       commit(mutation.UPDATE_SINGLE_USER_EARNINGS, res.data.data)
     })
   },
+  resetUserPassword({ commit, dispatch }, data) {
+    const { form, snackbar, id } = data;
+    Vue.axios
+      .post(`admin/password-change/reset/${id}`,
+        form,
+      )
+      .then((res) => {
+        snackbar.msg = res.data.data;
+        dispatch('getAllUsers');
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.message;
+        console.log(e)
+      })
+      .finally((snackbar.show = true));
+  },
 };
 
 const mutations = {
