@@ -286,14 +286,12 @@ const actions = {
   },
   updateOneProduct({ commit, dispatch }, data) {
     const { form, snackbar } = data;
-    let { dialog } = data;
     snackbar.msg = 'Updating...';
     snackbar.show = true;
     Vue.axios
       .post('admin/product/update', form)
       .then(() => {
         snackbar.msg = 'Product has been updated for the user';
-        dialog = false;
         dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
       })
       .catch((e) => {

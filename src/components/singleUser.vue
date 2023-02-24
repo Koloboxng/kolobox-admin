@@ -114,7 +114,7 @@
             <v-btn
               color="primary"
               :disabled="!validateUpdateProductForm"
-              @click="updateOneProduct({form: updateProduct, snackbar: toast, dialog: updateProductDialog})"
+              @click="updateAProduct({form: updateProduct, snackbar: toast})"
             >UPDATE</v-btn>
             <v-btn
               color="error"
@@ -471,6 +471,7 @@ export default {
         user_id: null,
       },
       updateProduct: {
+        id: null,
         verified: null,
         canceled: null,
         product_id: null,
@@ -553,6 +554,7 @@ export default {
       this.updateProduct.product_id = this.product_id;
       this.updateProduct.verified = item.verified;
       this.updateProduct.canceled = item.canceled;
+      this.updateProduct.id = item.id;
     },
     createNewSubscription() {
       this.createSubDialog = true;
@@ -590,8 +592,20 @@ export default {
       this.toast.show = true;
       this.rolloverProduct({
         id: value, user_id: this.$route.params.id, snackbar: this.toast
+      }).then(() => {
+        this.rolloverDialog = false;
       })
-      this.rolloverDialog = false;
+
+    },
+    updateAProduct(value) {
+      this.toast.msg = 'Rolling product over...';
+      this.toast.show = true;
+      this.updateOneProduct({
+        form: value.form, snackbar: value.snackbar
+      }).then(() => {
+        this.updateProductDialog = false;
+      })
+
     },
   },
   computed: {
