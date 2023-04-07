@@ -165,6 +165,13 @@
       <v-card>
         <v-card-title>Rollover Product</v-card-title>
         <v-card-text>Are you sure you want to rollover this product ?</v-card-text>
+        <date-picker
+            v-model="start_date"
+            :default-value="new Date()"
+            :disabled-date="disabledStartDate"
+            type="date"
+            class="pr-1 pl-1"
+          ></date-picker>
         <v-card-actions>
           <v-btn
             flat
@@ -486,6 +493,7 @@ export default {
       validateUpdateProductForm: true,
       validateUpdateSubscriptionForm: true,
       rolloverItem: null,
+      start_date: null,
     };
   },
   created() {
@@ -523,6 +531,18 @@ export default {
       'getFundedAndUnFundedProductById',
       'rolloverProduct'
     ]),
+    disabledStartDate(date) {
+      return (
+      new Date(date).setHours(0, 0, 0, 0) >
+          new Date(this.end).setHours(0, 0, 0, 0)
+      );
+    },
+    disabledEndDate(date) {
+      return (
+      new Date(date).setHours(0, 0, 0, 0) <
+          new Date(this.start).setHours(0, 0, 0, 0)
+      );
+    },
     findProduct(productId) {
       return this.getProducts.find(x => x.id === productId).name;
     },
@@ -591,7 +611,7 @@ export default {
       this.toast.msg = 'Rolling product over...';
       this.toast.show = true;
       this.rolloverProduct({
-        id: value, user_id: this.$route.params.id, snackbar: this.toast
+        id: value, user_id: this.$route.params.id, start_date: this.start_date, snackbar: this.toast
       }).then(() => {
         this.rolloverDialog = false;
       })

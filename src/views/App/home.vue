@@ -148,6 +148,12 @@
         <v-flex xs3 ml-5>
           <home-card :title="Titles[7].name" :number="account.userUnFundedCount | commas"/>
         </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[8].name" :number="account.allAccountBalance | currency('₦',2)"/>
+        </v-flex>
+        <v-flex xs3 ml-5>
+          <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2)"/>
+        </v-flex>
       </v-layout>
     </v-container>
   </v-app>
@@ -178,6 +184,8 @@ export default {
         { name: 'Total Monthly Registered User' },
         { name: 'Funded Users' },
         { name: 'Unfunded Users' },
+        { name: 'Total Account Balance' },
+        { name: 'Total Locked Balance' },
       ],
       valid: true,
       start: null,

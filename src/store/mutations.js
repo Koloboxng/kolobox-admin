@@ -8,6 +8,8 @@ const mutations = {
     state.account.userCount = data.userCount;
     state.account.userFundedCount = data.userFundedCount;
     state.account.userUnFundedCount = data.userUnFundedCount;
+    state.account.allAccountBalance = data.allAccountBalance;
+    state.account.allLockedBalance = data.allLockedBalance;
   },
   [mutate.UPDATE_APP_LOADED](state) {
     state.loaded = true;

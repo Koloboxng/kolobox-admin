@@ -380,9 +380,10 @@ const actions = {
     })
   },
   rolloverProduct({ commit, dispatch }, data){
-    const { id, user_id, snackbar } = data;
+    const { id, user_id, start_date, snackbar } = data;
     Vue.axios.post('admin/rollover-product/update',{
-      user_product_id: id
+      user_product_id: id,
+      start_date: start_date,
     }).then((res) => {
       snackbar.msg = 'Product successfully rolled over';
       snackbar.show = true;
