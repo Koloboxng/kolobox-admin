@@ -515,6 +515,7 @@ export default {
     this.getSingleEarnings({id: this.$route.params.id});
     this.getSingleUserSub({id: this.$route.params.id});
     this.getFundedAndUnFundedProductById({id: this.$route.params.id});
+    this.getSingleUserEarnings()
 
     // console.log(this.$route.params.id)
   },

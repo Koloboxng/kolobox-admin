@@ -387,8 +387,9 @@ const actions = {
     }).then((res) => {
       snackbar.msg = 'Product successfully rolled over';
       snackbar.show = true;
-      dispatch('getSingleEarnings', {id: id}, {root: true})
+      // dispatch('getSingleEarnings', {id: id}, {root: true})
       dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
+      dispatch('getSingleEarnings', {id: user_id}, { root: true});
     })
 
   },
