@@ -172,7 +172,7 @@
                 </td>
                 <td>
                   <v-btn
-                    class="green --text"
+                    class="yellow --text"
                     flat
                     slot="activator"
                     @click="reportDialog = true;reportItem = props.item"
@@ -287,6 +287,7 @@ export default {
           align: 'left',
           sortable: true,
         },
+        {},
         {},
         {},
         {},
