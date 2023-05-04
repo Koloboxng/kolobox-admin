@@ -54,6 +54,30 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="reportDialog" width="500">
+      <v-card v-if="reportItem">
+        <v-card-title>Report For Month</v-card-title>
+        <v-card-text>
+          <v-form v-if="reportForm" ref="reportForm" v-model="reportValid" lazy-validation>
+            <date-picker
+            v-model="reportForm.start_date"
+            :default-value="new Date()"
+            :disabled-date="disabledStartDate"
+            type="date"
+            class="pr-1 pl-1"
+          ></date-picker>
+            <v-btn
+              :disabled="!reportValid"
+              color="primary"
+              @click="sendReport(reportItem.email, reportItem.id);"
+            >Send Report</v-btn>
+            <v-btn class="red --text" flat @click="reportDialog = false;reportItem = null;">CANCEL</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <div v-if="!cachedUsers">
       <loader/>
     </div>
@@ -148,6 +172,14 @@
                 </td>
                 <td>
                   <v-btn
+                    class="green --text"
+                    flat
+                    slot="activator"
+                    @click="reportDialog = true;reportItem = props.item"
+                  >Report</v-btn>
+                </td>
+                <td>
+                  <v-btn
                     :class="props.item.active ? 'red --text' : 'green --text'"
                     flat
                     slot="activator"
@@ -202,6 +234,7 @@ export default {
       valid: true,
       resetPasswordvalid: true,
       validNotification: true,
+      reportValid: true,
       emailRules: [
         v => !!v || 'Email is required',
         v => /.+@.+/.test(v) || 'Email must be valid',
@@ -230,6 +263,10 @@ export default {
       resetForm: {
         new_password: '',
         new_cpassword: ''
+      },
+      reportForm: {
+        email: '',
+        start_date: ''
       },
       headers: [
         {
@@ -261,8 +298,10 @@ export default {
       toggleItem: null,
       updateItem: null,
       updatePasswordReset: null,
+      reportItem: null,
       updateDialog: false,
       updatePasswordDialog: false,
+      reportDialog: false,
       formToFind: true,
       notification: null,
       items: ['subscribed', 'unsubscribed'],
@@ -275,6 +314,7 @@ export default {
       'updateUser',
       'findSingleUser',
       'resetUserPassword',
+      'sendReportToUser',
     ]),
     populateForm(item) {
       this.form = item;
@@ -319,8 +359,36 @@ export default {
               new_cpassword: ''
             }
             this.updatePasswordDialog = false;
+            this.toast.show = true
           })
+          this.toast.show = false
 
+        }
+        return
+      }
+    },
+    sendReport(email, id) {
+      if (this.$refs.reportForm.validate()) {
+        if (this.reportForm.start_date !== '') {
+          this.toast.msg = 'Sending Report...';
+          this.toast.show = true;
+          this.reportItem = null;
+          this.reportForm.email = email
+
+          this.sendReportToUser({
+            form: this.reportForm,
+            snackbar: this.toast,
+            id,
+          })
+          .then(() => {
+            this.reportForm = {
+              email: '',
+              start_date: ''
+            }
+            this.reportDialog = false;
+            this.toast.show = true
+          })
+          this.toast.show = false
         }
         return
       }
@@ -396,6 +464,19 @@ export default {
           pouch: this.$pouch,
         });
       }
+    },
+
+    disabledStartDate(date) {
+      return (
+      new Date(date).setHours(0, 0, 0, 0) >
+          new Date(this.end).setHours(0, 0, 0, 0)
+      );
+    },
+    disabledEndDate(date) {
+      return (
+      new Date(date).setHours(0, 0, 0, 0) <
+          new Date(this.start).setHours(0, 0, 0, 0)
+      );
     },
   },
   computed: {

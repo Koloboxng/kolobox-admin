@@ -334,7 +334,21 @@ const actions = {
           id:role_id,
         }, { root: true})
       }).finally(snackbar.show = true)
-    }
+    },
+    
+    sendReportToUser ({ dispatch }, data) {
+      const {
+        snackbar,
+        form,
+        id
+      } = data;
+
+      Vue.axios.post('admin/send-monthly-report',
+        form
+      ).then((res) => {
+        snackbar.msg = res.data.data;
+      }).finally(snackbar.show = true)
+    },
 
 };
 
