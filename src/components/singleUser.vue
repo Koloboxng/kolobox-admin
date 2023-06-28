@@ -17,7 +17,8 @@
       <v-card>
         <v-flex ml-2 xs10 v-if="getProducts">
           <v-form ref="subForm" v-model="validateSubscriptionForm">
-            <v-text-field label="Deposit Amount" v-model="subscriptionForm.deposit_amount" required></v-text-field>
+            <v-text-field label="Deposit Amount" v-model="subscriptionForm.deposit_amount" required>
+            </v-text-field>
             <v-select
               :items="frequency"
               label="Frequency"
@@ -35,9 +36,11 @@
             <v-btn
               color="primary"
               :disabled="!validateSubscriptionForm"
-              @click="createSubscription({form: subscriptionForm, snackbar: toast, dialog: createSubDialog})"
+              @click="createSubscription({form: subscriptionForm, snackbar: toast,
+                dialog: createSubDialog})"
             >CREATE</v-btn>
-            <v-btn color="error" @click="clearForm(subscriptionForm);createSubDialog = false;">CLOSE</v-btn>
+            <v-btn color="error" @click="clearForm(subscriptionForm);
+            createSubDialog = false;">CLOSE</v-btn>
           </v-form>
         </v-flex>
       </v-card>
@@ -47,7 +50,8 @@
       <v-card>
         <v-flex ml-2 xs10>
           <v-form v-model="validateProductForm" v-if="getProducts" >
-            <v-text-field label="Deposit Amount" v-model="productForm.deposit_amount" required></v-text-field>
+            <v-text-field label="Deposit Amount" v-model="productForm.deposit_amount" required>
+            </v-text-field>
             <v-select
               :items="binary"
               item-text="text"
@@ -75,9 +79,11 @@
             <v-btn
               color="primary"
               :disabled="!validateProductForm"
-              @click="createOneProduct({form: productForm, snackbar: toast, dialog: createProductDialog})"
+              @click="createOneProduct({form: productForm,
+                snackbar: toast, dialog: createProductDialog})"
             >CREATE</v-btn>
-            <v-btn color="error" @click="clearForm(productForm);createProductDialog = false;">CLOSE</v-btn>
+            <v-btn color="error" @click="clearForm(productForm);
+            createProductDialog = false;">CLOSE</v-btn>
           </v-form>
         </v-flex>
       </v-card>
@@ -129,7 +135,8 @@
       <v-card>
         <v-flex xs10 ml-1>
           <v-form v-model="validateUpdateSubscriptionForm">
-            <v-text-field label="Deposit Amount" v-model="updateSub.deposit_amount" required></v-text-field>
+            <v-text-field label="Deposit Amount" v-model="updateSub.deposit_amount" required>
+            </v-text-field>
             <v-select
               :items="binary"
               item-text="text"
@@ -138,7 +145,8 @@
               label="Auto Subsription"
               required
             ></v-select>
-            <v-text-field v-model="updateSub.next_pay_day" label="Next Pay Day" required></v-text-field>
+            <v-text-field v-model="updateSub.next_pay_day" label="Next Pay Day" required>
+            </v-text-field>
             <v-select
               :items="transformProduct(getProducts)"
               item-text="text"
@@ -150,7 +158,8 @@
             <v-btn
               color="primary"
               :disabled="!validateUpdateSubscriptionForm"
-              @click="updateOneSubscription({form: updateSub, snackbar: toast, dialog: updateSubscriptionDialog})"
+              @click="updateOneSubscription({form: updateSub,
+                snackbar: toast, dialog: updateSubscriptionDialog})"
             >UPDATE</v-btn>
             <v-btn
               color="error"
@@ -178,7 +187,8 @@
             @click="rolloverSingleProduct(rolloverItem.id);rolloverItem = null"
             class="green --text"
           >Rollover Product</v-btn>
-          <v-btn class="red --text" flat @click="rolloverDialog = false;rolloverItem = null;">CANCEL</v-btn>
+          <v-btn class="red --text" flat @click="rolloverDialog = false;
+          rolloverItem = null;">CANCEL</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -189,7 +199,9 @@
         <v-flex xs9 mt-5>
           <v-card>
             <v-toolbar color="blue" dark>
-              <v-toolbar-title>{{user.firstname.toUpperCase()}} {{user.lastname.toUpperCase()}}</v-toolbar-title>
+              <v-toolbar-title>
+                {{user.firstname.toUpperCase()}} {{user.lastname.toUpperCase()}}
+              </v-toolbar-title>
 
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -230,15 +242,23 @@
                 </v-list-tile>
                 <v-list-tile>
                   <v-list-tile-content>
+                    <v-list-tile-title>Kolobox Number</v-list-tile-title>
+                    <v-list-tile-sub-title v-html="user.number"></v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>
                     <v-list-tile-title>Next of Kin</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="user.Next_Of_Kin ? user.Next_Of_Kin : 'None'"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="user.Next_Of_Kin ? user.Next_Of_Kin : 'None'">
+                    </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Amount of Subscriptions</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="getSingleUserSubscriptions.length"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="getSingleUserSubscriptions.length">
+                    </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
 
@@ -261,21 +281,25 @@
                       @click="updateSingleSubscription(item)"
                     >Update Subscription</v-btn>
                   </div>
-                  <v-btn color="success" @click="createNewSubscription()">Create Subscription</v-btn>
+                  <v-btn color="success" @click="createNewSubscription()">
+                    Create Subscription</v-btn>
                 </div>
                 <div v-else class="products">
-                  <v-btn color="success" @click="createNewSubscription()">Create Subscription</v-btn>
+                  <v-btn color="success" @click="createNewSubscription()">
+                    Create Subscription</v-btn>
                 </div>
 
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Amount of Products</v-list-tile-title>
-                    <v-list-tile-sub-title v-html="getSingleUserEarnings.length"></v-list-tile-sub-title>
+                    <v-list-tile-sub-title v-html="getSingleUserEarnings.length">
+                    </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <div v-if="getSingleUserEarnings.length > 0" class="products">
                   <h2>Products Details</h2>
-                  <div v-for="(item, index) in getSingleUserEarnings" :key="index" class="particularItem">
+                  <div v-for="(item, index) in getSingleUserEarnings" :key="index"
+                  class="particularItem">
                     <h3>[{{index + 1}}]</h3>
                     <h3>Product Name -- {{item.name}}</h3>
                     <h3>Start Date -- {{formatDate(item.start_date)}}</h3>
@@ -294,7 +318,8 @@
                     <h3>Investment -- {{item.amount ? formatPrice(item.amount): "₦0.00"}}</h3>
                     <h3>Status -- {{ item.canceled ? "Canceled" : "Active" }}</h3>
                     <v-btn color="primary" @click="updateSingleProduct(item)">Update Product</v-btn>
-                    <v-btn color="success" v-if="!item.canceled" @click="rolloverDialog = true; rolloverItem=item">Rollover Product</v-btn>
+                    <v-btn color="success" v-if="!item.canceled" @click="rolloverDialog = true;
+                    rolloverItem=item">Rollover Product</v-btn>
                     <!-- v-if="!item.canceled" -->
                   </div>
                   <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
@@ -306,13 +331,18 @@
                 <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Unlocked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].account_balance) ? formatPrice(getSingleUserDetails[0].account_balance): "₦0.00"}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>
+                      {{(getSingleUserDetails[0].account_balance) ?
+                        formatPrice(getSingleUserDetails[0].account_balance) : "₦0.00"
+                      }}</v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile v-if="getSingleUserDetails[0]">
                   <v-list-tile-content>
                     <v-list-tile-title>Locked Funds</v-list-tile-title>
-                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].book_balance) ? formatPrice(getSingleUserDetails[0].book_balance): "₦0.00"}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{(getSingleUserDetails[0].book_balance)
+                      ? formatPrice(getSingleUserDetails[0].book_balance): "₦0.00"}}
+                    </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
@@ -336,21 +366,24 @@
                   <v-list-title>
                     <v-list-content>
                       <v-list-tile-title>Bank Name</v-list-tile-title>
-                      <v-list-tile-sub-title v-html="item.bank_name ? item.bank_name : 'None'"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="item.bank_name ?
+                      item.bank_name : 'None'"></v-list-tile-sub-title>
                     </v-list-content>
                   </v-list-title>
 
                   <v-list-title>
                     <v-list-content>
                       <v-list-tile-title>Account Number</v-list-tile-title>
-                      <v-list-tile-sub-title v-html="item.account_number ? item.account_number : 'None'"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="item.account_number ?
+                      item.account_number : 'None'"></v-list-tile-sub-title>
                     </v-list-content>
                   </v-list-title>
 
                   <v-list-title>
                     <v-list-content>
                       <v-list-tile-title>Account Name</v-list-tile-title>
-                      <v-list-tile-sub-title v-html="item.account_name ? item.account_name : 'None'"></v-list-tile-sub-title>
+                      <v-list-tile-sub-title v-html="item.account_name ?
+                       item.account_name : 'None'"></v-list-tile-sub-title>
                     </v-list-content>
                   </v-list-title>
                 </div>
@@ -372,7 +405,8 @@
             </v-card-title>
             <v-list class="ml-3 mt-2 mb-2" v-if="getAllFundedAndUnFundedProduct">
               <template>
-                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.fundedProduct" :key="index" class="mb-4">
+                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.fundedProduct"
+                :key="index" class="mb-4">
                   <v-list-title>
                     <v-list-content>
                       <v-list-tile-sub-title v-html="item.name"></v-list-tile-sub-title>
@@ -390,7 +424,8 @@
 
             <v-list class="ml-3 mt-2 mb-2" v-if="getAllFundedAndUnFundedProduct">
               <template>
-                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.unFundedProduct" :key="index" class="mb-4">
+                <div v-for="(item, index) in getAllFundedAndUnFundedProduct.unFundedProduct"
+                :key="index" class="mb-4">
                   <v-list-title>
                     <v-list-content>
                       <v-list-tile-sub-title v-html="item.name"></v-list-tile-sub-title>
@@ -501,21 +536,21 @@ export default {
       () => this.$route.params,
       () => this.user.id,
       () => {
-        this.getSingleUser({id: this.$route.params.id});
-        this.getSingleEarnings({id: this.$route.params.id});
-        this.getSingleUserSub({id: this.$route.params.id});
-        this.getFundedAndUnFundedProductById({id: this.$route.params.id});
+        this.getSingleUser({ id: this.$route.params.id });
+        this.getSingleEarnings({ id: this.$route.params.id });
+        this.getSingleUserSub({ id: this.$route.params.id });
+        this.getFundedAndUnFundedProductById({ id: this.$route.params.id });
       },
       // fetch the data when the view is created and the data is
       // already being observed
-      { immediate: true }
+      { immediate: true },
     );
     this.getAllProducts();
-    this.getSingleUser({id: this.$route.params.id});
-    this.getSingleEarnings({id: this.$route.params.id});
-    this.getSingleUserSub({id: this.$route.params.id});
-    this.getFundedAndUnFundedProductById({id: this.$route.params.id});
-    this.getSingleUserEarnings()
+    this.getSingleUser({ id: this.$route.params.id });
+    this.getSingleEarnings({ id: this.$route.params.id });
+    this.getSingleUserSub({ id: this.$route.params.id });
+    this.getFundedAndUnFundedProductById({ id: this.$route.params.id });
+    this.getSingleUserEarnings();
 
     // console.log(this.$route.params.id)
   },
@@ -530,18 +565,18 @@ export default {
       'getSingleUserSub',
       'getSingleEarnings',
       'getFundedAndUnFundedProductById',
-      'rolloverProduct'
+      'rolloverProduct',
     ]),
     disabledStartDate(date) {
       return (
-      new Date(date).setHours(0, 0, 0, 0) >
-          new Date(this.end).setHours(0, 0, 0, 0)
+        new Date(date).setHours(0, 0, 0, 0)
+        > new Date(this.end).setHours(0, 0, 0, 0)
       );
     },
     disabledEndDate(date) {
       return (
-      new Date(date).setHours(0, 0, 0, 0) <
-          new Date(this.start).setHours(0, 0, 0, 0)
+        new Date(date).setHours(0, 0, 0, 0)
+        < new Date(this.start).setHours(0, 0, 0, 0)
       );
     },
     findProduct(productId) {
@@ -567,7 +602,7 @@ export default {
         this.product_id = this.getProducts[0].id;
       } else {
         this.product_id = this.getProducts.filter(
-          x => x.name === item.name
+          x => x.name === item.name,
         )[0].id;
       }
       this.updateProductDialog = true;
@@ -601,32 +636,33 @@ export default {
       this.productForm.units_purchased = null;
     },
     formatPrice(value) {
-        /* let val = (value/1).toFixed(2).replace('.', ',')
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") */
-        return new Intl.NumberFormat('en-NG', {
-          style: 'currency',
-          currency: 'NGN',
-        }).format(value);
+      /* let val = (value/1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") */
+      return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN',
+      }).format(value);
     },
     rolloverSingleProduct(value) {
       this.toast.msg = 'Rolling product over...';
       this.toast.show = true;
       this.rolloverProduct({
-        id: value, user_id: this.$route.params.id, start_date: this.start_date, snackbar: this.toast
+        id: value,
+        user_id: this.$route.params.id,
+        start_date: this.start_date,
+        snackbar: this.toast,
       }).then(() => {
         this.rolloverDialog = false;
-      })
-
+      });
     },
     updateAProduct(value) {
       this.toast.msg = 'Rolling product over...';
       this.toast.show = true;
       this.updateOneProduct({
-        form: value.form, snackbar: value.snackbar
+        form: value.form, snackbar: value.snackbar,
       }).then(() => {
         this.updateProductDialog = false;
-      })
-
+      });
     },
   },
   computed: {
@@ -635,7 +671,7 @@ export default {
       'getSingleUserDetails',
       'getSingleUserSubscriptions',
       'getSingleUserEarnings',
-      'getAllFundedAndUnFundedProduct'
+      'getAllFundedAndUnFundedProduct',
     ]),
   },
 };
