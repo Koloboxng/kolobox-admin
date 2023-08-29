@@ -204,7 +204,7 @@
             type="date"
             class="pr-1 pl-1"
           ></date-picker>
-          <v-text-field label="Rollover Amount" v-model="deposit_amount" @keydown="validateInput" required>
+          <v-text-field label="Rollover Amount" v-model="deposit_amount" @keypress="validateInput" required>
           </v-text-field>
         <v-card-actions>
           <v-btn
@@ -558,7 +558,7 @@ export default {
       rolloverItem: null,
       rolloverInactiveItem: null,
       start_date: null,
-      deposit_amount: "",
+      deposit_amount: null,
     };
   },
   created() {
@@ -596,6 +596,7 @@ export default {
       'getSingleEarnings',
       'getFundedAndUnFundedProductById',
       'rolloverProduct',
+      'rolloverInactiveProduct',
     ]),
     disabledStartDate(date) {
       return (
@@ -707,17 +708,30 @@ export default {
         this.updateProductDialog = false;
       });
     },
-    validateInput(event) {
+    validateInput($event) {
       // this.deposit_amount = this.deposit_amount.replace(/[^0-9.]/g, "");
       
       // Get the current value of the input after the keydown event
-      const inputValue = event.target.value;
+      /* const inputValue = event.target.value;
 
       // Use a regular expression to test if the input matches the allowed pattern
       const allowedPattern = /^[0-9]*\.?[0-9]*$/;
       if (!allowedPattern.test(inputValue)) {
         // Prevent the default keydown behavior if input doesn't match the pattern
         event.preventDefault();
+      } */
+
+      // console.log($event.keyCode); //keyCodes value
+     let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+
+      // only allow number and one dot
+      if ((keyCode < 48 || keyCode > 57) && (keyCode !== 46 || this.deposit_amount.indexOf('.') != -1)) { // 46 is dot
+        $event.preventDefault();
+      }
+
+      // restrict to 2 decimal places
+      if(this.deposit_amount!=null && this.deposit_amount.indexOf(".")>-1 && (this.deposit_amount.split('.')[1].length > 1)){
+        $event.preventDefault();
       }
     },
   },
