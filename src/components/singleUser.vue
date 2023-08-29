@@ -204,7 +204,7 @@
             type="date"
             class="pr-1 pl-1"
           ></date-picker>
-          <v-text-field label="Rollover Amount" v-model="deposit_amount" @input="validateInput" required>
+          <v-text-field label="Rollover Amount" v-model="deposit_amount" @keydown="validateInput" required>
           </v-text-field>
         <v-card-actions>
           <v-btn
@@ -707,10 +707,20 @@ export default {
         this.updateProductDialog = false;
       });
     },
-    validateInput() {
-      // Use a regular expression to allow only numbers and decimals
-      this.deposit_amount = this.deposit_amount.replace(/[^0-9.]/g, "");
+    validateInput(event) {
+      // this.deposit_amount = this.deposit_amount.replace(/[^0-9.]/g, "");
+      
+      // Get the current value of the input after the keydown event
+      const inputValue = event.target.value;
+
+      // Use a regular expression to test if the input matches the allowed pattern
+      const allowedPattern = /^[0-9]*\.?[0-9]*$/;
+      if (!allowedPattern.test(inputValue)) {
+        // Prevent the default keydown behavior if input doesn't match the pattern
+        event.preventDefault();
+      }
     }
+  }
   },
   computed: {
     ...mapGetters([
