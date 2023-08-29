@@ -204,8 +204,8 @@
             type="date"
             class="pr-1 pl-1"
           ></date-picker>
-          <v-text-field label="Rollover Amount" v-model="deposit_amount" required>
-            </v-text-field>
+          <v-text-field label="Rollover Amount" v-model="deposit_amount" @input="validateInput" required>
+          </v-text-field>
         <v-card-actions>
           <v-btn
             flat
@@ -558,7 +558,7 @@ export default {
       rolloverItem: null,
       rolloverInactiveItem: null,
       start_date: null,
-      deposit_amount: null,
+      deposit_amount: "",
     };
   },
   created() {
@@ -707,6 +707,10 @@ export default {
         this.updateProductDialog = false;
       });
     },
+    validateInput() {
+      // Use a regular expression to allow only numbers and decimals
+      this.deposit_amount = this.deposit_amount.replace(/[^0-9.]/g, "");
+    }
   },
   computed: {
     ...mapGetters([
