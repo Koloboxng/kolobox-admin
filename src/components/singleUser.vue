@@ -719,8 +719,7 @@ export default {
         // Prevent the default keydown behavior if input doesn't match the pattern
         event.preventDefault();
       }
-    }
-  }
+    },
   },
   computed: {
     ...mapGetters([
