@@ -172,7 +172,7 @@
 
     <v-dialog v-model="rolloverDialog" width="500">
       <v-card>
-        <v-card-title>Rollover Product</v-card-title>
+        <v-card-title>Rollover Active Product</v-card-title>
         <v-card-text>Are you sure you want to rollover this product ?</v-card-text>
         <date-picker
             v-model="start_date"
@@ -189,6 +189,31 @@
           >Rollover Product</v-btn>
           <v-btn class="red --text" flat @click="rolloverDialog = false;
           rolloverItem = null;">CANCEL</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="rolloverInactiveDialog" width="500">
+      <v-card>
+        <v-card-title>Rollover Inactive Product</v-card-title>
+        <v-card-text>Are you sure you want to rollover this inactive product ?</v-card-text>
+        <date-picker
+            v-model="start_date"
+            :default-value="new Date()"
+            :disabled-date="disabledStartDate"
+            type="date"
+            class="pr-1 pl-1"
+          ></date-picker>
+          <v-text-field label="Rollover Amount" v-model="deposit_amount" required>
+            </v-text-field>
+        <v-card-actions>
+          <v-btn
+            flat
+            @click="rolloverInactiveSingleProduct(rolloverInactiveItem.id);rolloverInactiveItem = null"
+            class="green --text"
+          >Rollover Inactive Product</v-btn>
+          <v-btn class="red --text" flat @click="rolloverInactiveDialog = false;
+          rolloverInactiveItem = null;">CANCEL</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -320,6 +345,8 @@
                     <v-btn color="primary" @click="updateSingleProduct(item)">Update Product</v-btn>
                     <v-btn color="success" v-if="!item.canceled" @click="rolloverDialog = true;
                     rolloverItem=item">Rollover Product</v-btn>
+                    <v-btn color="success" v-if="item.canceled" @click="rolloverInactiveDialog = true;
+                    rolloverInactiveItem=item">Rollover Inactive Product</v-btn>
                     <!-- v-if="!item.canceled" -->
                   </div>
                   <v-btn color="success" @click="createNewProduct()">Add New Product</v-btn>
@@ -475,6 +502,7 @@ export default {
       createSubDialog: false,
       walletDialog: false,
       rolloverDialog: false,
+      rolloverInactiveDialog: false,
       product_id: null,
       subscriptionForm: {
         id: null,
@@ -528,7 +556,9 @@ export default {
       validateUpdateProductForm: true,
       validateUpdateSubscriptionForm: true,
       rolloverItem: null,
+      rolloverInactiveItem: null,
       start_date: null,
+      deposit_amount: null,
     };
   },
   created() {
@@ -653,6 +683,19 @@ export default {
         snackbar: this.toast,
       }).then(() => {
         this.rolloverDialog = false;
+      });
+    },
+    rolloverInactiveSingleProduct(value) {
+      this.toast.msg = 'Rolling inactive product over...';
+      this.toast.show = true;
+      this.rolloverInactiveProduct({
+        id: value,
+        user_id: this.$route.params.id,
+        start_date: this.start_date,
+        amount: this.deposit_amount,
+        snackbar: this.toast,
+      }).then(() => {
+        this.rolloverInactiveDialog = false;
       });
     },
     updateAProduct(value) {

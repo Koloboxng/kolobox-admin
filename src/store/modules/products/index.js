@@ -393,6 +393,21 @@ const actions = {
     })
 
   },
+  rolloverInactiveProduct({ commit, dispatch }, data){
+    const { id, user_id, start_date, amount, snackbar } = data;
+    Vue.axios.post('admin/rollover-withdrawable-product/update',{
+      user_product_id: id,
+      start_date: start_date,
+      amount: amount,
+    }).then((res) => {
+      snackbar.msg = res.data.data.msg || 'Product successfully rolled over';
+      snackbar.show = true;
+      // dispatch('getSingleEarnings', {id: id}, {root: true})
+      dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
+      dispatch('getSingleEarnings', {id: user_id}, { root: true});
+    })
+
+  },
 };
 
 const mutations = {
