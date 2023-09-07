@@ -401,7 +401,7 @@ const actions = {
       amount: amount,
     }).then((res) => {
       console.log(res)
-      snackbar.msg = res.data.data.msg || 'Product successfully rolled over';
+      snackbar.msg = res.data.data || 'Product successfully rolled over';
       snackbar.show = true;
       // dispatch('getSingleEarnings', {id: id}, {root: true})
       dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
