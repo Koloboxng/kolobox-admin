@@ -387,9 +387,9 @@ const actions = {
     }).then((res) => {
       snackbar.msg = 'Product successfully rolled over';
       snackbar.show = true;
-      // dispatch('getSingleEarnings', {id: id}, {root: true})
       dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
       dispatch('getSingleEarnings', {id: user_id}, { root: true});
+      
     })
 
   },
@@ -400,11 +400,14 @@ const actions = {
       start_date: start_date,
       amount: amount,
     }).then((res) => {
+      console.log(res)
       snackbar.msg = res.data.data.msg || 'Product successfully rolled over';
       snackbar.show = true;
       // dispatch('getSingleEarnings', {id: id}, {root: true})
       dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
       dispatch('getSingleEarnings', {id: user_id}, { root: true});
+      dispatch('getSingleUserSub', {id: user_id}, { root: true})
+      dispatch('getSingleUser', {id: user_id}, { root: true})
     })
 
   },
