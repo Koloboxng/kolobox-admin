@@ -400,7 +400,6 @@ const actions = {
       start_date: start_date,
       amount: amount,
     }).then((res) => {
-      console.log(res)
       snackbar.msg = res.data.data || 'Product successfully rolled over';
       snackbar.show = true;
       // dispatch('getSingleEarnings', {id: id}, {root: true})
