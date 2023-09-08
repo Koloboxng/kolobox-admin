@@ -218,6 +218,30 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="resetWalletDialog" max-width="690" data-app>
+      <v-card>
+        <v-flex ml-2 xs10>
+          <v-form ref="subForm" v-model="validateResetWalletForm">
+            <v-text-field label="Reset Amount" v-model="resetForm.amount" @keypress="validateResetAmountInput(this)" required>
+            </v-text-field>
+            <v-select
+              :items="select_option"
+              label="Reset Wallet Type"
+              v-model="resetForm.option"
+              required
+            ></v-select>
+            <v-btn
+              color="primary"
+              :disabled="!validateResetWalletForm"
+              @click="resetUserWalletBalance()"
+            >CREATE</v-btn>
+            <v-btn color="error" @click="clearForm(resetForm);
+            resetWalletDialog = false;">CLOSE</v-btn>
+          </v-form>
+        </v-flex>
+      </v-card>
+    </v-dialog>
+
     <v-flex ml-1 mt-2>
       <router-link class="link" to="/index/all-users">&lt; &lt; Back To Users</router-link>
       <v-layout justify-center>
@@ -376,6 +400,10 @@
                   <v-list-tile-content>
                     <v-btn color="info" @click="walletDialog = true">UPDATE WALLET</v-btn>
                   </v-list-tile-content>
+
+                  <v-list-tile-content>
+                    <v-btn color="warning" @click="resetWalletDialog = true">Reset WALLET</v-btn>
+                  </v-list-tile-content>
                 </v-list-tile>
               </template>
             </v-list>
@@ -501,6 +529,7 @@ export default {
       validateSubscriptionForm: true,
       createSubDialog: false,
       walletDialog: false,
+      resetWalletDialog: false,
       rolloverDialog: false,
       rolloverInactiveDialog: false,
       product_id: null,
@@ -559,6 +588,13 @@ export default {
       rolloverInactiveItem: null,
       start_date: null,
       deposit_amount: null,
+      select_option: ['locked', 'unlocked'],
+      validateResetWalletForm: true,
+      resetForm: {
+        amount: null,
+        option: null,
+        user_id: null,
+      }
     };
   },
   created() {
@@ -597,6 +633,7 @@ export default {
       'getFundedAndUnFundedProductById',
       'rolloverProduct',
       'rolloverInactiveProduct',
+      'resetUserWalletBalance',
     ]),
     disabledStartDate(date) {
       return (
@@ -733,6 +770,32 @@ export default {
       if(this.deposit_amount!=null && this.deposit_amount.indexOf(".")>-1 && (this.deposit_amount.split('.')[1].length > 1)){
         $event.preventDefault();
       }
+    },
+    validateResetAmountInput($event, $this) {
+     let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+
+      // only allow number and one dot
+      if ((keyCode < 48 || keyCode > 57) && (keyCode !== 46 || $this.indexOf('.') != -1)) { // 46 is dot
+        $event.preventDefault();
+      }
+
+      // restrict to 2 decimal places
+      if($this!=null && $this.indexOf(".")>-1 && ($this.split('.')[1].length > 1)){
+        $event.preventDefault();
+      }
+    },
+    resetUserWalletBalance() {
+      this.toast.msg = 'Reseting user wallet balance...';
+      this.toast.show = true;
+
+      this.resetUserWalletBalance({
+        user_id: this.$route.params.id,
+        option: this.resetForm.option,
+        amount: this.resetForm.amount,
+        snackbar: this.toast,
+      }).then(() => {
+        this.resetWalletDialog = false;
+      });
     },
   },
   computed: {

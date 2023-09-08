@@ -151,6 +151,29 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
+  resetUserWalletBalance({ commit, dispatch }, data) {
+    const { user_id, option, amount, snackbar } = data;
+    Vue.axios
+      .post(`admin/reset-user-wallet-balance`,{
+        user_id: user_id,
+        option: option,
+        amount: amount,
+      })
+      .then((res) => {
+        snackbar.msg = res.data.data || 'User wallet successfully reset';
+        snackbar.show = true;
+        // dispatch('getSingleEarnings', {id: id}, {root: true})
+        dispatch('getFundedAndUnFundedProductById', {id: user_id}, {root: true})
+        dispatch('getSingleEarnings', {id: user_id}, { root: true});
+        dispatch('getSingleUserSub', {id: user_id}, { root: true})
+        dispatch('getSingleUser', {id: user_id}, { root: true})
+      })
+      .catch((e) => {
+        snackbar.msg = e.data.data.message;
+        console.log(e)
+      })
+      .finally((snackbar.show = true));
+  },
 };
 
 const mutations = {
