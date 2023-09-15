@@ -233,7 +233,7 @@
             <v-btn
               color="primary"
               :disabled="!validateResetWalletForm"
-              @click="resetUserWalletBalance()"
+              @click="resetUserWalletBalances()"
             >CREATE</v-btn>
             <v-btn color="error" @click="clearForm(resetForm);
             resetWalletDialog = false;">CLOSE</v-btn>
@@ -784,7 +784,7 @@ export default {
         $event.preventDefault();
       }
     },
-    resetUserWalletBalance() {
+    resetUserWalletBalances() {
       this.toast.msg = 'Reseting user wallet balance...';
       this.toast.show = true;
 
