@@ -222,7 +222,7 @@
       <v-card>
         <v-flex ml-2 xs10>
           <v-form ref="subForm" v-model="validateResetWalletForm">
-            <v-text-field label="Reset Amount" v-model="resetForm.amount" @keypress="validateResetAmountInput(event, this)" required>
+            <v-text-field label="Reset Amount" v-model="resetForm.amount" @keypress="validateResetAmountInput" required>
             </v-text-field>
             <v-select
               :items="select_option"
@@ -771,21 +771,17 @@ export default {
         $event.preventDefault();
       }
     },
-    validateResetAmountInput(event, input) {
-      let keyCode = event.keyCode || event.which;
-      let currentValue = input.value;
+    validateResetAmountInput($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
 
-      // Check if the pressed key is a number (0-9) or a dot
-      if (
-        (keyCode < 48 || keyCode > 57) && // Numbers
-        (keyCode !== 46 || currentValue.indexOf('.') !== -1) // Dot
-      ) {
-        event.preventDefault();
+      // only allow number and one dot
+      if ((keyCode < 48 || keyCode > 57) && (keyCode !== 46 || this.resetForm.amount.indexOf('.') != -1)) { // 46 is dot
+        $event.preventDefault();
       }
 
-      // Restrict to 2 decimal places
-      if (currentValue.indexOf('.') !== -1 && currentValue.split('.')[1].length > 1) {
-        event.preventDefault();
+      // restrict to 2 decimal places
+      if(this.resetForm.amount!=null && this.resetForm.amount.indexOf(".")>-1 && (this.resetForm.amount.split('.')[1].length > 1)){
+        $event.preventDefault();
       }
     },
     resetUserWalletBalances() {
