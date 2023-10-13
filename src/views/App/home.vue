@@ -119,10 +119,10 @@
 
       <v-layout row>
         <v-flex xs3 ml-5>
-          <home-card
+          <!-- <home-card
             :title="Titles[0].name"
             :number="account.paystackBalance | currency('₦',2) | commas"
-          />
+          /> -->
         </v-flex>
         <v-flex xs3 ml-5>
           <home-card :title="Titles[1].name" :number="account.userCount | commas"/>
