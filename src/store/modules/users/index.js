@@ -58,7 +58,7 @@ const actions = {
   updateUser({ commit, dispatch }, data) {
     const { form, snackbar, id } = data;
     Vue.axios
-      .post(`user/${id}`, {
+      .put(`user/${id}`, {
         form,
       })
       .then((res) => {
