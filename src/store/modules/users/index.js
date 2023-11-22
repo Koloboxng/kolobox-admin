@@ -58,9 +58,7 @@ const actions = {
   updateUser({ commit, dispatch }, data) {
     const { form, snackbar, id } = data;
     Vue.axios
-      .put(`user/${id}`, {
-        form,
-      })
+      .put(`user/${id}`,form)
       .then((res) => {
         snackbar.msg = res.data.message;
         dispatch('getAllUsers');
