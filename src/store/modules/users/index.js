@@ -62,11 +62,11 @@ const actions = {
         form,
       })
       .then((res) => {
-        snackbar.msg = res.data.data.msg;
+        snackbar.msg = res.data.message;
         dispatch('getAllUsers');
       })
       .catch((e) => {
-        snackbar.msg = e.data.data.msg;
+        snackbar.msg = e.data.message;
       })
       .finally((snackbar.show = true));
   },
