@@ -60,6 +60,7 @@ const actions = {
     Vue.axios
       .put(`user/${id}`,form)
       .then((res) => {
+        console.log(res)
         snackbar.msg = res.data.message;
         dispatch('getAllUsers');
       })
