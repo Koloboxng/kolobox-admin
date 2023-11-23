@@ -339,6 +339,8 @@ export default {
           form: this.form,
           snackbar: this.toast,
           id,
+        }).then(() => {
+          this.updateDialog = false;
         });
       }
     },
