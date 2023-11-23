@@ -60,8 +60,8 @@ const actions = {
     Vue.axios
       .put(`user/${id}`,form)
       .then((res) => {
-        console.log(res)
-        snackbar.msg = res.data.message;
+        console.log({res})
+        snackbar.msg = res.data.data;
         dispatch('getAllUsers');
       })
       .catch((e) => {
