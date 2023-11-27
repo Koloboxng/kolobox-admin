@@ -408,6 +408,10 @@ const actions = {
       dispatch('getSingleUserSub', {id: user_id}, { root: true})
       dispatch('getSingleUser', {id: user_id}, { root: true})
     })
+    .catch((e) => {
+      snackbar.msg = e.data.message;
+    })
+    .finally((snackbar.show = true));
 
   },
 };
