@@ -149,10 +149,10 @@
           <home-card :title="Titles[7].name" :number="account.userUnFundedCount | commas"/>
         </v-flex>
         <v-flex xs3 ml-5>
-          <home-card :title="Titles[8].name" :number="account.allAccountBalance | currency('₦',2)"/>
+          <home-card :title="Titles[8].name" :number="account.allAccountBalance | currency('₦',2) | commas"/>
         </v-flex>
         <v-flex xs3 ml-5>
-          <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2)"/>
+          <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2) | commas"/>
         </v-flex>
       </v-layout>
     </v-container>
