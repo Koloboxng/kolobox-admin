@@ -154,6 +154,12 @@
         <v-flex xs3 ml-5>
           <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2) | commas"/>
         </v-flex>
+        <v-flex v-for="item in products_balances" :key="item.id" xs12 md6 lg3>
+          <v-card>
+            <h3>{{ item }}</h3>
+          </v-card>
+          <!-- products_balances -->
+        </v-flex>
       </v-layout>
     </v-container>
   </v-app>
@@ -186,6 +192,7 @@ export default {
         { name: 'Unfunded Users' },
         { name: 'Total Account Balance' },
         { name: 'Total Locked Balance' },
+        {name: 'Product Balances' },
       ],
       valid: true,
       start: null,
@@ -208,14 +215,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loaded', 'account', 'allProduct']),
+    ...mapGetters(['loaded', 'account', 'allProduct', 'products_balances']),
   },
   created() {
     this.getProfile();
     this.getAllProducts();
+    this.getProductsBalances()
   },
   methods: {
-    ...mapActions(['getProfile', 'getAllProducts']),
+    ...mapActions(['getProfile', 'getAllProducts', 'getProductsBalances']),
     getRangeClasses(cellDate, currentDates, classnames) {
       const classes = [];
       const start = this.start && new Date(this.start).setHours(0, 0, 0, 0);

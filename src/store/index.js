@@ -15,6 +15,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     account: {},
+    products_balances: {},
     loaded: false,
   },
   mutations,
