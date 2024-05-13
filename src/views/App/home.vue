@@ -249,7 +249,13 @@ export default {
     this.getProfile();
     this.getAllProducts();
     this.getProductsBalances()
-    console.log({products_balances})
+    .then(() => {
+      console.log(this.products_balances);
+    })
+    .catch(error => {
+      console.error('Error fetching product balances:', error);
+    });
+    console.log(this.products_balances)
   },
   methods: {
     ...mapActions(['getProfile', 'getAllProducts', 'getProductsBalances']),
