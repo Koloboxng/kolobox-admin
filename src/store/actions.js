@@ -40,9 +40,6 @@ export const getProductsBalances = ({
 }) => {
   Vue.axios.get('admin/product-earnings')
     .then((res) => {
-      console.log({res})
-      console.log(res.data.data)
-      console.log(res.data)
       commit(mutations.UPDATE_BALANCES, res.data.data);
     });
 };
