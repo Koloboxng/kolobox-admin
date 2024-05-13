@@ -182,9 +182,6 @@
                       <td data-label="Total Interest">
                         <span>{{ item.interest | currency("₦", 2) }}</span>
                       </td>
-                      <td data-label="Interest">
-                        <span>{{ item.interest | currency("₦", 2) }}</span>
-                      </td>
                       <td data-label="Interest Rate">
                         <span>{{ item.interest_rate | percent(2) }}</span>
                       </td>
