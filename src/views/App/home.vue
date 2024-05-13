@@ -158,35 +158,37 @@
           <v-card>
             <v-card-title>Product Earnings</v-card-title>
             <v-card-text>
-              <v-table>
-                <thead>
-                  <tr>
-                    <th class="text-left">
-                      Product Name
-                    </th>
-                    <th class="text-left">
-                      Total Amount
-                    </th>
-                    <th class="text-left">
-                      Total Interest
-                    </th>
-                    <th class="text-left">
-                      Interest
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="item in products_balances"
-                    :key="item.name"
-                  >
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.amount }}</td>
-                    <td>{{ item.interest }}</td>
-                    <td>{{ item.interest_rate }}</td>
-                  </tr>
-                </tbody>
-              </v-table>
+              <v-simple-table>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Product Name
+                      </th>
+                      <th class="text-left">
+                        Total Amount
+                      </th>
+                      <th class="text-left">
+                        Total Interest
+                      </th>
+                      <th class="text-left">
+                        Interest
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in products_balances"
+                      :key="item.name"
+                    >
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.amount }}</td>
+                      <td>{{ item.interest }}</td>
+                      <td>{{ item.interest_rate }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
             </v-card-text>
           </v-card>
           <!-- products_balances -->
