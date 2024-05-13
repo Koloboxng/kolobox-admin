@@ -17,9 +17,6 @@ const mutations = {
   [mutate.UPDATE_APP_LOADED](state) {
     state.loaded = true;
   },
-  [mutate.UPDATE_BALANCES](state, data) {
-    state.products_balances = data;
-  },
 };
 
 export default mutations;

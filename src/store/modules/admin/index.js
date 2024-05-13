@@ -9,6 +9,7 @@ const state = {
   allPermissions: null,
   allExistingRolePermission: null,
   allNonExistingRolePermission: null,
+  allProductBalances: null,
 };
 
 const getters = {
@@ -17,6 +18,7 @@ const getters = {
   allPermissions: state => state.allPermissions,
   allExistingRolePermission: state => state.allExistingRolePermission,
   allNonExistingRolePermission: state => state.allNonExistingRolePermission,
+  allProductBalances: state => state.allProductBalances,
 };
 
 const mutations = {
@@ -34,7 +36,10 @@ const mutations = {
   },
   [mutate.UPDATE_ALL_NONEXISTING_ROLE_PERMISSIONS](state, data){
     state.allNonExistingRolePermission = data;
-  }
+  },
+  [mutate.UPDATE_ALL_PRODUCT_BALANCES](state, data){
+    state.allProductBalances = data;
+  },
 };
 
 const actions = {
@@ -348,6 +353,17 @@ const actions = {
       ).then((res) => {
         snackbar.msg = res.data.data;
       }).finally(snackbar.show = true)
+    },
+    getAllProductBalances({
+      commit,
+    }, data) {
+      const {snackbar} = data;
+      Vue.axios.get('admin/product-earnings')
+        .then((res) => {
+          commit(mutate.UPDATE_ALL_PRODUCT_BALANCES, res.data.data);
+        }).catch((e) => {
+          console.log(`error occurs from modules/admin/index.js on 365 line ${e}`);
+        })
     },
 
 };

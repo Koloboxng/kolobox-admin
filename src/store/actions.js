@@ -34,12 +34,3 @@ export const getProfile = ({
       commit(mutations.UPDATE_APP_LOADED, true);
     });
 };
-
-export const getProductsBalances = ({
-  commit,
-}) => {
-  Vue.axios.get('admin/product-earnings')
-    .then((res) => {
-      commit(mutations.UPDATE_BALANCES, res.data.data);
-    });
-};

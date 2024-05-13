@@ -171,7 +171,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in products_balances" :key="item.name">
+                  <tr v-for="item in allProductBalances" :key="item.name">
                     <td>{{ item.name }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.interest }}</td>
@@ -243,16 +243,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['loaded', 'account', 'allProduct', 'products_balances']),
+    ...mapGetters(['loaded', 'account', 'allProduct', 'allProductBalances']),
   },
   created() {
     this.getProfile();
     this.getAllProducts();
-    this.getProductsBalances()
-    
+    this.getAllProductBalances()
   },
   methods: {
-    ...mapActions(['getProfile', 'getAllProducts', 'getProductsBalances']),
+    ...mapActions(['getProfile', 'getAllProducts', 'getAllProductBalances']),
     getRangeClasses(cellDate, currentDates, classnames) {
       const classes = [];
       const start = this.start && new Date(this.start).setHours(0, 0, 0, 0);
