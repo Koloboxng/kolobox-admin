@@ -158,27 +158,31 @@
 
       <v-layout>
         <div>
-          <h3>Product Earnings</h3>
-          <v-simple-table>
-            <template>
-              <thead>
-                <tr>
-                  <th class="text-left">Product Name</th>
-                  <th class="text-left">Total Amount</th>
-                  <th class="text-left">Total Interest</th>
-                  <th class="text-left">Interest Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Rice</td>
-                  <td>Palntain</td>
-                  <td>Ice cream</td>
-                  <td>Sugar</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+          <v-card>
+            <v-card-title>Product Earnings</v-card-title>
+            <v-card-text>
+              <v-simple-table>
+                <template>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Product Name</th>
+                      <th class="text-left">Total Amount</th>
+                      <th class="text-left">Total Interest</th>
+                      <th class="text-left">Interest Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Rice</td>
+                      <td>Palntain</td>
+                      <td>Ice cream</td>
+                      <td>Sugar</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+          </v-card>
         </div>
       </v-layout>
     </v-container>
