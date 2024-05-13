@@ -159,6 +159,28 @@
       <v-layout>
         <v-container mt-3>
           <v-row justify="space-around">
+
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Product Name</th>
+                    <th class="text-left">Total Amount</th>
+                    <th class="text-left">Total Interest</th>
+                    <th class="text-left">Interest Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in allProductBalances" :key="item.name">
+                    <td class="text-left">{{ item.name }}</td>
+                    <td class="text-left">{{ item.amount }}</td>
+                    <td class="text-left">{{ item.interest }}</td>
+                    <td class="text-left">{{ item.interest_rate }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+
             <v-card>
               <v-card-title>Product Earnings</v-card-title>
               <v-card-text>
@@ -174,10 +196,10 @@
                     </thead>
                     <tbody>
                       <tr v-for="item in allProductBalances" :key="item.name">
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.amount }}</td>
-                        <td>{{ item.interest }}</td>
-                        <td>{{ item.interest_rate }}</td>
+                        <td class="text-left">{{ item.name }}</td>
+                        <td class="text-left">{{ item.amount }}</td>
+                        <td class="text-left">{{ item.interest }}</td>
+                        <td class="text-left">{{ item.interest_rate }}</td>
                       </tr>
                     </tbody>
                   </template>
