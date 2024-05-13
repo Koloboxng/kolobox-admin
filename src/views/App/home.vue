@@ -162,7 +162,7 @@
             <v-card-title>Product Earnings</v-card-title>
             <v-card-text>
               <v-simple-table>
-                <template>
+                <template v-slot:default>
                   <thead>
                     <tr>
                       <th class="text-left">Product Name</th>
@@ -173,10 +173,10 @@
                   </thead>
                   <tbody>
                     <tr v-for="item in allProductBalances" :key="item.name">
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.amount }}</td>
-                      <td>{{ item.interest }}</td>
-                      <td>{{ item.interest_rate }}</td>
+                      <td class="text-left">{{ item.name }}</td>
+                      <td class="text-left">{{ item.amount || 0 | currency("₦", 2) }}</td>
+                      <td class="text-left">{{ item.interest || 0 | currency("₦", 2) }}</td>
+                      <td class="text-left">{{ item.interest_rate }}</td>
                     </tr>
                   </tbody>
                 </template>
