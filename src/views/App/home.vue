@@ -160,7 +160,7 @@
         <v-container mt-3>
           <v-row justify="space-around">
             <h3>Product Earnings</h3>
-            <v-simple-table style="width: 100%;">
+            <v-simple-table>
               <template v-slot:default>
                 <thead>
                   <tr>
