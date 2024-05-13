@@ -247,12 +247,14 @@ export default {
   },
   computed: {
     ...mapGetters(['loaded', 'account', 'allProduct', 'allProductBalances']),
+    formatter() {
+      return this.getCurrencyFormatter();
+    }
   },
   created() {
     this.getProfile();
     this.getAllProducts();
     this.getAllProductBalances()
-    const formatter = this.getCurrencyFormatter();
   },
   methods: {
     ...mapActions(['getProfile', 'getAllProducts', 'getAllProductBalances']),
