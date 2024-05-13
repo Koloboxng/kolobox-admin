@@ -162,7 +162,7 @@
             <v-card>
               <v-card-title>Product Earnings</v-card-title>
               <v-card-text>
-                <table class="table table-striped table-responsive">
+                <table class="table table-striped table-responsive" style="width: 100%;">
                   <thead>
                     <tr>
                       <th class="col">Product Name</th>
@@ -182,11 +182,11 @@
                       <td data-label="Total Interest">
                         <span>{{ item.interest | currency("₦", 2) }}</span>
                       </td>
-                      <td data-label="Interest Rate">
-                        <span>{{ item.interest_rate | percent(2) }}</span>
-                      </td>
                       <td data-label="Interest">
                         <span>{{ item.interest | currency("₦", 2) }}</span>
+                      </td>
+                      <td data-label="Interest Rate">
+                        <span>{{ item.interest_rate | percent(2) }}</span>
                       </td>
                     </tr>
                   </tbody>
