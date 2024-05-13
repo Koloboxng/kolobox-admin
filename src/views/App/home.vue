@@ -174,8 +174,8 @@
                   <tbody>
                     <tr v-for="item in allProductBalances" :key="item.name">
                       <td class="text-left">{{ item.name }}</td>
-                      <td class="text-left">{{ item.amount | currency("₦", 2) || '0' }}</td>
-                      <td class="text-left">{{ item.interest | currency("₦", 2) || '0' }}</td>
+                      <td class="text-left">{{ item.amount | currency("₦", 2) || 0 }}</td>
+                      <td class="text-left">{{ item.interest | currency("₦", 2) || 0 }}</td>
                       <td class="text-left">{{ item.interest_rate }}</td>
                     </tr>
                   </tbody>
@@ -251,6 +251,7 @@ export default {
     this.getProfile();
     this.getAllProducts();
     this.getAllProductBalances()
+    const formatter = this.getCurrencyFormatter();
   },
   methods: {
     ...mapActions(['getProfile', 'getAllProducts', 'getAllProductBalances']),

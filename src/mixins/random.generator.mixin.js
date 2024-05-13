@@ -10,5 +10,11 @@ export default {
       }
       return result;
     },
+    getCurrencyFormatter() {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'NGN', // Change this to your desired currency code
+      });
+    },
   },
 };
