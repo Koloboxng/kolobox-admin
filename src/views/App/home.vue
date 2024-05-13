@@ -159,7 +159,7 @@
       <v-layout>
         <v-container mt-3>
           <v-row justify="space-around">
-
+            <h3>Product Earnings</h3>
             <v-simple-table>
               <template v-slot:default>
                 <thead>
@@ -185,7 +185,7 @@
               <v-card-title>Product Earnings</v-card-title>
               <v-card-text>
                 <v-simple-table>
-                  <template v-slot:default>
+                  <template>
                     <thead>
                       <tr>
                         <th class="text-left">Product Name</th>
