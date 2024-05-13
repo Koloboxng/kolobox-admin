@@ -160,7 +160,7 @@
         <v-container mt-3>
           <v-row justify="space-around">
             <h3>Product Earnings</h3>
-            <v-simple-table>
+            <v-simple-table width="100%">
               <template v-slot:default>
                 <thead>
                   <tr>
@@ -173,8 +173,8 @@
                 <tbody>
                   <tr v-for="item in allProductBalances" :key="item.name">
                     <td class="text-left">{{ item.name }}</td>
-                    <td class="text-left">{{ item.amount }}</td>
-                    <td class="text-left">{{ item.interest }}</td>
+                    <td class="text-left">{{ formatter(item.amount) }}</td>
+                    <td class="text-left">{{ formatter(item.interest) }}</td>
                     <td class="text-left">{{ item.interest_rate }}</td>
                   </tr>
                 </tbody>
@@ -185,7 +185,7 @@
               <v-card-title>Product Earnings</v-card-title>
               <v-card-text>
                 <v-simple-table>
-                  <template>
+                  <template v-slot:default>
                     <thead>
                       <tr>
                         <th class="text-left">Product Name</th>
