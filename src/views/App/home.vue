@@ -162,25 +162,14 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="text-left">
-                        Product Name
-                      </th>
-                      <th class="text-left">
-                        Total Amount
-                      </th>
-                      <th class="text-left">
-                        Total Interest
-                      </th>
-                      <th class="text-left">
-                        Interest
-                      </th>
+                      <th class="text-left">Product Name</th>
+                      <th class="text-left">Total Amount</th>
+                      <th class="text-left">Total Interest</th>
+                      <th class="text-left">Interest Rate</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      v-for="item in products_balances"
-                      :key="item.name"
-                    >
+                    <tr v-for="item in products_balances" :key="item.name">
                       <td>{{ item.name }}</td>
                       <td>{{ item.amount }}</td>
                       <td>{{ item.interest }}</td>
@@ -260,6 +249,7 @@ export default {
     this.getProfile();
     this.getAllProducts();
     this.getProductsBalances()
+    console.log({products_balances})
   },
   methods: {
     ...mapActions(['getProfile', 'getAllProducts', 'getProductsBalances']),
