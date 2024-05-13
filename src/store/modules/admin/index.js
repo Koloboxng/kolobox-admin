@@ -354,10 +354,7 @@ const actions = {
         snackbar.msg = res.data.data;
       }).finally(snackbar.show = true)
     },
-    getAllProductBalances({
-      commit,
-    }, data) {
-      const {snackbar} = data;
+    getAllProductBalances({commit}) {
       Vue.axios.get('admin/product-earnings')
         .then((res) => {
           commit(mutate.UPDATE_ALL_PRODUCT_BALANCES, res.data.data);
