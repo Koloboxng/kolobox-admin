@@ -154,34 +154,34 @@
         <v-flex xs3 ml-5>
           <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2) | commas"/>
         </v-flex>
-        <v-flex>
-          <v-card>
-            <v-card-title>Product Earnings</v-card-title>
-            <v-card-text>
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Product Name</th>
-                      <th class="text-left">Total Amount</th>
-                      <th class="text-left">Total Interest</th>
-                      <th class="text-left">Interest Rate</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in products_balances" :key="item.name">
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.amount }}</td>
-                      <td>{{ item.interest }}</td>
-                      <td>{{ item.interest_rate }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
-          <!-- products_balances -->
-        </v-flex>
+      </v-layout>
+
+      <v-layout>
+        <v-card>
+          <v-card-title>Product Earnings</v-card-title>
+          <v-card-text>
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Product Name</th>
+                    <th class="text-left">Total Amount</th>
+                    <th class="text-left">Total Interest</th>
+                    <th class="text-left">Interest Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in products_balances" :key="item.name">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.interest }}</td>
+                    <td>{{ item.interest_rate }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-card>
       </v-layout>
     </v-container>
   </v-app>
@@ -249,13 +249,7 @@ export default {
     this.getProfile();
     this.getAllProducts();
     this.getProductsBalances()
-    .then(() => {
-      console.log(this.products_balances);
-    })
-    .catch(error => {
-      console.error('Error fetching product balances:', error);
-    });
-    console.log(this.products_balances)
+    
   },
   methods: {
     ...mapActions(['getProfile', 'getAllProducts', 'getProductsBalances']),
