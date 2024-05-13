@@ -194,6 +194,7 @@ import { mapGetters, mapActions } from 'vuex';
 import loader from '@/components/loader.vue';
 import homeCard from '@/components/homeCard.vue';
 import productMixin from '../../mixins/products.mixin';
+import currencyMixin from '../../mixins/random.generator.mixin';
 import Vue from 'vue';
 
 export default {
@@ -202,7 +203,7 @@ export default {
     loader,
     homeCard,
   },
-  mixins: [productMixin],
+  mixins: [productMixin, currencyMixin],
   data() {
     return {
       Titles: [
