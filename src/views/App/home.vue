@@ -174,10 +174,10 @@
                     </thead>
                     <tbody>
                       <tr v-for="item in allProductBalances" :key="item.name">
-                        <td class="text-left">{{ item.name }}</td>
-                        <td class="text-left">{{ item.amount }}</td>
-                        <td class="text-left">{{ item.interest }}</td>
-                        <td class="text-left">{{ item.interest_rate }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.interest }}</td>
+                        <td>{{ item.interest_rate }}</td>
                       </tr>
                     </tbody>
                   </template>
