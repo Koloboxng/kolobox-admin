@@ -158,7 +158,7 @@
 
       <v-layout>
         <div>
-          <v-card>
+          <v-card justify="space-around">
             <v-card-title>Product Earnings</v-card-title>
             <v-card-text>
               <v-simple-table>
@@ -174,8 +174,8 @@
                   <tbody>
                     <tr v-for="item in allProductBalances" :key="item.name">
                       <td class="text-left">{{ item.name }}</td>
-                      <td class="text-left">{{ item.amount | currency("₦", 2) || 0 }}</td>
-                      <td class="text-left">{{ item.interest | currency("₦", 2) || 0 }}</td>
+                      <td class="text-left">{{ item.amount | currency("₦", 2) }}</td>
+                      <td class="text-left">{{ item.interest | currency("₦", 2) }}</td>
                       <td class="text-left">{{ item.interest_rate }}</td>
                     </tr>
                   </tbody>
