@@ -157,7 +157,7 @@
       </v-layout>
 
       <v-layout>
-        <v-container>
+        <v-container mt-3>
           <v-row justify="space-around">
             <v-card>
               <v-card-title>Product Earnings</v-card-title>
