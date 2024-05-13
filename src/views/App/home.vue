@@ -154,9 +154,19 @@
         <v-flex xs3 ml-5>
           <home-card :title="Titles[9].name" :number="account.allLockedBalance | currency('₦',2) | commas"/>
         </v-flex>
-        <v-flex v-for="item in products_balances" :key="item.id" xs12 md6 lg3>
+        <v-flex>
           <v-card>
-            <h3>{{ item }}</h3>
+            <v-card-title>Product Earnings</v-card-title>
+            <v-card-text>
+              <v-data-table :headers="headers" :items="products_balances" item-key="id">
+                <template v-slot:items="props">
+                  <td>{{ props.item.name }}</td>
+                  <td>{{ props.item.amount }}</td>
+                  <td>{{ props.item.interest }}</td>
+                  <td>{{ props.item.interest_rate }}</td>
+                </template>
+              </v-data-table>
+            </v-card-text>
           </v-card>
           <!-- products_balances -->
         </v-flex>
@@ -193,6 +203,12 @@ export default {
         { name: 'Total Account Balance' },
         { name: 'Total Locked Balance' },
         {name: 'Product Balances' },
+      ],
+      headers: [
+        { text: 'Product Name', value: 'name' },
+        { text: 'Total Investment (Amount)', value: 'amount' },
+        { text: 'Total Interest', value: 'interest' },
+        { text: 'Interest Rate', value: 'interest_rate' },
       ],
       valid: true,
       start: null,
