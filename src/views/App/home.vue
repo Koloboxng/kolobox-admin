@@ -174,8 +174,8 @@
                   <tbody>
                     <tr v-for="item in allProductBalances" :key="item.name">
                       <td class="text-left">{{ item.name }}</td>
-                      <td class="text-left">{{ item.amount || 0 | currency("₦", 2) }}</td>
-                      <td class="text-left">{{ item.interest || 0 | currency("₦", 2) }}</td>
+                      <td class="text-left">{{ item.amount | currency("₦", 2) || '0' }}</td>
+                      <td class="text-left">{{ item.interest | currency("₦", 2) || '0' }}</td>
                       <td class="text-left">{{ item.interest_rate }}</td>
                     </tr>
                   </tbody>
