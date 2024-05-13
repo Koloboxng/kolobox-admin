@@ -38,7 +38,7 @@ export const getProfile = ({
 export const getProductsBalances = ({
   commit,
 }) => {
-  Vue.axios.post('admin/product-earnings')
+  Vue.axios.get('admin/product-earnings')
     .then((res) => {
       commit(mutations.UPDATE_BALANCES, res.data.data);
     });
