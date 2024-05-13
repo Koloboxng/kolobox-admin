@@ -160,7 +160,7 @@
         <v-container mt-3>
           <v-row justify="space-around">
             <h3>Product Earnings</h3>
-            <v-simple-table>
+            <v-simple-table style="width: 100%;">
               <template v-slot:default>
                 <thead>
                   <tr>
@@ -173,13 +173,39 @@
                 <tbody>
                   <tr v-for="item in allProductBalances" :key="item.name">
                     <td class="text-left">{{ item.name }}</td>
-                    <td class="text-left">{{ item.amount }}</td>
-                    <td class="text-left">{{ item.interest }}</td>
+                    <td class="text-left">{{ item.amount || 0 | currency("₦", 2) }}</td>
+                    <td class="text-left">{{ item.interest || 0 | currency("₦", 2) }}</td>
                     <td class="text-left">{{ item.interest_rate }}</td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
+
+            <v-card>
+              <v-card-title>Product Earnings</v-card-title>
+              <v-card-text>
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Product Name</th>
+                        <th class="text-left">Total Amount</th>
+                        <th class="text-left">Total Interest</th>
+                        <th class="text-left">Interest Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in allProductBalances" :key="item.name">
+                        <td class="text-left">{{ item.name }}</td>
+                        <td class="text-left">{{ item.amount }}</td>
+                        <td class="text-left">{{ item.interest }}</td>
+                        <td class="text-left">{{ item.interest_rate }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
           </v-row>
         </v-container>
       </v-layout>
