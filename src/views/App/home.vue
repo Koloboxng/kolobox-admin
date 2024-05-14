@@ -165,10 +165,10 @@
                 <table class="table table-striped table-responsive" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="col">Product Name</th>
-                      <th class="col">Total Investment</th>
-                      <th class="col">Total Interest</th>
-                      <th class="col">Interest Rate</th>
+                      <th>Product Name</th>
+                      <th>Total Investment</th>
+                      <th>Total Interest</th>
+                      <th>Interest Rate</th>
                     </tr>
                   </thead>
                   <tbody v-if="allProductBalances.length > 0">
@@ -351,7 +351,7 @@ export default {
       
     },
     formatCurrency(amount) {
-      const formatter = new Intl.NumberFormat('en-US', {
+      const formatter = new Intl.NumberFormat('en-NG', {
         style: 'currency',
         currency: 'NGN', // Change this to your desired currency code
       });
