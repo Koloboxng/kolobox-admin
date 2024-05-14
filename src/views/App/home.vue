@@ -177,10 +177,10 @@
                         <span>{{ item.name }}</span>
                       </td>
                       <td data-label="Total Investment">
-                        <span>{{ formatter(item.amount) }}</span>
+                        <span>{{ formatCurrency(item.amount) }}</span>
                       </td>
                       <td data-label="Total Interest">
-                        <span>{{ formatter(item.interest) }}</span>
+                        <span>{{ formatCurrency(item.interest) }}</span>
                       </td>
                       <td data-label="Interest Rate">
                         <span>{{ item.interest_rate | percent(2) }}</span>
@@ -203,7 +203,6 @@ import { mapGetters, mapActions } from 'vuex';
 import loader from '@/components/loader.vue';
 import homeCard from '@/components/homeCard.vue';
 import productMixin from '../../mixins/products.mixin';
-import currencyMixin from '../../mixins/random.generator.mixin';
 import Vue from 'vue';
 
 export default {
@@ -212,7 +211,7 @@ export default {
     loader,
     homeCard,
   },
-  mixins: [productMixin, currencyMixin],
+  mixins: [productMixin],
   data() {
     return {
       Titles: [
@@ -256,9 +255,6 @@ export default {
   },
   computed: {
     ...mapGetters(['loaded', 'account', 'allProduct', 'allProductBalances']),
-    formatter() {
-      return this.getCurrencyFormatter();
-    }
   },
   created() {
     this.getProfile();
@@ -353,6 +349,13 @@ export default {
     },
     onChange(event) {
       
+    },
+    formatCurrency(amount) {
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD', // Change this to your desired currency code
+      });
+      return formatter.format(amount);
     },
   },
 };
