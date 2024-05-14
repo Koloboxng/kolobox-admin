@@ -173,16 +173,16 @@
                   </thead>
                   <tbody v-if="allProductBalances.length > 0">
                     <tr v-for="(item, index) in allProductBalances" :key="index">
-                      <td data-label="Product Name">
+                      <td class="text-center" data-label="Product Name">
                         <span>{{ item.name }}</span>
                       </td>
-                      <td data-label="Total Investment">
+                      <td class="text-center" data-label="Total Investment">
                         <span>{{ formatCurrency(item.amount) }}</span>
                       </td>
-                      <td data-label="Total Interest">
+                      <td class="text-center" data-label="Total Interest">
                         <span>{{ formatCurrency(item.interest) }}</span>
                       </td>
-                      <td data-label="Interest Rate">
+                      <td class="text-center" data-label="Interest Rate">
                         <span>{{ item.interest_rate | percent(2) }}</span>
                       </td>
                     </tr>
