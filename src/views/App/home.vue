@@ -353,7 +353,7 @@ export default {
     formatCurrency(amount) {
       const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD', // Change this to your desired currency code
+        currency: 'NGN', // Change this to your desired currency code
       });
       return formatter.format(amount);
     },
