@@ -1,0 +1,118 @@
+name: Deploy Admin Dashboard
+
+on:
+  push:
+    branches: [ main, staging ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+jobs:
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '12'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: ${{ secrets.NODE_ENV_STAGING }}
+        VUE_APP_STAGING_API_URL: ${{ secrets.VUE_APP_STAGING_API_URL }}
+      
+    - name: Update server code and deploy
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: |
+          cd /var/www/html/vue/kolobox_admin_dashboard
+          git pull origin staging
+          
+    - name: Deploy built files
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        source: "dist/*"
+        target: "/var/www/html/vue/kolobox_admin_dashboard/"
+        
+    - name: Restart nginx
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.STAGING_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        script: sudo service nginx restart
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '12'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      env:
+        NODE_ENV: ${{ secrets.NODE_ENV_PRODUCTION }}
+        VUE_APP_LIVE_API_URL: ${{ secrets.VUE_APP_LIVE_API_URL }}
+      
+    - name: Update server code and deploy
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        script: |
+          cd /home/ubuntu/kolobox_admin_dashboard
+          git pull origin main
+          
+    - name: Deploy built files
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        source: "dist/*"
+        target: "/home/ubuntu/kolobox_admin_dashboard/"
+        
+    - name: Restart nginx
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.PROD_SSH_KEY }}
+        script: sudo service nginx restart
