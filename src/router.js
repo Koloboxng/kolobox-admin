@@ -9,7 +9,7 @@ const STAGING_SERVER = process.env.VUE_APP_STAGING_API_URL || 'https://api-stagi
 const LOCAL_SERVER = process.env.VUE_APP_LOCAL_API_URL || 'http://localhost:9200';
 
 // Auto-select base URL based on VUE_APP_NODE_ENV
-console.log('process.env.VUE_APP_NODE_ENV', process.env.VUE_APP_NODE_ENV);
+
 const getBaseUrl = () => {
   switch (process.env.VUE_APP_NODE_ENV) {
     case 'local':

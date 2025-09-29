@@ -89,7 +89,6 @@ jobs:
       env:
         VUE_APP_NODE_ENV: ${{ secrets.NODE_ENV_PRODUCTION }}
         VUE_APP_LIVE_API_URL: ${{ secrets.VUE_APP_LIVE_API_URL }}
-        DISABLE_ESLINT_PLUGIN: true
       
     - name: Update server code and deploy
       uses: appleboy/ssh-action@v0.1.7
