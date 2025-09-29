@@ -98,7 +98,12 @@ jobs:
         key: ${{ secrets.PROD_SSH_KEY }}
         script: |
           cd /home/ubuntu/kolobox_admin_dashboard
-          git pull origin main
+          # Clean up any GitLab remnants and set up GitHub
+          git remote remove origin || true
+          git remote add origin git@github.com:Koloboxng/kolobox-admin.git
+          git fetch origin
+          git reset --hard origin/main
+          git clean -fd
           
     - name: Deploy built files
       uses: appleboy/scp-action@v0.1.4
@@ -115,4 +120,4 @@ jobs:
         host: ${{ secrets.PROD_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.PROD_SSH_KEY }}
-        script: sudo service nginx restart 
+        script: sudo systemctl restart nginx
