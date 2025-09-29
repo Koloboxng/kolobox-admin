@@ -104,8 +104,8 @@ jobs:
           
           cd /home/ubuntu/kolobox_admin_dashboard
           git pull origin main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_KEY }}
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_KEY }}
           
     - name: Deploy built files
       uses: appleboy/scp-action@v0.1.4
