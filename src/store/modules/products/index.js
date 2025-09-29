@@ -58,7 +58,7 @@ const actions = {
       commit(mutate.UPDATE_ALL_PRODUCTS, res.data.data);
     });
   },
-  createProduct({ commit, dispatch }, data) {
+  createProduct({ dispatch }, data) {
     const { form, snackbar, router } = data;
     Vue.axios
       .post('product', {
@@ -74,7 +74,7 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
-  updateProduct({ commit, dispatch }, data) {
+  updateProduct({ dispatch }, data) {
     const { form, snackbar, router } = data;
     Vue.axios
       .put(`product/${form.id}`)
@@ -88,7 +88,7 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
-  deleteProduct({ commit, dispatch }, data) {
+  deleteProduct({ dispatch }, data) {
     const { id, snackbar } = data;
     Vue.axios
       .delete(`product/${id}`, {
@@ -103,7 +103,7 @@ const actions = {
       })
       .finally((snackbar.show = true));
   },
-  moveUsers({ commit }, data) {
+  moveUsers(context, data) {
     const { form, snackbar } = data;
     Vue.axios
       .post('product/movement', {
@@ -269,15 +269,15 @@ const actions = {
   }, */
   createOneProduct({ commit, dispatch }, data) {
     const { form, snackbar } = data;
-    let { dialog } = data;
+    const { dialog } = data;
     snackbar.msg = 'Creating...';
     snackbar.show = true;
     Vue.axios
       .post('admin/product/create', form)
       .then(() => {
         snackbar.msg = 'Product has been created for the user';
-        dialog = false;
-        dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
+        // dialog = false;
+        dispatch('getSingleEarnings', { id: form.user_id }, { root: true });
       })
       .catch((e) => {
         snackbar.msg = e.data.message;
@@ -292,7 +292,7 @@ const actions = {
       .post('admin/product/update', form)
       .then(() => {
         snackbar.msg = 'Product has been updated for the user';
-        dispatch('getSingleEarnings', {id: form.user_id}, { root: true});
+        dispatch('getSingleEarnings', { id: form.user_id }, { root: true });
       })
       .catch((e) => {
         snackbar.msg = e.data.message;
