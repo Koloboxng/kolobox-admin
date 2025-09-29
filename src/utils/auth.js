@@ -3,12 +3,28 @@
 import Vue from 'vue';
 import axios from 'axios';
 
-const LIVE_SERVER = 'https://api.kolobox.ng';
-const STAGING_SERVER = 'https://api-staging.kolobox.ng';
-const LOCAL_SERVER = 'http://localhost:9200';
+const LIVE_SERVER = process.env.VUE_APP_LIVE_API_URL || 'https://api.kolobox.ng';
+const STAGING_SERVER = process.env.VUE_APP_STAGING_API_URL || 'https://api-staging.kolobox.ng';
+const LOCAL_SERVER = process.env.VUE_APP_LOCAL_API_URL || 'http://localhost:9200';
+
+console.log('process.env.VUE_APP_NODE_ENV', process.env.VUE_APP_NODE_ENV);
+
+// Auto-select API URL based on VUE_APP_NODE_ENV
+const getApiUrl = () => {
+  switch (process.env.VUE_APP_NODE_ENV) {
+    case 'local':
+      return LOCAL_SERVER;
+    case 'development':
+      return STAGING_SERVER;
+    case 'production':
+      return LIVE_SERVER;
+    default:
+      return STAGING_SERVER;
+  }
+};
 
 // set defaults
-axios.defaults.baseURL = STAGING_SERVER;
+axios.defaults.baseURL = getApiUrl();
 
 const redirect = (context, redirectUrl) => {
   if (redirectUrl) context.$router.replace(redirectUrl);

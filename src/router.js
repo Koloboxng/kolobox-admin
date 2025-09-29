@@ -4,9 +4,28 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
+const LIVE_SERVER = process.env.VUE_APP_LIVE_API_URL || 'https://api.kolobox.ng';
+const STAGING_SERVER = process.env.VUE_APP_STAGING_API_URL || 'https://api-staging.kolobox.ng';
+const LOCAL_SERVER = process.env.VUE_APP_LOCAL_API_URL || 'http://localhost:9200';
+
+// Auto-select base URL based on VUE_APP_NODE_ENV
+console.log('process.env.VUE_APP_NODE_ENV', process.env.VUE_APP_NODE_ENV);
+const getBaseUrl = () => {
+  switch (process.env.VUE_APP_NODE_ENV) {
+    case 'local':
+      return LOCAL_SERVER;
+    case 'development':
+      return STAGING_SERVER;
+    case 'production':
+      return LIVE_SERVER;
+    default:
+      return STAGING_SERVER;
+  }
+};
+
 const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: getBaseUrl(),
   routes: [
     {
       path: '/',
