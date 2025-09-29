@@ -8,13 +8,13 @@ import Vuex from 'vuex';
 import Paginate from 'vuejs-paginate';
 import PouchDB from 'pouchdb-browser';
 import * as pouchVue from 'pouch-vue';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 import Auth from './utils/auth';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
 import './registerServiceWorker';
-import DatePicker from "vue2-datepicker";
-import "vue2-datepicker/index.css";
 
 Vue.config.productionTip = false;
 
@@ -46,12 +46,12 @@ Vue.use(Auth, {
 // Vue filters
 Vue.filter(
   'percent',
-  (value, decimals) => `${Math.round(value * 10 ** decimals) / 10 ** decimals}%`,
+  (value, decimals) => `${Math.round(value * (10 ** decimals)) / (10 ** decimals)}%`,
 );
 
 Vue.filter(
   'currency',
-  (value, curr, decimalPoints) => `${curr}${(Math.floor(value * 10 ** decimalPoints) / 10 ** decimalPoints).toFixed(
+  (value, curr, decimalPoints) => `${curr}${(Math.floor(value * (10 ** decimalPoints)) / (10 ** decimalPoints)).toFixed(
     decimalPoints,
   )}`,
 );
