@@ -7,8 +7,6 @@ const LIVE_SERVER = process.env.VUE_APP_LIVE_API_URL || 'https://api.kolobox.ng'
 const STAGING_SERVER = process.env.VUE_APP_STAGING_API_URL || 'https://api-staging.kolobox.ng';
 const LOCAL_SERVER = process.env.VUE_APP_LOCAL_API_URL || 'http://localhost:9200';
 
-
-
 // Auto-select API URL based on VUE_APP_NODE_ENV
 const getApiUrl = () => {
   switch (process.env.VUE_APP_NODE_ENV) {
@@ -46,7 +44,6 @@ class Authenticate {
 
   login(context, input, redirectUrl = false, errorHandler = false) {
     axios.post(this.loginUrl, input).then((response) => {
-
       this.setToken(response.data.data.token);
       this.authenticated = true;
       localStorage.setItem('email', response.data.data.email);
